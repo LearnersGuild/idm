@@ -1,9 +1,11 @@
 require('babel/register')
 
-if (require('piping')()) {
-  // application logic here
-  if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
+  if (require('piping')()) {
+    // application logic here
     require('dotenv').load()
+    require('./app')
   }
+} else {
   require('./app')
 }
