@@ -40,6 +40,5 @@ swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
   // Start the server
   http.createServer(app).listen(serverPort, () => {
     console.log('🌍  Your server is listening at http://%s:%d ', serverHost, serverPort)
-    console.log('📄  Swagger-ui is available on http://%s:%d/docs ', serverHost, serverPort)
   })
 })
