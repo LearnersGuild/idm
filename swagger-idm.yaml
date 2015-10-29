@@ -1,0 +1,865 @@
+swagger: '2.0'
+info:
+  version: 0.1.0
+  title: idm
+  description: Learners Guild Identity Management System
+  termsOfService: 'https://learnersguild.org/legal/terms'
+  contact:
+    name: Jeffrey Wescott
+    email: jeffrey@learnersguild.org
+  license:
+    name: UNLICENSED
+host: idm.learnersguild.org
+basePath: /
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /users/current:
+    get:
+      description: Returns the currently signed-in user
+      operationId: getCurrentUser
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: user response
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/authorize/{capability}':
+    get:
+      description: Check to see if currently signed-in user has the given capability
+      operationId: isAuthorized
+      produces:
+        - application/json
+      parameters:
+        - name: capability
+          in: path
+          description: capability we are verifying
+          required: true
+          type: string
+      responses:
+        '204':
+          description: user is authorized
+        '403':
+          description: user is not authorized
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /users:
+    get:
+      description: Returns all users from the system that the user has access to
+      operationId: findUsers
+      produces:
+        - application/json
+      parameters:
+        - name: cohorts
+          in: query
+          description: return only users in the given cohorts
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: pods
+          in: query
+          description: return only users in the given pods
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: chapters
+          in: query
+          description: return only users in the given chapters
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: user response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Creates a new user in the system.
+      operationId: addUser
+      produces:
+        - application/json
+      parameters:
+        - name: user
+          in: body
+          description: User to add to the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingUser'
+      responses:
+        '200':
+          description: user response
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/users/{id}':
+    get:
+      description: 'Returns a user based on a single ID'
+      operationId: findUserById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: user response
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    put:
+      description: updates a single user based on the ID supplied
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to update
+          required: true
+          type: string
+          format: UUID
+        - name: user
+          in: body
+          description: User to update in the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingUser'
+      responses:
+        '200':
+          description: user updated
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /pods:
+    get:
+      description: Returns all pods from the system that the user has access to
+      operationId: findPods
+      produces:
+        - application/json
+      parameters:
+        - name: cohorts
+          in: query
+          description: return only pods in the given cohorts
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: users
+          in: query
+          description: return only pods that contain the given users
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: chapters
+          in: query
+          description: return only pods for the given chapters
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: pod response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Creates a new pod in the system.
+      operationId: addPod
+      produces:
+        - application/json
+      parameters:
+        - name: pod
+          in: body
+          description: Pod to add to the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingPod'
+      responses:
+        '200':
+          description: pod response
+          schema:
+            $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/pods/{id}':
+    get:
+      description: 'Returns a pod based on a single ID'
+      operationId: findPodById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of pod to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: pod response
+          schema:
+            $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    put:
+      description: updates a single pod based on the ID supplied
+      operationId: updatePod
+      parameters:
+        - name: id
+          in: path
+          description: ID of pod to update
+          required: true
+          type: string
+          format: UUID
+        - name: pod
+          in: body
+          description: Pod to update in the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingPod'
+      responses:
+        '200':
+          description: pod updated
+          schema:
+            $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/pods/{id}/learners':
+    get:
+      description: 'Returns the learners that are part of the given pod.'
+      operationId: getLearnersForPod
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of pod whose learners we want to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: user response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Adds a learner to a pod
+      operationId: addLearnerForPod
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of pod to which we want to add a learner
+          required: true
+          type: string
+          format: UUID
+        - name: user
+          in: body
+          description: User to add to the pod
+          required: true
+          schema:
+            $ref: '#/definitions/incomingUser'
+      responses:
+        '200':
+          description: user added to pod
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/pods/{id}/mentors':
+    get:
+      description: 'Returns the mentors that are part of the given pod.'
+      operationId: getMentorsForPod
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of pod whose mentors we want to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: user response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Adds a mentor to a pod
+      operationId: addMentorForPod
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of pod to which we want to add a mentor
+          required: true
+          type: string
+          format: UUID
+        - name: user
+          in: body
+          description: User to add to the pod
+          required: true
+          schema:
+            $ref: '#/definitions/incomingUser'
+      responses:
+        '200':
+          description: user added to pod
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /cohorts:
+    get:
+      description: Returns all cohorts from the system that the user has access to
+      operationId: findCohorts
+      produces:
+        - application/json
+      parameters:
+        - name: pods
+          in: query
+          description: return only cohorts that contain at least one of the given pods
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: users
+          in: query
+          description: return only cohorts that contain the given users
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: cohort response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/cohort'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Creates a new pod in the system.
+      operationId: addCohort
+      produces:
+        - application/json
+      parameters:
+        - name: cohort
+          in: body
+          description: Cohort to add to the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingCohort'
+      responses:
+        '200':
+          description: cohort response
+          schema:
+            $ref: '#/definitions/cohort'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/cohorts/{id}':
+    get:
+      description: 'Returns a cohort based on a single ID'
+      operationId: findCohortById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of cohort to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: cohort response
+          schema:
+            $ref: '#/definitions/cohort'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    put:
+      description: updates a single cohort based on the ID supplied
+      operationId: updateCohort
+      parameters:
+        - name: id
+          in: path
+          description: ID of cohort to update
+          required: true
+          type: string
+          format: UUID
+        - name: cohort
+          in: body
+          description: Cohort to update in the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingCohort'
+      responses:
+        '200':
+          description: cohort updated
+          schema:
+            $ref: '#/definitions/cohort'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/cohorts/{id}/pods':
+    get:
+      description: 'Returns the pods that are part of the given cohort.'
+      operationId: getPodsForCohort
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of cohort whose pods we want to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: pod response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Adds a pod to a cohort
+      operationId: addPodToCohort
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of cohort to which we want to add a pod
+          required: true
+          type: string
+          format: UUID
+        - name: pod
+          in: body
+          description: Pod that we want to add to the cohort
+          required: true
+          schema:
+            $ref: '#/definitions/incomingPod'
+      responses:
+        '200':
+          description: pod added to cohort
+          schema:
+            $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /chapters:
+    get:
+      description: Returns all chapters from the system that the user has access to
+      operationId: findChapters
+      produces:
+        - application/json
+      parameters:
+        - name: pods
+          in: query
+          description: return only chapters that contain at least one of the given pods
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: users
+          in: query
+          description: return only chapters that contain the given users
+          required: false
+          type: array
+          items:
+            type: string
+            format: UUID
+          collectionFormat: csv
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: chapter response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/chapter'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Creates a new chapter in the system.
+      operationId: addChapter
+      produces:
+        - application/json
+      parameters:
+        - name: cohort
+          in: body
+          description: Chapter to add to the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingChapter'
+      responses:
+        '200':
+          description: chapter response
+          schema:
+            $ref: '#/definitions/chapter'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/chapters/{id}':
+    get:
+      description: 'Returns a chapter based on a single ID'
+      operationId: findChapterById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of chapter to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: chapter response
+          schema:
+            $ref: '#/definitions/chapter'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    put:
+      description: updates a single chapter based on the ID supplied
+      operationId: updateChapter
+      parameters:
+        - name: id
+          in: path
+          description: ID of chapter to update
+          required: true
+          type: string
+          format: UUID
+        - name: cohort
+          in: body
+          description: Chapter to update in the system
+          required: true
+          schema:
+            $ref: '#/definitions/incomingChapter'
+      responses:
+        '200':
+          description: chapter updated
+          schema:
+            $ref: '#/definitions/chapter'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  '/chapters/{id}/pods':
+    get:
+      description: 'Returns the pods that are part of the given chapter.'
+      operationId: getPodsForChapter
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of chapter whose pods we want to fetch
+          required: true
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: pod response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+    post:
+      description: Adds a pod to a chapter
+      operationId: addPodToChapter
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: ID of chapter to which we want to add a pod
+          required: true
+          type: string
+          format: UUID
+        - name: pod
+          in: body
+          description: Pod that we want to add to the cohort
+          required: true
+          schema:
+            $ref: '#/definitions/incomingPod'
+      responses:
+        '200':
+          description: pod added to chapter
+          schema:
+            $ref: '#/definitions/pod'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+definitions:
+  user:
+    type: object
+    description: A user
+    required:
+      - id
+      - name
+      - email
+    properties:
+      id:
+        type: string
+        format: UUID
+      name:
+        type: string
+      email:
+        type: string
+        format: email
+  incomingUser:
+    type: object
+    description: Contains user attributes to be added / updated.
+    required:
+      - name
+      - email
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+        format: email
+      birthdate:
+        type: string
+        format: date
+      pods:
+        type: array
+        items:
+          type: string
+          description: pod IDs
+          format: UUID
+        type: string
+        format: date
+      address:
+        type: object
+        $ref: '#/definitions/address'
+  pod:
+    type: object
+    description: A pod is a group of learners who have agreed to go into business together. The sole purpose of this business is to provide an accountability framework for each of the 12 Learners as they go through the program.
+    required:
+      - id
+      - name
+    properties:
+      id:
+        type: string
+        format: UUID
+      name:
+        type: string
+  incomingPod:
+    type: object
+    description: Contains pod attributes to be added / updated.
+    required:
+      - name
+    properties:
+      name:
+        type: string
+  cohort:
+    type: object
+    description: A cohort is a set of pods with a shared start date.
+    required:
+      - id
+      - start_date
+    properties:
+      id:
+        type: string
+        format: UUID
+      start_date:
+        type: string
+        format: date
+  incomingCohort:
+    type: object
+    description: Contains cohort attributes to be added / updated.
+    required:
+      - start_date
+    properties:
+      start_date:
+        type: string
+        format: date
+  chapter:
+    type: object
+    description: A chapter is a branch of Learners Guild with a physical location that various pods use for on-site learning and collaboration.
+    required:
+      - id
+      - name
+      - address
+    properties:
+      id:
+        type: string
+        format: UUID
+      name:
+        type: string
+      address:
+        type: object
+        $ref: '#/definitions/address'
+  incomingChapter:
+    type: object
+    description: Contains chapter attributes to be added / updated.
+    required:
+      - name
+      - address
+    properties:
+      name:
+        type: string
+      address:
+        type: object
+        $ref: '#/definitions/address'
+  address:
+    type: object
+    description: A physical location in the world.
+    required:
+      - address1
+      - city
+      - postal_code
+      - country
+    properties:
+      address1:
+        type: string
+      address2:
+        type: string
+      city:
+        type: string
+      state_province:
+        type: string
+      postal_code:
+        type: string
+      country:
+        type: string
+  errorModel:
+    type: object
+    description: Error information returned by an unsuccessful API call.
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
