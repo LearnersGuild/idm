@@ -1,8 +1,10 @@
-# idm-api-spec
+# idm
 
-This is an API specification for the Learners Guild identity management system (idm).
+This is the identity management service.
 
 ## Getting Started
+
+Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 1. Clone the repository.
 2. Create your `.env` file for your environment, e.g.:
@@ -14,3 +16,8 @@ This is an API specification for the Learners Guild identity management system (
     $ open http://localhost:8080
 5. Update the API definitions in [swagger-idm.yaml](swagger-idm.yaml).
 6. Go to step (4).
+
+
+## License
+
+See the [LICENSE](./LICENSE) file.
