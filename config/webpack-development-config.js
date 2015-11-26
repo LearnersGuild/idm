@@ -7,7 +7,7 @@ module.exports = {
     app: [
       'webpack-hot-middleware/client',
       'bootstrap-loader',
-      './common/components/App.jsx',
+      './common/containers/App.jsx',
     ]
   },
 
@@ -35,8 +35,20 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        loaders: [ 'babel' ],
+        loader: 'babel',
         exclude: /node_modules/,
+        query: {
+          plugins: ['react-transform'],
+          extra: {
+            "react-transform": {
+              transforms: [{
+                transform: "react-transform-hmr",
+                imports: ["react"],
+                locals: ["module"],
+              }],
+            },
+          },
+        },
       },
       {
         test: /\.css$/,

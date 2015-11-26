@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-use-before-define, no-undef */
+/* eslint-disable no-console, no-undef */
 process.env.PORT = process.env.PORT || '8080'
 
 import path from 'path'
@@ -7,6 +7,7 @@ import serveStatic from 'serve-static'
 
 import configureDevEnvironment from './configure-dev-environment'
 import configureSwagger from './configure-swagger'
+import handleRender from './render'
 
 const serverHost = process.env.APP_HOSTNAME || 'localhost'
 const serverPort = parseInt(process.env.PORT, 10)
@@ -20,6 +21,8 @@ if (__DEVELOPMENT__) {
 // Use this middleware to server up static files
 app.use(serveStatic(path.join(__dirname, '../dist')))
 app.use(serveStatic(path.join(__dirname, '../public')))
+
+app.use(handleRender)
 
 configureSwagger(app, ()=> {
   app.listen(serverPort, (error) => {
