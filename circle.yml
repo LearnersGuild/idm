@@ -1,0 +1,14 @@
+machine:
+  node:
+    version: 4.2.1
+
+test:
+  override:
+    - npm run lint
+    - npm test -- --verbose
+
+deployment:
+  production:
+    branch: master
+    heroku:
+      appname: lg-idm
