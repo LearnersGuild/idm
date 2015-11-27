@@ -22,8 +22,7 @@ if (__DEVELOPMENT__) {
 app.use(serveStatic(path.join(__dirname, '../dist')))
 app.use(serveStatic(path.join(__dirname, '../public')))
 
-app.use(handleRender)
-
+// Swagger middleware
 configureSwagger(app, ()=> {
   app.listen(serverPort, (error) => {
     if (error) {
@@ -33,3 +32,6 @@ configureSwagger(app, ()=> {
     }
   })
 })
+
+// Default React application
+app.use(handleRender)
