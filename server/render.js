@@ -11,7 +11,7 @@ import Root from '../common/containers/Root'
 
 function renderFullPage(renderedAppHtml, initialState) {
   const { title } = initialState
-  let iconsMetadata = fs.readFileSync(path.join(__dirname, '..', 'public', 'assets', 'icons-metadata.html'))
+  const iconsMetadata = fs.readFileSync(path.join(__dirname, '..', 'public', 'assets', 'icons-metadata.html'))
   let appCss = ''
   if (!__DEVELOPMENT__) {
     appCss = `<link href="/app.css" media="screen,projection" rel="stylesheet" type="text/css" />`

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import fs from 'fs'
 import path from 'path'
 import favicons from 'favicons'
@@ -7,22 +9,22 @@ const run = !module.parent
 
 function saveIcons(directory, images) {
   const savedFiles = []
-  for (let img of images) {
+  for (const img of images) {
     const absFilename = path.join(directory, img.name)
     savedFiles.push(fs.writeFile(absFilename, img.contents, 'binary'))
   }
-  Promise.all(savedFiles).then(function() {
+  Promise.all(savedFiles).then(()=> {
     console.info('images saved')
   })
 }
 
 function saveFiles(directory, files) {
   const savedFiles = []
-  for (let file of files) {
+  for (const file of files) {
     const absFilename = path.join(directory, file.name)
     savedFiles.push(fs.writeFile(absFilename, file.contents, 'utf-8'))
   }
-  Promise.all(savedFiles).then(function() {
+  Promise.all(savedFiles).then(()=> {
     console.info('files saved')
   })
 }
@@ -42,25 +44,25 @@ if (run) {
     appDescription: 'Identity Management',      // Your application's description. `string`
     developerName: 'Learners Guild',            // Your (or your developer's) name. `string`
     developerURL: 'https://learnersguild.org',  // Your (or your developer's) URL. `string`
-    background: "#fff",             // Background colour for flattened icons. `string`
-    path: "/assets/",               // Path for overriding default icons path. `string`
-    url: "/assets/",                // Absolute URL for OpenGraph image. `string`
-    display: "standalone",          // Android display: "browser" or "standalone". `string`
-    orientation: "portrait",        // Android orientation: "portrait" or "landscape". `string`
+    background: '#fff',             // Background colour for flattened icons. `string`
+    path: '/assets/',               // Path for overriding default icons path. `string`
+    url: '/assets/',                // Absolute URL for OpenGraph image. `string`
+    display: 'standalone',          // Android display: 'browser' or 'standalone'. `string`
+    orientation: 'portrait',        // Android orientation: "portrait" or "landscape". `string`
     version: null,                  // Your application's version number. `number`
     logging: false,                 // Print logs to console? `boolean`
     online: false,                  // Use RealFaviconGenerator to create favicons? `boolean`
     icons: {
-        android: true,              // Create Android homescreen icon. `boolean`
-        appleIcon: true,            // Create Apple touch icons. `boolean`
-        appleStartup: true,         // Create Apple startup images. `boolean`
-        coast: true,                // Create Opera Coast icon. `boolean`
-        favicons: true,             // Create regular favicons. `boolean`
-        firefox: true,              // Create Firefox OS icons. `boolean`
-        opengraph: true,            // Create Facebook OpenGraph image. `boolean`
-        twitter: true,              // Create Twitter Summary Card image. `boolean`
-        windows: true,              // Create Windows 8 tile icons. `boolean`
-        yandex: true                // Create Yandex browser icon. `boolean`
+      android: true,                // Create Android homescreen icon. `boolean`
+      appleIcon: true,              // Create Apple touch icons. `boolean`
+      appleStartup: true,           // Create Apple startup images. `boolean`
+      coast: true,                  // Create Opera Coast icon. `boolean`
+      favicons: true,               // Create regular favicons. `boolean`
+      firefox: true,                // Create Firefox OS icons. `boolean`
+      opengraph: true,              // Create Facebook OpenGraph image. `boolean`
+      twitter: true,                // Create Twitter Summary Card image. `boolean`
+      windows: true,                // Create Windows 8 tile icons. `boolean`
+      yandex: true                  // Create Yandex browser icon. `boolean`
     }
   }
 

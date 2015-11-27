@@ -40,11 +40,11 @@ module.exports = {
         query: {
           plugins: ['react-transform'],
           extra: {
-            "react-transform": {
+            'react-transform': {
               transforms: [{
-                transform: "react-transform-hmr",
-                imports: ["react"],
-                locals: ["module"],
+                transform: 'react-transform-hmr',
+                imports: ['react'],
+                locals: ['module'],
               }],
             },
           },
