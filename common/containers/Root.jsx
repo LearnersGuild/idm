@@ -1,12 +1,12 @@
 import React from 'react'
 
-import css from './Root.scss'
+import styles from './Root.scss'
 
-export default class Index extends React.Component {
+export default class Root extends React.Component {
 
   render() {
     return (
-      <section className={css.layout}>
+      <section className={styles.layout}>
         <div className="display-1">Identity Management</div>
         <div>
           <a className="btn btn-primary" href="/docs/#!/default">View API Docs</a>
