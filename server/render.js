@@ -1,8 +1,5 @@
 /* eslint-disable no-undef */
 
-import path from 'path'
-import fs from 'fs'
-
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import fetch from 'node-fetch'
@@ -12,7 +9,6 @@ import Root from '../common/containers/Root'
 
 function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
   const { title } = initialState
-  const iconsMetadata = fs.readFileSync(path.join(__dirname, '..', 'public', 'assets', 'icons-metadata.html'))
   let appCss = ''
   if (!__DEVELOPMENT__) {
     appCss = `<link href="/app.css" media="screen,projection" rel="stylesheet" type="text/css" />`
@@ -52,8 +48,8 @@ export default function handleRender(req, res) {
     <Root />
   )
   fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
-    .then((res) => {
-      return res.json()
+    .then((resp) => {
+      return resp.json()
     }).then((tags) => {
       const iconsMetadataTagsHtml = '        ' + tags.join('\n        ')
       res.send(renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState))
