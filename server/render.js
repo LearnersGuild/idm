@@ -5,11 +5,12 @@ import fs from 'fs'
 
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import fetch from 'node-fetch'
 
 import Root from '../common/containers/Root'
 
 
-function renderFullPage(renderedAppHtml, initialState) {
+function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
   const { title } = initialState
   const iconsMetadata = fs.readFileSync(path.join(__dirname, '..', 'public', 'assets', 'icons-metadata.html'))
   let appCss = ''
@@ -28,12 +29,7 @@ function renderFullPage(renderedAppHtml, initialState) {
         <meta name="description" content="Identity Management" />
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-        <!--
-        <link rel="apple-touch-icon" href="/images/icon.png" />
-        <link rel="icon" href="/images/icon.png" />
-        -->
-
-        ${iconsMetadata}
+        ${iconsMetadataTagsHtml}
         ${appCss}
       </head>
       <body>
@@ -55,5 +51,11 @@ export default function handleRender(req, res) {
   const renderedAppHtml = ReactDOMServer.renderToString(
     <Root />
   )
-  res.send(renderFullPage(renderedAppHtml, initialState))
+  fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
+    .then((res) => {
+      return res.json()
+    }).then((tags) => {
+      const iconsMetadataTagsHtml = '        ' + tags.join('\n        ')
+      res.send(renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState))
+    })
 }
