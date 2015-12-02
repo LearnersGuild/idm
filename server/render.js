@@ -51,7 +51,6 @@ export default function handleRender(req, res) {
     .then((resp) => {
       return resp.json()
     }).then((tags) => {
-      const iconsMetadataTagsHtml = '        ' + tags.join('\n        ')
-      res.send(renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState))
+      res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, initialState))
     })
 }
