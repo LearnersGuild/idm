@@ -5,8 +5,8 @@ import path from 'path'
 import Express from 'express'
 import serveStatic from 'serve-static'
 
-import configureDevEnvironment from './configure-dev-environment'
-import configureSwagger from './configure-swagger'
+import configureDevEnvironment from './configureDevEnvironment'
+import configureSwagger from './configureSwagger'
 import handleRender from './render'
 
 const serverHost = process.env.APP_HOSTNAME || 'localhost'
