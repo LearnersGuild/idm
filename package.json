@@ -82,7 +82,6 @@
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
-    "favicons": "^4.2.6",
     "jest-cli": "^0.8.0",
     "jest-css-modules": "^1.0.0",
     "piping": "^0.3.0",
