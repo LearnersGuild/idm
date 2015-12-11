@@ -24,6 +24,9 @@ app.use(serveStatic(path.join(__dirname, '../public')))
 
 // Swagger middleware
 configureSwagger(app, ()=> {
+  // Default React application
+  app.use(handleRender)
+
   app.listen(serverPort, (error) => {
     if (error) {
       console.error(error)
@@ -32,6 +35,3 @@ configureSwagger(app, ()=> {
     }
   })
 })
-
-// Default React application
-app.use(handleRender)
