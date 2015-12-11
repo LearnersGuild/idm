@@ -9,7 +9,7 @@ import fetch from 'node-fetch'
 
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-const swaggerDoc = YAML.load(path.join(__dirname, '../config/swagger-idm.yaml'))
+const swaggerDoc = YAML.load(path.join(__dirname, '../config/swagger.yaml'))
 
 // Customize the look-and-feel of the Swagger docs.
 function replaceSwaggerUiHtml() {
