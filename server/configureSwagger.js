@@ -11,6 +11,7 @@ import fetch from 'node-fetch'
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 const swaggerDoc = YAML.load(path.join(__dirname, '../config/swagger-idm.yaml'))
 
+// Customize the look-and-feel of the Swagger docs.
 function replaceSwaggerUiHtml() {
   const title = 'IDM API'
   const logoUrl = 'https://lg-icons.herokuapp.com/favicon-32x32.png'
@@ -26,11 +27,8 @@ function replaceSwaggerUiHtml() {
       }).then((iconsMetadataTagsHtml) => {
         const templateData = fs.readFileSync(customSwaggerUiTemplateFilename).toString('utf-8')
         const renderedTemplate = ejs.render(templateData, { title, logoUrl, iconsMetadataTagsHtml })
-        // console.log('renderedTemplate:', renderedTemplate)
-        console.log('writing file:', swaggerUiHtmlFilename)
         fs.writeFileSync(swaggerUiHtmlFilename, renderedTemplate.toString())
-        console.log('wrote file:', swaggerUiHtmlFilename)
-        resolve(renderedTemplate)
+        resolve()
       })
   })
 }
@@ -49,7 +47,7 @@ export default function configureSwagger(app, next) {
 
     // Serve the Swagger documents and Swagger UI
     replaceSwaggerUiHtml()
-      .then((templateData) => {
+      .then(() => {
         app.use(middleware.swaggerUi())
 
         // Start the server
