@@ -7,15 +7,20 @@ This is the identity management service.
 Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 1. Clone the repository.
-2. Create your `.env` file for your environment, e.g.:
-    $ echo -e "PORT=8080\nNODE_ENV=development"
-3. Run the server:
+2. Create your `.env` file for your environment. Example:
+    PORT=8081
+    NODE_ENV=development
+    APP_BASEURL=http://localhost:8081
+    DATABASE_URL=postgres://localhost/idm_development
+    ICONS_SERVICE_TAGS_API_URL=https://lg-icons.herokuapp.com/tags
+3. Run the setup tasks:
     $ npm install
+    $ npm run db:create
+    $ npm run db:migrate
+4. Run the server:
     $ npm start
-4. Visit the server in your browser:
-    $ open http://localhost:8080
-5. Update the API definitions in [swagger-idm.yaml](swagger-idm.yaml).
-6. Go to step (4).
+5. Visit the server in your browser:
+    $ open http://localhost:8081
 
 
 ## License
