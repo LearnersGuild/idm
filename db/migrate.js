@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import path from 'path'
 import postgrator from 'postgrator'
 
@@ -23,10 +24,10 @@ if (run) {
 
   postgrator.migrate(args[0], (err, migrations) => {
     if (err) {
-      console.err("ERROR:", err)
+      console.err('ERROR:', err)
       process.exit(1)
     }
-    // console.log(migrations)
+    console.info('Completed %d migrations.', migrations.length)
     process.exit(0)
   })
 }
