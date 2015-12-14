@@ -1,10 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-import Promise from 'bluebird'
 import swaggerTools from 'swagger-tools'
 import YAML from 'yamljs'
-import _ from 'lodash'
 import ejs from 'ejs'
 import fetch from 'node-fetch'
 
