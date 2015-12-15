@@ -7,6 +7,7 @@ import serveStatic from 'serve-static'
 
 import configureDevEnvironment from './configureDevEnvironment'
 import configureSwagger from './configureSwagger'
+import configureGoogleAuth from './configureGoogleAuth'
 import handleRender from './render'
 
 const serverPort = parseInt(process.env.PORT, 10)
@@ -24,6 +25,9 @@ app.use(serveStatic(path.join(__dirname, '../public')))
 
 // Swagger middleware
 configureSwagger(app, ()=> {
+  // Authentication with google
+  configureGoogleAuth(app)
+
   // Default React application
   app.use(handleRender)
 
