@@ -24,7 +24,7 @@ if (run) {
 
   postgrator.migrate(args[0], (err, migrations) => {
     if (err) {
-      console.err('ERROR:', err)
+      console.error('ERROR:', err)
       process.exit(1)
     }
     console.info('Completed %d migrations.', migrations.length)
