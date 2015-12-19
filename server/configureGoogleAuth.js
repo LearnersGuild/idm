@@ -3,17 +3,23 @@
 import passport from 'passport'
 import { OAuth2Strategy as GoogleOAuth2Strategy } from 'passport-google-oauth'
 
-function verifyUser(accessToken, refreshToken, profile, done) {
-  // TODO: verify the user account in the database
-  console.log('accessToken:', accessToken)
-  console.log('refreshToken:', refreshToken)
-  const user = {
-    id: 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee',
+import {
+  findByEmailAndUpdateOrCreate as findByEmailAndUpdateOrCreateUser
+} from './dao/Users'
+
+
+function updateUser(accessToken, refreshToken, profile, done) {
+  const userData = {
     name: profile.displayName,
     email: profile.emails[0].value,
-    avatarUrl: profile.photos[0].value,
+    _google_auth_info: {
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      profile: profile,
+    },
   }
-  return done(user)
+  findByEmailAndUpdateOrCreateUser(userData.email, userData)
+    .then((user) => done(user))
 }
 
 function handleAuthenticate(req, res, next) {
@@ -42,7 +48,7 @@ export default function configureGoogleAuth(app) {
       clientID: process.env.GOOGLE_API_CLIENT_ID,
       clientSecret: process.env.GOOGLE_API_CLIENT_SECRET,
       callbackURL: `${process.env.APP_BASEURL}/auth/google/callback`,
-    }, verifyUser)
+    }, updateUser)
   )
 
   app.get('/auth/google', handleAuthenticate)
