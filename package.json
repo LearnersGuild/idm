@@ -67,6 +67,7 @@
     "passport": "^0.3.2",
     "passport-google-oauth": "^0.2.0",
     "pg": "^4.4.3",
+    "pg-query": "^0.11.0",
     "postcss": "^5.0.12",
     "postcss-modules-extract-imports": "^1.0.0",
     "postcss-modules-local-by-default": "^1.0.0",
