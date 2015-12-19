@@ -23,33 +23,23 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: cohorts
+        - name: id
           in: query
-          description: return only users in the given cohorts
+          description: return only users that match the given id
           required: false
-          type: array
-          items:
-            type: string
-            format: UUID
-          collectionFormat: csv
-        - name: pods
+          type: string
+          format: UUID
+        - name: name
           in: query
-          description: return only users in the given pods
+          description: return only users that match the given name
           required: false
-          type: array
-          items:
-            type: string
-            format: UUID
-          collectionFormat: csv
-        - name: chapters
+          type: string
+        - name: email
           in: query
-          description: return only users in the given chapters
+          description: return only users that match the given email
           required: false
-          type: array
-          items:
-            type: string
-            format: UUID
-          collectionFormat: csv
+          type: string
+          format: email
         - name: limit
           in: query
           description: maximum number of results to return
@@ -131,7 +121,6 @@ definitions:
       - message
     properties:
       code:
-        type: integer
-        format: int32
+        type: string
       message:
         type: string
