@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 
 export function buildWhereForParams(params) {
-  if (Object.keys(params).length === 0) {
+  if (!params || Object.keys(params).length === 0) {
     return { clause: '', values: [] }
   }
   const [columns, values] = _.unzip(_.pairs(params))
