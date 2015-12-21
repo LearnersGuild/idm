@@ -15,6 +15,42 @@ consumes:
 produces:
   - application/json
 paths:
+  /auth/google:
+    get:
+      description: Initiate an OAuth2 authentication process with Google
+      x-swagger-router-controller: GoogleOAuth2
+      operationId: authenticate
+      responses:
+        '301':
+          description: redirect to OAuth2 callback
+          schema:
+            type: string
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
+  /auth/google/callback:
+    get:
+      description: Callback from the OAuth2 authentication process with Google
+      x-swagger-router-controller: GoogleOAuth2
+      operationId: callback
+      produces:
+        - application/json
+      parameters:
+        - name: code
+          in: query
+          description: access token
+          required: true
+          type: string
+      responses:
+        '200':
+          description: user response
+          schema:
+            $ref: '#/definitions/user'
+        default:
+          description: unexpected error
+          schema:
+            $ref: '#/definitions/errorModel'
   /users:
     get:
       description: Returns all users from the system that the user has access to
