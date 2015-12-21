@@ -15,7 +15,6 @@
     "build": "mkdir -p dist && webpack --config config/webpack-$NODE_ENV-config.js",
     "db:create": "createdb idm_$NODE_ENV",
     "db:migrate": "./node_modules/.bin/babel-node ./db/migrate.js",
-    "favicons": "mkdir -p public/assets && ./node_modules/.bin/babel-node scripts/generate-favicons.js",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx .",
     "start": "npm run build & node server",
     "test": "./node_modules/.bin/jest"
