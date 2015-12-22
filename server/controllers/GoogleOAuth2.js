@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 
+import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import fetch from 'node-fetch'
 
@@ -47,7 +48,13 @@ export function callback(req, res, next) {
       if (err) {
         return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><br/><p>${err.toString()}</p></body></html>`)
       }
-      const initialState = { user }
+
+      const token = jwt.sign({
+        iss: 'learnersguild.org',
+        sub: user.id,
+        name: user.name,
+      }, process.env.JWT_SECRET)
+      const initialState = { token, user }
       const renderedAppHtml = ReactDOMServer.renderToString(
         <Root />
       )
@@ -55,6 +62,10 @@ export function callback(req, res, next) {
         .then((resp) => {
           return resp.json()
         }).then((tags) => {
+          res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+          })
           res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, initialState))
         })
     }
