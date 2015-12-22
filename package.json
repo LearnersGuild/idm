@@ -59,6 +59,7 @@
     "dotenv": "^1.2.0",
     "ejs": "^2.3.4",
     "express": "^4.13.3",
+    "express-sslify": "^1.0.1",
     "extract-text-webpack-plugin": "^0.9.1",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",

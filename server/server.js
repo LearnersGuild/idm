@@ -4,6 +4,7 @@ process.env.PORT = process.env.PORT || '8080'
 import path from 'path'
 import Express from 'express'
 import serveStatic from 'serve-static'
+import enforceSecure from 'express-sslify'
 
 import configureDevEnvironment from './configureDevEnvironment'
 import configureSwagger from './configureSwagger'
@@ -17,6 +18,11 @@ const app = new Express()
 
 if (process.env.NODE_ENV === 'development') {
   configureDevEnvironment(app)
+}
+
+// Ensure secure connection in production.
+if (process.env.NODE_ENV === 'production') {
+  app.use(enforceSecure.HTTPS({ trustProtoHeader: true }))
 }
 
 // Use this middleware to server up static files
