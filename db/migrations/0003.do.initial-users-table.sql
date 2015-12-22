@@ -2,9 +2,9 @@ CREATE TABLE users(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name varchar(255),
   email varchar(255),
+  google_auth_info jsonb,
   created_at timestamp with time zone default now(),
-  updated_at timestamp with time zone default now(),
-  _google_auth_info jsonb
+  updated_at timestamp with time zone default now()
 );
 
 CREATE UNIQUE INDEX users_lower_email ON users(lower(email));

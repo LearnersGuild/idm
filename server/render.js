@@ -7,7 +7,7 @@ import fetch from 'node-fetch'
 import Root from '../common/containers/Root'
 
 
-function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
+export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
   const { title } = initialState
   let appCss = ''
   if (!process.env.NODE_ENV === 'development') {

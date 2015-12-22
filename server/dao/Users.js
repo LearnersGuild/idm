@@ -28,13 +28,13 @@ export function getById(id) {
 
 export function create(userData) {
   return queryFirstAsync(`
-  INSERT INTO users (name, email, _google_auth_info)
+  INSERT INTO users (name, email, google_auth_info)
   VALUES      ($1, $2, $3)
-  RETURNING   id, name, email, created_at, updated_at
+  RETURNING   id, name, email, google_auth_info, created_at, updated_at
   `, [
     userData.name,
     userData.email,
-    userData._google_auth_info,
+    userData.google_auth_info,
   ])
 }
 
@@ -42,12 +42,12 @@ export function update(id, userData) {
   return queryFirstAsync(`
   UPDATE    users
   SET       name = $1,
-            _google_auth_info = $2
+            google_auth_info = $2
   WHERE     id = $3
-  RETURNING id, name, email, created_at, updated_at
+  RETURNING id, name, email, google_auth_info, created_at, updated_at
   `, [
     userData.name,
-    userData._google_auth_info,
+    userData.google_auth_info,
     id
   ])
 }
