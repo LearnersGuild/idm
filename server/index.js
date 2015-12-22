@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-require('babel/register')
+require('babel-core/register')
 
 // CSS modules on server-side in development.
 setupCssModulesRequireHook()
