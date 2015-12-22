@@ -17,7 +17,7 @@
     "db:migrate": "./node_modules/.bin/babel-node ./db/migrate.js",
     "lint": "./node_modules/.bin/eslint --ext .js,.jsx .",
     "start": "npm run build & node server",
-    "test": "./node_modules/.bin/jest"
+    "test": "NODE_ENV=test ./node_modules/.bin/jest"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/jest-css-modules",
@@ -78,6 +78,7 @@
     "sass-loader": "^3.1.2",
     "serve-static": "^1.10.0",
     "style-loader": "^0.13.0",
+    "supertest": "^1.1.0",
     "swagger-tools": "0.9.*",
     "webpack": "^1.12.9",
     "webpack-dev-middleware": "^1.4.0",
