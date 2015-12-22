@@ -15,7 +15,7 @@ const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
 
 const app = new Express()
 
-if (__DEVELOPMENT__) {
+if (process.env.NODE_ENV === 'development') {
   configureDevEnvironment(app)
 }
 
@@ -24,6 +24,7 @@ app.use(serveStatic(path.join(__dirname, '../dist')))
 app.use(serveStatic(path.join(__dirname, '../public')))
 
 // Swagger middleware
+let server
 configureSwagger(app, ()=> {
   // Authentication with google
   configureGoogleAuth(app)
@@ -31,7 +32,7 @@ configureSwagger(app, ()=> {
   // Default React application
   app.use(handleRender)
 
-  app.listen(serverPort, (error) => {
+  server = app.listen(serverPort, (error) => {
     if (error) {
       console.error(error)
     } else {
@@ -39,3 +40,5 @@ configureSwagger(app, ()=> {
     }
   })
 })
+
+export default server
