@@ -10,7 +10,7 @@ import Root from '../common/containers/Root'
 export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
   const { title } = initialState
   let appCss = ''
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV !== 'development') {
     appCss = `<link href="/app.css" media="screen,projection" rel="stylesheet" type="text/css" />`
   }
 
