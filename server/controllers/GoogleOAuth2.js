@@ -42,6 +42,11 @@ export function authenticate(req, res, next) {
 
 // TODO: any way to refactor this with what's in ../render.js?
 export function callback(req, res, next) {
+  if (!req.query.code || req.query.error) {
+    const errStr = req.query.error ? req.query.error : "Missing 'code' parameter."
+    return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><br/><p>${errStr}</p></body></html>`)
+  }
+
   passport.authenticate(
     'google', {},
     (err, user) => {

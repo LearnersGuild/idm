@@ -44,13 +44,13 @@ describe('GoogleOAuth2', () => {
   })
 
   describe('callback', () => {
-    it('expects a \'code\' parameter', () => {
+    it("expects a 'code' parameter", () => {
       let requestSucceeded = false
 
       runs(() => {
         request(app)
           .get('/auth/google/callback')
-          .expect(400, (err) => {
+          .expect(401, (err) => {
             if (err) {
               requestSucceeded = false
             } else {
@@ -64,14 +64,14 @@ describe('GoogleOAuth2', () => {
       }, 'Request should be recognized as malformed.', 1500)
     })
 
-    it('should succeed if code parameter is supplied', () => {
+    it("should fail if 'error' parameter is supplied", () => {
       let requestSucceeded = false
 
       runs(() => {
         request(app)
           .get('/auth/google/callback')
-          .query({ code: 'xxx' })
-          .expect(200, (err) => {
+          .query({ error: 'xxx', code: 'yyy' })
+          .expect(401, (err) => {
             if (err) {
               requestSucceeded = false
             } else {
