@@ -22,30 +22,32 @@ export function replaceSwaggerUiHtml(iconsMetadataTagsHtml) {
   fs.writeFileSync(swaggerUiHtmlFilename, renderedTemplate.toString())
 }
 
-export default function configureSwagger(app, next) {
-  // Fetch the icons data and then generate the Swagger HTML file.
-  fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
-    .then((resp) => {
-      return resp.json()
-    }).then((tags) => {
-      return tags.join('\n        ')
-    }).then((iconsMetadataTagsHtml) => replaceSwaggerUiHtml(iconsMetadataTagsHtml))
+export default function configureSwagger(app) {
+  return new Promise((resolve) => {
+    // Fetch the icons data and then generate the Swagger HTML file.
+    fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
+      .then((resp) => {
+        return resp.json()
+      }).then((tags) => {
+        return tags.join('\n        ')
+      }).then((iconsMetadataTagsHtml) => replaceSwaggerUiHtml(iconsMetadataTagsHtml))
 
-  // Initialize the Swagger middleware
-  swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
-    // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
-    app.use(middleware.swaggerMetadata())
+    // Initialize the Swagger middleware
+    swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
+      // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
+      app.use(middleware.swaggerMetadata())
 
-    // Validate Swagger requests
-    app.use(middleware.swaggerValidator())
+      // Validate Swagger requests
+      app.use(middleware.swaggerValidator())
 
-    // Route validated requests to appropriate controller
-    app.use(middleware.swaggerRouter({ useStubs: false, controllers: path.join(__dirname, 'controllers') }))
+      // Route validated requests to appropriate controller
+      app.use(middleware.swaggerRouter({ useStubs: false, controllers: path.join(__dirname, 'controllers') }))
 
-    // Serve the Swagger documents and Swagger UI
-    app.use(middleware.swaggerUi())
+      // Serve the Swagger documents and Swagger UI
+      app.use(middleware.swaggerUi())
 
-    // Start the server
-    return next()
+      // Start the server
+      return resolve()
+    })
   })
 }

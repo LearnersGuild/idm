@@ -16,35 +16,35 @@ const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
 
 const app = new Express()
 
-if (process.env.NODE_ENV === 'development') {
-  configureDevEnvironment(app)
-}
+export function start() {
+  if (process.env.NODE_ENV === 'development') {
+    configureDevEnvironment(app)
+  }
 
-// Ensure secure connection in production.
-if (process.env.NODE_ENV === 'production') {
-  app.use(enforceSecure.HTTPS({ trustProtoHeader: true }))
-}
+  // Ensure secure connection in production.
+  if (process.env.NODE_ENV === 'production') {
+    app.use(enforceSecure.HTTPS({ trustProtoHeader: true }))
+  }
 
-// Use this middleware to server up static files
-app.use(serveStatic(path.join(__dirname, '../dist')))
-app.use(serveStatic(path.join(__dirname, '../public')))
+  // Use this middleware to server up static files
+  app.use(serveStatic(path.join(__dirname, '../dist')))
+  app.use(serveStatic(path.join(__dirname, '../public')))
 
-// Swagger middleware
-let server
-configureSwagger(app, ()=> {
-  // Authentication with google
-  configureGoogleAuth(app)
+  return Promise.all([
+    // Swagger middleware
+    configureSwagger(app),
+    // Authentication with google
+    configureGoogleAuth(app),
+  ]).then(() => {
+    // Default React application
+    app.use(handleRender)
 
-  // Default React application
-  app.use(handleRender)
-
-  server = app.listen(serverPort, (error) => {
-    if (error) {
-      console.error(error)
-    } else {
-      console.info('🌍  Listening at %s', baseUrl)
-    }
+    return app.listen(serverPort, (error) => {
+      if (error) {
+        console.error(error)
+      } else {
+        console.info('🌍  Listening at %s', baseUrl)
+      }
+    })
   })
-})
-
-export default server
+}
