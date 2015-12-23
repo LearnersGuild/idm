@@ -20,11 +20,12 @@
     "test": "NODE_ENV=test ./node_modules/.bin/jest"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/jest-css-modules",
+    "scriptPreprocessor": "<rootDir>/config/jest-preprocessor.js",
     "testFileExtensions": [
       "js",
       "jsx"
     ],
+    "testRunner": "<rootDir>/node_modules/jest-cli/src/testRunners/jasmine/jasmine2.js",
     "moduleFileExtensions": [
       "js",
       "json",
@@ -90,12 +91,12 @@
   },
   "devDependencies": {
     "babel-eslint": "^4.1.6",
+    "babel-jest": "^6.0.1",
     "babel-plugin-react-transform": "^2.0.0-beta1",
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
-    "jest-cli": "^0.8",
-    "jest-css-modules": "^1.0.0",
+    "jest-cli": "^0.8.2",
     "piping": "^0.3.0",
     "react-addons-test-utils": "^0.14.3",
     "react-transform-hmr": "^1.0.1"
