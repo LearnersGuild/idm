@@ -14,8 +14,8 @@ export default function configureAppForDevelopment(app) {
         publicPath: webpackConfig.output.publicPath
       }))
       app.use(webpackHotMiddleware(compiler))
-
-      return resolve()
     }
+
+    return resolve()
   })
 }
