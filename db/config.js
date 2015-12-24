@@ -17,6 +17,11 @@ function config() {
       db: parsedUrl.pathname.slice(1),
       authKey: parsedUrl.auth ? parsedUrl.auth.split(':')[1] : undefined,
     }
+    if (process.env.RETHINKDB_CERT) {
+      _dbConfig.ssl = {
+        ca: process.env.RETHINKDB_CERT
+      }
+    }
   }
   return _dbConfig
 }
