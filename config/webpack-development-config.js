@@ -7,7 +7,7 @@ module.exports = {
     app: [
       'webpack-hot-middleware/client',
       'bootstrap-loader',
-      './common/containers/App.jsx',
+      './client/containers/App.jsx',
     ]
   },
 

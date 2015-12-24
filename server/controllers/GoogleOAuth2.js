@@ -5,6 +5,7 @@ import passport from 'passport'
 import fetch from 'node-fetch'
 import _ from 'lodash'
 import r from 'rethinkdb'
+import raven from 'raven'
 
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
@@ -13,6 +14,8 @@ import getDBConfig from '../../db/config'
 import { renderFullPage } from '../render'
 import Root from '../../common/containers/Root'
 
+
+const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 export function updateUser(accessToken, refreshToken, profile, done) {
   const userData = {
@@ -45,8 +48,8 @@ export function updateUser(accessToken, refreshToken, profile, done) {
             })
         })
     })
-    .catch((/* err */) => {
-      // TODO: integrate with HoneyBadger
+    .catch((err) => {
+      sentry.captureException(err)
       return done("Couldn't save user record.")
     })
 }
@@ -72,6 +75,7 @@ export function callback(req, res, next) {
     'google', {},
     (err, user) => {
       if (err) {
+        sentry.captureException(new Error(err))
         return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><p>${err}</p></body></html>`)
       }
 
@@ -80,7 +84,7 @@ export function callback(req, res, next) {
         sub: user.id,
         name: user.name,
       }, process.env.JWT_SECRET)
-      const initialState = { token, user }
+      const initialState = { token, user, title: 'Identity Management' }
       const renderedAppHtml = ReactDOMServer.renderToString(
         <Root />
       )

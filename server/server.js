@@ -5,6 +5,7 @@ import path from 'path'
 import Express from 'express'
 import serveStatic from 'serve-static'
 import enforceSecure from 'express-sslify'
+import raven from 'raven'
 
 import configureDevEnvironment from './configureDevEnvironment'
 import configureSwagger from './configureSwagger'
@@ -12,6 +13,9 @@ import configureGoogleAuth from './configureGoogleAuth'
 import handleRender from './render'
 
 export function start() {
+  // error handling
+  raven.patchGlobal(process.env.SENTRY_SERVER_DSN)
+
   const serverPort = parseInt(process.env.PORT, 10)
   const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
 

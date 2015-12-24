@@ -1,7 +1,9 @@
 import r from 'rethinkdb'
+import raven from 'raven'
 
 import getDBConfig from '../../db/config'
 
+const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 export function findUsers(req, res) {
   r.connect(getDBConfig())
@@ -12,8 +14,10 @@ export function findUsers(req, res) {
         .then((cursor) => cursor.toArray())
         .then((users) => res.status(200).json(users))
     })
-    // TODO: integrate with HoneyBadger
-    .catch((err) => res.status(500).json({ code: err.code, message: err.msg }))
+    .catch((err) => {
+      sentry.captureException(err)
+      res.status(500).json({ code: err.code, message: err.msg })
+    })
 }
 
 export function getUserById(req, res) {
@@ -29,8 +33,10 @@ export function getUserById(req, res) {
           return res.status(200).json(user)
         })
     })
-    // TODO: integrate with HoneyBadger
-    .catch((err) => res.status(500).json({ code: err.code, message: err.msg }))
+    .catch((err) => {
+      sentry.captureException(err)
+      res.status(500).json({ code: err.code, message: err.msg })
+    })
 }
 
 export function getCurrentUser(req, res) {

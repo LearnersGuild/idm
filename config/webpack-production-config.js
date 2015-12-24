@@ -6,7 +6,7 @@ module.exports = {
   entry: {
     app: [
       'bootstrap-loader/extractStyles',
-      './common/containers/App.jsx',
+      './client/containers/App.jsx',
     ]
   },
 

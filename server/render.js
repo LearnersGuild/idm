@@ -42,7 +42,8 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
 
 export default function handleRender(req, res) {
   const initialState = {
-    title: 'Identity Management'
+    title: 'Identity Management',
+    sentryClientDSN: process.env.SENTRY_CLIENT_DSN,
   }
   const renderedAppHtml = ReactDOMServer.renderToString(
     <Root />
