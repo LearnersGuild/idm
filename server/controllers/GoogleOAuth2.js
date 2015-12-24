@@ -3,15 +3,14 @@
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import fetch from 'node-fetch'
+import _ from 'lodash'
+import r from 'rethinkdb'
 
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
-import {
-  findByEmailAndUpdateOrCreate as findByEmailAndUpdateOrCreateUser
-} from '../dao/Users'
+import getDBConfig from '../../db/config'
 import { renderFullPage } from '../render'
-
 import Root from '../../common/containers/Root'
 
 
@@ -25,9 +24,31 @@ export function updateUser(accessToken, refreshToken, profile, done) {
       profile: profile,
     },
   }
-  findByEmailAndUpdateOrCreateUser(userData.email, userData)
-    .then((user) => done(null, user))
-    .catch((err) => done({ code: err.code || 401, message: err.toString() }))
+  // find the user by her email address, then insert / update
+  r.connect(getDBConfig())
+    .then((conn) => {
+      return r.table('users')
+        .filter({ email: userData.email })
+        .run(conn)
+        .then((cursor) => cursor.toArray())
+        .then((users) => {
+          const user = users.length ? users[0] : {}
+          return _.merge(user, userData)
+        })
+        .then((user) => {
+          return r.table('users')
+            .insert(user, { returnChanges: true, conflict: 'update' })
+            .run(conn)
+            .then((result) => result.changes[0].new_val)
+            .then((updatedUser) => {
+              return done(null, updatedUser)
+            })
+        })
+    })
+    .catch((/* err */) => {
+      // TODO: integrate with HoneyBadger
+      return done("Couldn't save user record.")
+    })
 }
 
 export function authenticate(req, res, next) {
@@ -44,14 +65,14 @@ export function authenticate(req, res, next) {
 export function callback(req, res, next) {
   if (!req.query.code || req.query.error) {
     const errStr = req.query.error ? req.query.error : "Missing 'code' parameter."
-    return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><br/><p>${errStr}</p></body></html>`)
+    return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><p>${errStr}</p></body></html>`)
   }
 
   passport.authenticate(
     'google', {},
     (err, user) => {
       if (err) {
-        return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><br/><p>${err.toString()}</p></body></html>`)
+        return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><p>${err}</p></body></html>`)
       }
 
       const token = jwt.sign({

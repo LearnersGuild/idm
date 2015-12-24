@@ -1,28 +1,36 @@
-import {
-  find,
-  getById,
-} from '../dao/Users'
+import r from 'rethinkdb'
+
+import getDBConfig from '../../db/config'
 
 
 export function findUsers(req, res) {
-  find(req.query)
-    .then((rows) => res.status(200).json(rows))
-    .catch((err) => {
-      res.status(500).json({ code: err.code, message: err.toString() })
+  r.connect(getDBConfig())
+    .then((conn) => {
+      r.table('users')
+        .filter(req.query)
+        .run(conn)
+        .then((cursor) => cursor.toArray())
+        .then((users) => res.status(200).json(users))
     })
+    // TODO: integrate with HoneyBadger
+    .catch((err) => res.status(500).json({ code: err.code, message: err.msg }))
 }
 
 export function getUserById(req, res) {
-  getById(req.swagger.params.id.value)
-    .then((result) => {
-      if (!result) {
-        res.status(404).json({ code: '404', message: 'Not Found' })
-      }
-      res.status(200).json(result)
+  r.connect(getDBConfig())
+    .then((conn) => {
+      r.table('users')
+        .get(req.swagger.params.id.value)
+        .run(conn)
+        .then((user) => {
+          if (!user) {
+            return res.status(404).json({ code: '404', message: 'Not Found' })
+          }
+          return res.status(200).json(user)
+        })
     })
-    .catch((err) => {
-      res.status(500).json({ code: err.code, message: err.toString() })
-    })
+    // TODO: integrate with HoneyBadger
+    .catch((err) => res.status(500).json({ code: err.code, message: err.msg }))
 }
 
 export function getCurrentUser(req, res) {
