@@ -6,7 +6,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import TestUtils from 'react-addons-test-utils'
 
-const Root = require('../Root').default
+const Root = require('../Root').Root
 
 describe('Root', () => {
   // This is admittedly a stupid test, but it's here just to demonstrate

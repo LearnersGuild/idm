@@ -4,7 +4,7 @@ import { pushPath } from 'redux-simple-router'
 
 import styles from './Root.scss'
 
-class Root extends React.Component {
+export class Root extends React.Component {
   constructor() {
     super()
     if (typeof(window) !== 'undefined' && window.__INITIAL_STATE__) {
