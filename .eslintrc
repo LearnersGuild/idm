@@ -10,6 +10,7 @@
 
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
+    "react/prop-types": [2, { "ignore": ["dispatch"] }],
     "react/react-in-jsx-scope": 2,
 
     "semi": [2, "never"],
