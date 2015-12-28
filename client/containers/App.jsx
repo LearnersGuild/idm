@@ -1,13 +1,21 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+
+import rootReducer from '../../common/reducers'
 import Root from '../../common/containers/Root'
 
 const Raven = require('raven-js').noConflict()
+Raven.config(window.sentryClientDSN)
+
 const initialState = window.__INITIAL_STATE__
-Raven.config(initialState.sentryClientDSN)
+const store = createStore(rootReducer, initialState)
 
-Raven.captureException(new Error('this is a client-side test'))
-
-
-ReactDOM.render(<Root />, document.getElementById('root'))
+render(
+  <Provider store={store}>
+    <Root />
+  </Provider>,
+  document.getElementById('root')
+)

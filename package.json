@@ -81,6 +81,8 @@
     "raven-js": "^2.0.0-rc2",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-redux": "^4.0.5",
+    "redux": "^3.0.5",
     "rethink-migrate": "jeffreywescott/rethink-migrate",
     "rethinkdb": "^2.2.1",
     "sass-loader": "^3.1.2",
