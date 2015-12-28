@@ -1,11 +1,14 @@
 import { combineReducers } from 'redux'
 
-function identity(state = {} /*, action */) {
+import { routeReducer } from 'redux-simple-router'
+
+function identity(state = {} /* , action */) {
   return state
 }
 
 const rootReducer = combineReducers({
-  identity
+  routing: routeReducer,
+  identity,
 })
 
 export default rootReducer

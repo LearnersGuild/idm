@@ -7,8 +7,10 @@ import { renderToString } from 'react-dom/server'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 
+import { RoutingContext, match } from 'react-router'
+
+import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
-import Root from '../common/containers/Root'
 
 
 export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
@@ -48,20 +50,30 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
 }
 
 export default function handleRender(req, res) {
-  const store = createStore(rootReducer)
-
-  const renderedAppHtml = renderToString(
-    <Provider store={store}>
-      <Root />
-    </Provider>
-  )
-
-  const initialState = store.getState()
-
   fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
     .then((resp) => {
       return resp.json()
     }).then((tags) => {
-      res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, initialState))
+      const store = createStore(rootReducer)
+
+      match({ routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+        // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
+        if (error) {
+          throw new Error(error)
+        } else if (redirectLocation) {
+          res.redirect(redirectLocation.pathname + redirectLocation.search)
+        } else if (!renderProps) {
+          res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
+        } else {
+          const renderedAppHtml = renderToString(
+            <Provider store={store}>
+              <RoutingContext {...renderProps}/>
+            </Provider>
+          )
+          res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, store.getState()))
+        }
+      })
+    }).catch((error) => {
+      res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
     })
 }
