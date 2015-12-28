@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-function identity(state = {}, action) {
+function identity(state = {} /*, action */) {
   return state
 }
 
