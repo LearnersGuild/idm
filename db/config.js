@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable no-var, no-console */
 var url = require('url')
 
 if (process.env.NODE_ENV === 'development') {

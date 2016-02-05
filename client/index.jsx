@@ -1,12 +1,13 @@
+/* global window, document */
 import React from 'react'
-import { render } from 'react-dom'
+import {render} from 'react-dom'
 
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
 
-import { Router } from 'react-router'
-import { createHistory } from 'history'
-import { syncReduxAndRouter } from 'redux-simple-router'
+import {Router} from 'react-router'
+import {createHistory} from 'history'
+import {syncReduxAndRouter} from 'redux-simple-router'
 
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'

@@ -1,4 +1,6 @@
 /* eslint-disable no-console, no-undef */
+/* eslint new-cap: [2, {"capIsNewExceptions": ["HTTPS"]}] */
+
 process.env.PORT = process.env.PORT || '8080'
 
 import path from 'path'
@@ -27,7 +29,7 @@ export function start() {
 
   // Ensure secure connection in production.
   if (process.env.NODE_ENV === 'production') {
-    app.use(enforceSecure.HTTPS({ trustProtoHeader: true }))
+    app.use(enforceSecure.HTTPS({trustProtoHeader: true}))
   }
 
   // Use this middleware to server up static files
@@ -43,7 +45,7 @@ export function start() {
     // Default React application
     app.use(handleRender)
 
-    return app.listen(serverPort, (error) => {
+    return app.listen(serverPort, error => {
       if (error) {
         console.error(error)
       } else {

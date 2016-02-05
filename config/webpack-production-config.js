@@ -15,18 +15,18 @@ module.exports = {
     filename: 'app.js',
   },
 
-  resolve: { extensions: [ '', '.js', '.jsx' ] },
+  resolve: {extensions: ['', '.js', '.jsx']},
 
   plugins: [
-    new ExtractTextPlugin('app.css', { allChunks: true }),
+    new ExtractTextPlugin('app.css', {allChunks: true}),
     new webpack.DefinePlugin({
       'process.env': {
         // useful to reduce the size of client-side libraries, e.g. react
-        'NODE_ENV': JSON.stringify('production'),
+        NODE_ENV: JSON.stringify('production'),
       },
-      __CLIENT__: true,
-      __SERVER__: false,
-      __DEVTOOLS__: false  // <-------- DISABLE redux-devtools HERE
+      '__CLIENT__': true,
+      '__SERVER__': false,
+      '__DEVTOOLS__': false  // <-------- DISABLE redux-devtools HERE
     }),
   ],
 
@@ -54,7 +54,7 @@ module.exports = {
       },
       {
         test: /\.(woff2?|ttf|eot|svg)$/,
-        loaders: [ 'url?limit=10000' ],
+        loaders: ['url?limit=10000'],
       },
     ],
   },

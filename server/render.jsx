@@ -3,11 +3,11 @@
 import fetch from 'node-fetch'
 
 import React from 'react'
-import { renderToString } from 'react-dom/server'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import {renderToString} from 'react-dom/server'
+import {createStore} from 'redux'
+import {Provider} from 'react-redux'
 
-import { RoutingContext, match } from 'react-router'
+import {RoutingContext, match} from 'react-router'
 
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
@@ -51,12 +51,12 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
 
 export default function handleRender(req, res) {
   fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
-    .then((resp) => {
+    .then(resp => {
       return resp.json()
-    }).then((tags) => {
+    }).then(tags => {
       const store = createStore(rootReducer)
 
-      match({ routes: getRoutes(store), location: req.originalUrl }, (error, redirectLocation, renderProps) => {
+      match({routes: getRoutes(store), location: req.originalUrl}, (error, redirectLocation, renderProps) => {
         // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
         if (error) {
           throw new Error(error)
@@ -73,7 +73,7 @@ export default function handleRender(req, res) {
           res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, store.getState()))
         }
       })
-    }).catch((error) => {
+    }).catch(error => {
       res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
     })
 }

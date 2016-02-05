@@ -7,7 +7,7 @@ const run = !module.parent
 
 export function drop() {
   return r.connect(dbEnv())
-    .then((conn) => {
+    .then(conn => {
       return r.dbDrop(dbEnv().db)
         .run(conn)
     })
@@ -19,7 +19,7 @@ if (run) {
       console.log(`Successfully dropped database '${dbEnv().db}'.`)
       process.exit(0)
     })
-    .catch((result) => {
+    .catch(result => {
       console.error(result.message)
       process.exit(1)
     })

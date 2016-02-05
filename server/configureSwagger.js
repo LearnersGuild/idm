@@ -6,7 +6,6 @@ import YAML from 'yamljs'
 import ejs from 'ejs'
 import fetch from 'node-fetch'
 
-
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 const swaggerDoc = YAML.load(path.join(__dirname, '../config/swagger.yaml'))
 
@@ -18,22 +17,22 @@ export function replaceSwaggerUiHtml(iconsMetadataTagsHtml) {
   const swaggerUiHtmlFilename = path.join(__dirname, '..', 'node_modules', 'swagger-tools', 'middleware', 'swagger-ui', 'index.html')
 
   const templateData = fs.readFileSync(customSwaggerUiTemplateFilename).toString('utf-8')
-  const renderedTemplate = ejs.render(templateData, { title, logoUrl, iconsMetadataTagsHtml })
+  const renderedTemplate = ejs.render(templateData, {title, logoUrl, iconsMetadataTagsHtml})
   fs.writeFileSync(swaggerUiHtmlFilename, renderedTemplate.toString())
 }
 
 export default function configureSwagger(app) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     // Fetch the icons data and then generate the Swagger HTML file.
     fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
-      .then((resp) => {
+      .then(resp => {
         return resp.json()
-      }).then((tags) => {
+      }).then(tags => {
         return tags.join('\n        ')
-      }).then((iconsMetadataTagsHtml) => replaceSwaggerUiHtml(iconsMetadataTagsHtml))
+      }).then(iconsMetadataTagsHtml => replaceSwaggerUiHtml(iconsMetadataTagsHtml))
 
     // Initialize the Swagger middleware
-    swaggerTools.initializeMiddleware(swaggerDoc, (middleware) => {
+    swaggerTools.initializeMiddleware(swaggerDoc, middleware => {
       // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
       app.use(middleware.swaggerMetadata())
 
@@ -41,7 +40,7 @@ export default function configureSwagger(app) {
       app.use(middleware.swaggerValidator())
 
       // Route validated requests to appropriate controller
-      app.use(middleware.swaggerRouter({ useStubs: false, controllers: path.join(__dirname, 'controllers') }))
+      app.use(middleware.swaggerRouter({useStubs: false, controllers: path.join(__dirname, 'controllers')}))
 
       // Serve the Swagger documents and Swagger UI
       app.use(middleware.swaggerUi())

@@ -2,9 +2,7 @@
 import path from 'path'
 import postgrator from 'postgrator'
 
-
 const run = !module.parent
-
 
 if (run) {
   const args = process.argv.slice(2)

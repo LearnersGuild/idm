@@ -1,17 +1,10 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { pushPath } from 'redux-simple-router'
+import {connect} from 'react-redux'
+import {pushPath} from 'redux-simple-router'
 
 import styles from './Root.scss'
 
 export class Root extends React.Component {
-  constructor() {
-    super()
-    if (typeof(window) !== 'undefined' && window.__INITIAL_STATE__) {
-      this.state = window.__INITIAL_STATE__
-    }
-  }
-
   render() {
     const welcomeOrSignIn = (this.state && this.state.user) ? (
       <p>Welcome back, {this.state.user.name}!</p>
@@ -30,6 +23,10 @@ export class Root extends React.Component {
       </section>
     )
   }
+}
+
+Root.propTypes = {
+  dispatch: React.PropTypes.function,
 }
 
 export default connect()(Root)

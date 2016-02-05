@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+
 var config = require('../config')()
 
 exports.up = function up(r, conn) {

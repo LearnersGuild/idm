@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 export default function configureAppForDevelopment(app) {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     if (process.env.NODE_ENV === 'development') {
       // Must be require'd rather than imported since it's only a devDependency and
       // won't exist in production, and all import statements must be static.

@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var babelJest = require('babel-jest')
 
 module.exports = {

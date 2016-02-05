@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-undef, camelcase */
 
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
@@ -11,9 +11,8 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
 import getDBConfig from '../../db/config'
-import { renderFullPage } from '../render'
+import {renderFullPage} from '../render'
 import Root from '../../common/containers/Root'
-
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
@@ -22,35 +21,35 @@ export function updateUser(accessToken, refreshToken, profile, done) {
     name: profile.displayName,
     email: profile.emails[0].value,
     google_auth_info: {
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      profile: profile,
+      accessToken,
+      refreshToken,
+      profile,
     },
   }
   // find the user by her email address, then insert / update
   r.connect(getDBConfig())
-    .then((conn) => {
+    .then(conn => {
       return r.table('users')
-        .filter({ email: userData.email })
+        .filter({email: userData.email})
         .run(conn)
-        .then((cursor) => cursor.toArray())
-        .then((users) => {
+        .then(cursor => cursor.toArray())
+        .then(users => {
           const user = users.length ? users[0] : {}
           return _.merge(user, userData)
         })
-        .then((user) => {
+        .then(user => {
           return r.table('users')
-            .insert(user, { returnChanges: true, conflict: 'update' })
+            .insert(user, {returnChanges: true, conflict: 'update'})
             .run(conn)
-            .then((result) => result.changes[0].new_val)
-            .then((updatedUser) => {
+            .then(result => result.changes[0].new_val)
+            .then(updatedUser => {
               return done(null, updatedUser)
             })
         })
     })
-    .catch((err) => {
+    .catch(err => {
       sentry.captureException(err)
-      return done("Couldn't save user record.")
+      return done('Couldn\'t save user record.')
     })
 }
 
@@ -61,13 +60,13 @@ export function authenticate(req, res, next) {
     'https://www.googleapis.com/auth/calendar',
   ]
 
-  passport.authenticate('google', { scope: scopes, accessType: 'offline'})(req, res, next)
+  passport.authenticate('google', {scope: scopes, accessType: 'offline'})(req, res, next)
 }
 
 // TODO: any way to refactor this with what's in ../render.js?
 export function callback(req, res, next) {
   if (!req.query.code || req.query.error) {
-    const errStr = req.query.error ? req.query.error : "Missing 'code' parameter."
+    const errStr = req.query.error ? req.query.error : 'Missing \'code\' parameter.'
     return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><p>${errStr}</p></body></html>`)
   }
 
@@ -84,14 +83,14 @@ export function callback(req, res, next) {
         sub: user.id,
         name: user.name,
       }, process.env.JWT_SECRET)
-      const initialState = { token, user, title: 'Identity Management' }
+      const initialState = {token, user, title: 'Identity Management'}
       const renderedAppHtml = ReactDOMServer.renderToString(
         <Root />
       )
       fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
-        .then((resp) => {
+        .then(resp => {
           return resp.json()
-        }).then((tags) => {
+        }).then(tags => {
           res.cookie('jwt', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',

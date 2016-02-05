@@ -13,9 +13,9 @@ function setupCssModulesRequireHook() {
   const hook = require('css-modules-require-hook')
   const sass = require('node-sass')
   hook({
-    extensions: [ '.scss' ],
+    extensions: ['.scss'],
     generateScopedName: '[name]__[local]__[hash:base64:5]',
-    preprocessCss: (css) => {
+    preprocessCss: css => {
       const result = sass.renderSync({
         data: css
       })

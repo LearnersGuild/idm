@@ -115,6 +115,10 @@
   },
   "xo": {
     "extends": "xo-react",
+    "rules": {
+      "comma-dangle": [0],
+      "no-negated-condition": [0]
+    },
     "esnext": true,
     "space": true,
     "semicolon": false
