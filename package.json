@@ -17,9 +17,8 @@
     "db:drop": "./node_modules/.bin/babel-node ./db/drop.js",
     "db:migrate:configure": "node ./db/config.js > ./db/database.json",
     "db:migrate": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db",
-    "lint": "./node_modules/.bin/xo",
     "start": "npm run build & node server",
-    "test": "npm run lint && NODE_ENV=test ./node_modules/.bin/ava"
+    "test": "./node_modules/.bin/xo && NODE_ENV=test ./node_modules/.bin/ava"
   },
   "keywords": [
     "idm"
