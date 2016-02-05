@@ -26,7 +26,7 @@ export class Root extends React.Component {
 }
 
 Root.propTypes = {
-  dispatch: React.PropTypes.function,
+  dispatch: React.PropTypes.func,
 }
 
 export default connect()(Root)

@@ -19,7 +19,7 @@
     "db:migrate": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db",
     "lint": "./node_modules/.bin/xo",
     "start": "npm run build & node server",
-    "test": "NODE_ENV=test npm run lint && ./node_modules/.bin/jest"
+    "test": "npm run lint && NODE_ENV=test ./node_modules/.bin/jest"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/config/jest-preprocessor.js",
@@ -34,6 +34,7 @@
       "jsx"
     ],
     "unmockedModulePathPatterns": [
+      "<rootDir>/node_modules/fbjs",
       "<rootDir>/node_modules/react",
       "<rootDir>/node_modules/react-dom",
       "<rootDir>/node_modules/react-addons-test-utils"
@@ -57,8 +58,8 @@
     "babel-preset-react": "^6.3.13",
     "babel-runtime": "^6.3.19",
     "bluebird": "^3.0.5",
-    "bootstrap": "twbs/bootstrap#v4.0.0-alpha",
-    "bootstrap-loader": "0.0.5",
+    "bootstrap": "github:twbs/bootstrap#v4.0.0-alpha.2",
+    "bootstrap-loader": "^1.0.7",
     "css-loader": "^0.23.0",
     "css-modules-require-hook": "^2.0.4",
     "dotenv": "^1.2.0",
@@ -66,6 +67,7 @@
     "express": "^4.13.3",
     "express-sslify": "^1.0.1",
     "extract-text-webpack-plugin": "^0.9.1",
+    "file-loader": "^0.8.5",
     "history": "^1.17.0",
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
@@ -86,6 +88,7 @@
     "react-router": "^1.0.3",
     "redux": "^3.0.5",
     "redux-simple-router": "^1.0.2",
+    "resolve-url-loader": "^1.4.3",
     "rethink-migrate": "jeffreywescott/rethink-migrate",
     "rethinkdb": "^2.2.1",
     "sass-loader": "^3.1.2",
@@ -93,6 +96,7 @@
     "style-loader": "^0.13.0",
     "supertest": "^1.1.0",
     "swagger-tools": "0.9.*",
+    "url-loader": "^0.5.7",
     "webpack": "^1.12.9",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.5.0",
