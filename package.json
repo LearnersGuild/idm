@@ -12,7 +12,7 @@
     "email": "jeffrey@learnersguild.org"
   },
   "scripts": {
-    "build": "mkdir -p dist && webpack --config config/webpack-$NODE_ENV-config.js",
+    "build": "mkdir -p dist && webpack --config config/webpack-production-config.js",
     "db:create": "./node_modules/.bin/babel-node ./db/create.js",
     "db:drop": "./node_modules/.bin/babel-node ./db/drop.js",
     "db:migrate:configure": "node ./db/config.js > ./db/database.json",
