@@ -17,9 +17,9 @@
     "db:drop": "./node_modules/.bin/babel-node ./db/drop.js",
     "db:migrate:configure": "node ./db/config.js > ./db/database.json",
     "db:migrate": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db",
-    "lint": "./node_modules/.bin/eslint --ext .js,.jsx .",
+    "lint": "./node_modules/.bin/xo",
     "start": "npm run build & node server",
-    "test": "NODE_ENV=test ./node_modules/.bin/jest"
+    "test": "xo && NODE_ENV=test ./node_modules/.bin/jest"
   },
   "jest": {
     "scriptPreprocessor": "<rootDir>/config/jest-preprocessor.js",
@@ -99,19 +99,24 @@
     "yamljs": "^0.2.4"
   },
   "devDependencies": {
-    "babel-eslint": "^4.1.6",
     "babel-jest": "^6.0.1",
     "babel-plugin-react-transform": "^2.0.0-beta1",
-    "eslint": "^1.7.3",
-    "eslint-config-airbnb": "^0.1.0",
-    "eslint-plugin-react": "^3.6.3",
+    "eslint-config-xo-react": "^0.3.0",
+    "eslint-plugin-react": "^3.16.1",
     "jest-cli": "^0.8.2",
     "piping": "^0.3.0",
     "react-addons-test-utils": "^0.14.3",
-    "react-transform-hmr": "^1.0.1"
+    "react-transform-hmr": "^1.0.1",
+    "xo": "^0.12.1"
   },
   "engines": {
     "node": "5.5.x",
     "npm": "3.3.x"
+  },
+  "xo": {
+    "extends": "xo-react",
+    "esnext": true,
+    "space": true,
+    "semicolon": false
   }
 }
