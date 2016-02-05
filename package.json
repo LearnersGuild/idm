@@ -52,8 +52,6 @@
     "jsonwebtoken": "^5.4.1",
     "lodash": "^3.10.1",
     "node-sass": "^3.4.2",
-    "passport": "^0.3.2",
-    "passport-google-oauth": "^0.2.0",
     "postcss": "^5.0.12",
     "postcss-modules-extract-imports": "^1.0.0",
     "postcss-modules-local-by-default": "^1.0.0",
