@@ -14,24 +14,19 @@ export default {
     args: {
       id: {type: new GraphQLNonNull(GraphQLID)}
     },
-    resolve(source, args) {
-      return new Promise((resolve, reject) => {
+    async resolve(source, args) {
+      try {
         const config = dbConfig()
-        return r.connect(config)
-          .then(conn => {
-            return r.table('users')
-              .get(args.id).run(conn)
-              .then(result => {
-                if (result) {
-                  return resolve(result)
-                }
-                throw new Error('No such user')
-              })
-          }).catch(err => {
-            sentry.captureException(err)
-            return reject(err)
-          })
-      })
+        const conn = await r.connect(config)
+        const result = await r.table('users').get(args.id).run(conn)
+        if (result) {
+          return result
+        }
+        throw new Error('No such user')
+      } catch (err) {
+        sentry.captureException(err)
+        throw err
+      }
     }
   },
 }

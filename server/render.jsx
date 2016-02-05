@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 import fetch from 'isomorphic-fetch'
+import raven from 'raven'
 
 import React from 'react'
 import {renderToString} from 'react-dom/server'
@@ -12,6 +13,7 @@ import {RoutingContext, match} from 'react-router'
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
 
+const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
   const title = 'Identity Management'
@@ -49,31 +51,30 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
     `
 }
 
-export default function handleRender(req, res) {
-  fetch(process.env.ICONS_SERVICE_TAGS_API_URL)
-    .then(resp => {
-      return resp.json()
-    }).then(tags => {
-      const store = createStore(rootReducer)
+export default async function handleRender(req, res) {
+  try {
+    const tags = await fetch(process.env.ICONS_SERVICE_TAGS_API_URL).then(resp => resp.json())
+    const store = createStore(rootReducer)
 
-      match({routes: getRoutes(store), location: req.originalUrl}, (error, redirectLocation, renderProps) => {
-        // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
-        if (error) {
-          throw new Error(error)
-        } else if (redirectLocation) {
-          res.redirect(redirectLocation.pathname + redirectLocation.search)
-        } else if (!renderProps) {
-          res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
-        } else {
-          const renderedAppHtml = renderToString(
-            <Provider store={store}>
-              <RoutingContext {...renderProps}/>
-            </Provider>
-          )
-          res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, store.getState()))
-        }
-      })
-    }).catch(error => {
-      res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
+    match({routes: getRoutes(store), location: req.originalUrl}, (error, redirectLocation, renderProps) => {
+      // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
+      if (error) {
+        throw new Error(error)
+      } else if (redirectLocation) {
+        res.redirect(redirectLocation.pathname + redirectLocation.search)
+      } else if (!renderProps) {
+        res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
+      } else {
+        const renderedAppHtml = renderToString(
+          <Provider store={store}>
+            <RoutingContext {...renderProps}/>
+          </Provider>
+        )
+        res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, store.getState()))
+      }
     })
+  } catch (error) {
+    sentry.captureException(error)
+    res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
+  }
 }

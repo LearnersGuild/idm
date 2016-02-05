@@ -1,7 +1,7 @@
 
 // set up CSS modules when not in production
 
-export default function setupCssModulesRequireHook() {
+export default function configureCSSModules() {
   if (process.env.NODE_ENV !== 'production') {
     const hook = require('css-modules-require-hook')
     const sass = require('node-sass')

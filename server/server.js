@@ -13,7 +13,7 @@ import configureDevEnvironment from './configureDevEnvironment'
 import configureGraphQL from './configureGraphQL'
 import handleRender from './render'
 
-export function start() {
+export async function start() {
   // error handling
   raven.patchGlobal(process.env.SENTRY_SERVER_DSN)
 
@@ -35,19 +35,17 @@ export function start() {
   app.use(serveStatic(path.join(__dirname, '../dist')))
   app.use(serveStatic(path.join(__dirname, '../public')))
 
-  return Promise.all([
-    // GraphQL middleware
-    configureGraphQL(app),
-  ]).then(() => {
-    // Default React application
-    app.use(handleRender)
+  // GraphQL middleware
+  await configureGraphQL(app)
 
-    return app.listen(serverPort, error => {
-      if (error) {
-        console.error(error)
-      } else {
-        console.info('🌍  Listening at %s', baseUrl)
-      }
-    })
+  // Default React application
+  app.use(handleRender)
+
+  return app.listen(serverPort, error => {
+    if (error) {
+      console.error(error)
+    } else {
+      console.info('🌍  Listening at %s', baseUrl)
+    }
   })
 }

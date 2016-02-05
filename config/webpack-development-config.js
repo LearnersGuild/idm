@@ -5,6 +5,7 @@ module.exports = {
 
   entry: {
     app: [
+      'babel-polyfill',
       'webpack-hot-middleware/client',
       'bootstrap-loader',
       './client',

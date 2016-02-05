@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 require('babel-core/register')
+require('babel-polyfill')
 
 const configureCSSModules = require('./configureCSSModules').default
 
