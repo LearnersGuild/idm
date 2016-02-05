@@ -2,7 +2,6 @@ import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
 import {GraphQLObjectType} from 'graphql/type'
 import {GraphQLEmailType} from '../types'
 
-
 export const User = new GraphQLObjectType({
   name: 'User',
   description: 'The user account',

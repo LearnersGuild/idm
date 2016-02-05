@@ -24,5 +24,5 @@ test('Root links to the API docs', t => {
   )
   const rootNode = ReactDOM.findDOMNode(root)
 
-  t.regexTest(/View API Docs/, rootNode.textContent)
+  t.regexTest(/View GraphiQL/, rootNode.textContent)
 })

@@ -1,8 +1,7 @@
 import r from 'rethinkdb'
 import raven from 'raven'
 
-import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
-import {GraphQLEmailType} from '../types'
+import {GraphQLNonNull, GraphQLID} from 'graphql'
 import {User} from './schema'
 
 import dbConfig from '../../../../db/config'
@@ -15,7 +14,7 @@ export default {
     args: {
       id: {type: new GraphQLNonNull(GraphQLID)}
     },
-    resolve(source, args, {rootValue}) {
+    resolve(source, args) {
       return new Promise((resolve, reject) => {
         const config = dbConfig()
         return r.connect(config)
@@ -28,10 +27,10 @@ export default {
                 }
                 throw new Error('No such user')
               })
-        }).catch(err => {
-          sentry.captureException(err)
-          return reject(err)
-        })
+          }).catch(err => {
+            sentry.captureException(err)
+            return reject(err)
+          })
       })
     }
   },

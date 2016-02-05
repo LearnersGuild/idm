@@ -1,4 +1,3 @@
-import graphql from 'graphql'
 import graphqlHTTP from 'express-graphql'
 
 import rootSchema from './graphql/rootSchema'

@@ -9,9 +9,9 @@ export const GraphQLEmailType = new GraphQLScalarType({
   parseLiteral: ast => {
     const re = /.+@.+\.+/
     if (ast.kind !== Kind.STRING) {
-      throw new GraphQLError('Email is not a string, it is a: ' + ast.kind, [ast])
+      throw new GraphQLError(`Email is not a string, it is a: ${ast.kind}`, [ast])
     }
-    if(!re.test(ast.value)) {
+    if (!re.test(ast.value)) {
       throw new GraphQLError('Not a valid Email', [ast])
     }
     if (ast.value.length < 4) {
