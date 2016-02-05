@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import fetch from 'node-fetch'
+import fetch from 'isomorphic-fetch'
 
 import React from 'react'
 import {renderToString} from 'react-dom/server'

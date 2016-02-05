@@ -2,7 +2,7 @@
 
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
-import fetch from 'node-fetch'
+import fetch from 'isomorphic-fetch'
 import _ from 'lodash'
 import r from 'rethinkdb'
 import raven from 'raven'
@@ -11,8 +11,6 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
 import getDBConfig from '../../db/config'
-import {renderFullPage} from '../render'
-import Root from '../../common/containers/Root'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
@@ -46,8 +44,7 @@ export function updateUser(accessToken, refreshToken, profile, done) {
               return done(null, updatedUser)
             })
         })
-    })
-    .catch(err => {
+    }).catch(err => {
       sentry.captureException(err)
       return done('Couldn\'t save user record.')
     })
@@ -65,6 +62,9 @@ export function authenticate(req, res, next) {
 
 // TODO: any way to refactor this with what's in ../render.js?
 export function callback(req, res, next) {
+  const Root = require('../../common/containers/Root').default
+  const renderFullPage = require('../render').renderFullPage
+
   if (!req.query.code || req.query.error) {
     const errStr = req.query.error ? req.query.error : 'Missing \'code\' parameter.'
     return res.status(401).send(`<html><body><h1>401 Unauthorized</h1><p>${errStr}</p></body></html>`)

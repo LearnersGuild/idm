@@ -1,63 +1,43 @@
-/* eslint-disable no-undef */
+import test from 'ava'
+import fetch from 'isomorphic-fetch'
 
-jest.dontMock('../GoogleOAuth2')
+let server
 
-describe('GoogleOAuth2', () => {
-  let request
-  let server
-  beforeAll(done => {
-    delete global.window // disable jsdom
-    process.env.PORT = '12345'
-    process.env.GOOGLE_API_CLIENT_ID = 'ignore'
-    process.env.GOOGLE_API_CLIENT_SECRET = 'ignore'
-    jest.autoMockOff()
-    request = require('supertest')
-    require('../../server').start().then(theServer => {
-      server = theServer
-      done()
-    })
+test.before.cb(t => {
+  require('dotenv').load({path: '../../../.env'})
+  process.env.PORT = '12345'
+  require('../../configureCSSModules').default()
+  require('../../server').start().then(theServer => {
+    server = theServer
+    t.end()
   })
-  afterAll(done => {
-    jest.autoMockOn()
-    server.close(done)
-  })
+})
 
-  describe('authenticate', () => {
-    it('redirects to Google', done => {
-      request(server)
-        .get('/auth/google')
-        .expect('Location', /accounts\.google\.com\/o\/oauth2/)
-        .expect(302, err => {
-          if (err) {
-            return done.fail(err)
-          }
-          return done()
-        })
-    })
-  })
+test.after.cb(t => {
+  server.close(t.end)
+})
 
-  describe('callback', () => {
-    it('expects a \'code\' parameter', done => {
-      request(server)
-        .get('/auth/google/callback')
-        .expect(401, err => {
-          if (err) {
-            return done.fail(err)
-          }
-          return done()
-        })
+test('authenticate redirects to Google', t => {
+  t.plan(2)
+  return fetch('http://localhost:12345/auth/google', {redirect: 'manual'})
+    .then(res => {
+      t.is(res.status, 200)
+      t.regexTest(/accounts.google.com\/ServiceLogin/, res.url)
     })
+})
 
-    it('should fail if \'error\' parameter is supplied', done => {
-      request(server)
-        .get('/auth/google/callback')
-        .query({error: 'xxx', code: 'yyy'})
-        .expect(401, err => {
-          if (err) {
-            return done.fail(err)
-          }
-          return done()
-        })
+test('callback expects a "code" parameter', t => {
+  t.plan(1)
+  return fetch('http://localhost:12345/auth/google/callback')
+    .then(res => {
+      t.is(res.status, 401)
     })
-  })
+})
+
+test('callback should fail if "error" parameter is supplied', t => {
+  t.plan(1)
+  return fetch('http://localhost:12345/auth/google/callback?error=xxx&code=yyy')
+    .then(res => {
+      t.is(res.status, 401)
+    })
 })

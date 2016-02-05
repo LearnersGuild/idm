@@ -4,7 +4,7 @@ import path from 'path'
 import swaggerTools from 'swagger-tools'
 import YAML from 'yamljs'
 import ejs from 'ejs'
-import fetch from 'node-fetch'
+import fetch from 'isomorphic-fetch'
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
 const swaggerDoc = YAML.load(path.join(__dirname, '../config/swagger.yaml'))
