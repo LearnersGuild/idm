@@ -26,8 +26,13 @@ function config() {
   return _dbConfig
 }
 
+var createOptions = {
+  replicas: (process.env.NODE_ENV === 'production') ? 2 : 1
+}
+
 if (run) {
   console.log(JSON.stringify(config()))
 }
 
 module.exports = config
+module.exports.createOptions = createOptions
