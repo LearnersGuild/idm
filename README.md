@@ -22,7 +22,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     ```bash
     $ npm install
     $ npm run db:create
-    $ npm run db:migrate
+    $ npm run db:migrate -- up
     ```
 
 4. Run the server:
