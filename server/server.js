@@ -11,6 +11,7 @@ import raven from 'raven'
 
 import configureDevEnvironment from './configureDevEnvironment'
 import configureSwagger from './configureSwagger'
+import configureGraphQL from './configureGraphQL'
 import handleRender from './render'
 
 export function start() {
@@ -38,6 +39,8 @@ export function start() {
   return Promise.all([
     // Swagger middleware
     configureSwagger(app),
+    // GraphQL middleware
+    configureGraphQL(app),
   ]).then(() => {
     // Default React application
     app.use(handleRender)
