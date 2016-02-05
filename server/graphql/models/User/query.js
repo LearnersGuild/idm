@@ -1,10 +1,13 @@
 import r from 'rethinkdb'
+import raven from 'raven'
 
 import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
 import {GraphQLEmailType} from '../types'
 import {User} from './schema'
 
 import dbConfig from '../../../../db/config'
+
+const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 export default {
   getUserById: {
@@ -15,18 +18,19 @@ export default {
     resolve(source, args, {rootValue}) {
       return new Promise((resolve, reject) => {
         const config = dbConfig()
-        r.connect(config)
+        return r.connect(config)
           .then(conn => {
-            r.table('users')
+            return r.table('users')
               .get(args.id).run(conn)
               .then(result => {
                 if (result) {
                   return resolve(result)
                 }
-                return reject('No such user')
+                throw new Error('No such user')
               })
         }).catch(err => {
-          throw new Error(err)
+          sentry.captureException(err)
+          return reject(err)
         })
       })
     }

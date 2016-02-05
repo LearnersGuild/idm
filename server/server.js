@@ -10,7 +10,6 @@ import enforceSecure from 'express-sslify'
 import raven from 'raven'
 
 import configureDevEnvironment from './configureDevEnvironment'
-import configureSwagger from './configureSwagger'
 import configureGraphQL from './configureGraphQL'
 import handleRender from './render'
 
@@ -37,8 +36,6 @@ export function start() {
   app.use(serveStatic(path.join(__dirname, '../public')))
 
   return Promise.all([
-    // Swagger middleware
-    configureSwagger(app),
     // GraphQL middleware
     configureGraphQL(app),
   ]).then(() => {
