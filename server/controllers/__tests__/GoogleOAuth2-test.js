@@ -4,7 +4,9 @@ import fetch from 'isomorphic-fetch'
 let server
 
 test.before.cb(t => {
-  require('dotenv').load({path: '../../../.env'})
+  process.env.ICONS_SERVICE_TAGS_API_URL = 'https://icons.learnersguild.org/tags'
+  process.env.GOOGLE_API_CLIENT_ID = '671647045935-lidv8t38k3787mjnbreedq3vad0bbl9h.apps.googleusercontent.com'
+  process.env.GOOGLE_API_CLIENT_SECRET = '1xWXab7DMjkyk54qmE0uJNkU'
   process.env.PORT = '12345'
   require('../../configureCSSModules').default()
   require('../../server').start().then(theServer => {
