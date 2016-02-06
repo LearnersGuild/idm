@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const path = require('path')
 
+const root = path.join(__dirname, '..')
+
 module.exports = {
 
   entry: {
@@ -13,13 +15,18 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, '..', 'dist'),
     filename: 'app.js',
+    chunkFilename: 'app_[name]_[chunkhash].js',
+    path: path.join(root, 'dist'),
   },
 
+  // devtool: '#source-map',
   devtool: '#cheap-module-eval-source-map',
 
-  resolve: {extensions: ['', '.js', '.jsx']},
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+    root,
+  },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
@@ -53,15 +60,15 @@ module.exports = {
         test: /\.css$/,
         loaders: [
           'style',
-          'css?modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]',
+          'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]',
         ],
       },
       {
         test: /\.scss$/,
         loaders: [
           'style',
-          'css?modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]',
-          'sass',
+          'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]',
+          'sass?sourceMap',
         ],
       },
       {

@@ -5,7 +5,7 @@ import {render} from 'react-dom'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 
-import {Router} from 'react-router'
+import {match, Router} from 'react-router'
 import {createHistory} from 'history'
 import {syncReduxAndRouter} from 'redux-simple-router'
 
@@ -16,17 +16,24 @@ const Raven = require('raven-js').noConflict()
 Raven.config(window.sentryClientDSN)
 
 const initialState = window.__INITIAL_STATE__
+const {pathname, search, hash} = window.location
+const location = `${pathname}${search}${hash}`
 
 const store = createStore(rootReducer, initialState)
 const history = createHistory()
+const routes = getRoutes(store)
 
 syncReduxAndRouter(history, store)
 
-render(
-  <Provider store={store}>
-    <Router history={history}>
-      {getRoutes(store)}
-    </Router>
-  </Provider>,
-  document.getElementById('root')
-)
+// Calling `match` is simply for the side-effects of loading route / component
+// code for the initial location. See also: 'routes/loadRoute.js'
+match({routes, location}, () => {
+  render(
+    <Provider store={store}>
+      <Router history={history}>
+        {routes}
+      </Router>
+    </Provider>,
+    document.getElementById('root')
+  )
+})

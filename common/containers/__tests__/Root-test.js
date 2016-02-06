@@ -10,7 +10,7 @@ test.before(() => {
   const win = doc.defaultView
   global.document = doc
   global.window = win
-  require('../../../server/configureCSSModules').default()
+  require('../../../server/configureCSSModules')()
 })
 
 test('Root links to the API docs', t => {

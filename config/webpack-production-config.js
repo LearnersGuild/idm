@@ -1,8 +1,13 @@
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const path = require('path')
 
+const root = path.join(__dirname, '..')
+
 module.exports = {
+  context: root,
+
   entry: {
     app: [
       'babel-polyfill',
@@ -12,14 +17,24 @@ module.exports = {
   },
 
   output: {
-    path: path.join(__dirname, '..', 'dist'),
     filename: 'app.js',
+    chunkFilename: 'app_[name]_[chunkhash].js',
+    path: path.join(root, 'dist'),
   },
 
-  resolve: {extensions: ['', '.js', '.jsx']},
+  devtool: '#cheap-module-source-map',
+
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+    root,
+  },
 
   plugins: [
     new ExtractTextPlugin('app.css', {allChunks: true}),
+    new OptimizeCssAssetsPlugin({
+      cssProcessorOptions: {discardComments: {removeAll: true}},
+      canPrint: false,
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         // useful to reduce the size of client-side libraries, e.g. react
@@ -28,6 +43,14 @@ module.exports = {
       '__CLIENT__': true,
       '__SERVER__': false,
       '__DEVTOOLS__': false  // <-------- DISABLE redux-devtools HERE
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+      output: {
+        comments: false,
+      },
     }),
   ],
 
@@ -42,15 +65,15 @@ module.exports = {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract(
           'style',
-          'css?modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]'
+          'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]'
         ),
       },
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract(
           'style',
-          'css?modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]' +
-          '!sass'
+          'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]' +
+          '!sass?sourceMap'
         ),
       },
       {

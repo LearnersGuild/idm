@@ -2,7 +2,7 @@
 require('babel-core/register')
 require('babel-polyfill')
 
-const configureCSSModules = require('./configureCSSModules').default
+const configureCSSModules = require('./configureCSSModules')
 
 // These may also be defined by webpack on the client-side.
 global.__CLIENT__ = false

@@ -13,6 +13,7 @@ export class Root extends React.Component {
           <a className="btn btn-primary" href="/graphql">View GraphiQL</a>
           <a className="btn btn-primary" onClick={() => this.props.dispatch(pushPath('/example'))}>Example</a>
         </div>
+        <div>{this.props.children}</div>
       </section>
     )
   }
@@ -20,6 +21,7 @@ export class Root extends React.Component {
 
 Root.propTypes = {
   dispatch: React.PropTypes.func,
+  children: React.PropTypes.any,
 }
 
 export default connect()(Root)
