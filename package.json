@@ -13,11 +13,12 @@
   },
   "scripts": {
     "build": "mkdir -p dist && webpack --config config/webpack-production-config.js",
+    "icons:fetch": "mkdir -p dist && curl -s https://icons.learnersguild.org/tags > dist/icons-metadata.json",
     "db:create": "./node_modules/.bin/babel-node ./db/create.js",
     "db:drop": "./node_modules/.bin/babel-node ./db/drop.js",
     "db:migrate:configure": "node ./db/config.js > ./db/database.json",
     "db:migrate": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db",
-    "start": "node server",
+    "start": "npm run icons:fetch && node server",
     "postinstall": "npm run build",
     "test": "./node_modules/.bin/xo && NODE_ENV=test ./node_modules/.bin/ava"
   },

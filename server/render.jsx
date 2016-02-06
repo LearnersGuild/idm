@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 
-import fetch from 'isomorphic-fetch'
 import raven from 'raven'
 
 import React from 'react'
@@ -12,6 +11,7 @@ import {RoutingContext, match} from 'react-router'
 
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
+import iconsMetadata from '../dist/icons-metadata'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
@@ -51,9 +51,8 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
     `
 }
 
-export default async function handleRender(req, res) {
+export default function handleRender(req, res) {
   try {
-    const tags = await fetch(process.env.ICONS_SERVICE_TAGS_API_URL).then(resp => resp.json())
     const store = createStore(rootReducer)
 
     match({routes: getRoutes(store), location: req.originalUrl}, (error, redirectLocation, renderProps) => {
@@ -70,7 +69,7 @@ export default async function handleRender(req, res) {
             <RoutingContext {...renderProps}/>
           </Provider>
         )
-        res.send(renderFullPage(tags.join('\n        '), renderedAppHtml, store.getState()))
+        res.send(renderFullPage(iconsMetadata.join('\n        '), renderedAppHtml, store.getState()))
       }
     })
   } catch (error) {
