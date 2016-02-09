@@ -4,3 +4,6 @@
 // Make bourbon / neat variables and mixins available when using CSS modules.
 @import "node_modules/bourbon/app/assets/stylesheets/bourbon";
 @import "node_modules/bourbon-neat/app/assets/stylesheets/neat";
+
+// Roboto font.
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500);

@@ -4,6 +4,7 @@ import {render} from 'react-dom'
 
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
+import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import {match, Router} from 'react-router'
 import {createHistory} from 'history'
@@ -22,6 +23,9 @@ const location = `${pathname}${search}${hash}`
 const store = createStore(rootReducer, initialState)
 const history = createHistory()
 const routes = getRoutes(store)
+
+// for material-ui (see: https://github.com/callemall/material-ui#react-tap-event-plugin)
+injectTapEventPlugin()
 
 syncReduxAndRouter(history, store)
 

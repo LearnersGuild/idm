@@ -54,6 +54,8 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
 export default function handleRender(req, res) {
   try {
     const store = createStore(rootReducer)
+    // This is terrible. See: https://github.com/callemall/material-ui/pull/2172
+    global.navigator = {userAgent: req.headers['user-agent']}
 
     match({routes: getRoutes(store), location: req.originalUrl}, (error, redirectLocation, renderProps) => {
       // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)

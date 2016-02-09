@@ -1,19 +1,59 @@
+/* eslint-disable no-undef */
 import React from 'react'
 import {connect} from 'react-redux'
 import {pushPath} from 'redux-simple-router'
 
+import AppBar from 'material-ui/lib/app-bar'
+import LeftNav from 'material-ui/lib/left-nav'
+import MenuItem from 'material-ui/lib/menus/menu-item'
+
 import styles from './Root.scss'
 
 export class Root extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {open: false}
+  }
+
+  handleToggle() {
+    this.setState({open: !this.state.open})
+  }
+
+  handleClose() {
+    this.setState({open: false})
+  }
+
+  handleHome() {
+    this.props.dispatch(pushPath('/'))
+  }
+
+  handleExample() {
+    this.handleClose()
+    this.props.dispatch(pushPath('/example'))
+  }
+
+  handleGraphQL() {
+    window.location = '/graphql'
+  }
+
   render() {
     return (
-      <section className={styles.layout}>
-        <h1>Identity Management</h1>
-        <div>
-          <a className="btn btn-primary" href="/graphql">View GraphiQL</a>
-          <a className="btn btn-primary" onClick={() => this.props.dispatch(pushPath('/example'))}>Example</a>
-        </div>
-        <div>{this.props.children}</div>
+      <section>
+        <LeftNav
+          docked={false}
+          open={this.state.open}
+          onRequestChange={open => this.setState({open})}
+          >
+          <MenuItem onTouchTap={this.handleExample.bind(this)}>Example</MenuItem>
+          <MenuItem onTouchTap={this.handleGraphQL.bind(this)}>View GraphiQL</MenuItem>
+        </LeftNav>
+        <AppBar
+          title="Identity Management"
+          titleStyle={{cursor: 'pointer'}}
+          onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
+          onTitleTouchTap={this.handleHome.bind(this)}
+          />
+        <div className={styles.layout}>{this.props.children}</div>
       </section>
     )
   }
