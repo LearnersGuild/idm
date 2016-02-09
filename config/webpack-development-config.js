@@ -9,7 +9,6 @@ module.exports = {
     app: [
       'babel-polyfill',
       'webpack-hot-middleware/client',
-      'bootstrap-loader',
       './client',
     ]
   },
@@ -69,6 +68,7 @@ module.exports = {
           'style',
           'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]',
           'sass?sourceMap',
+          'sass-resources',
         ],
       },
       {
@@ -77,4 +77,6 @@ module.exports = {
       },
     ],
   },
+
+  sassResources: './config/sass-resources.scss',
 }

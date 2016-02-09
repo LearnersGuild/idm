@@ -11,7 +11,6 @@ module.exports = {
   entry: {
     app: [
       'babel-polyfill',
-      'bootstrap-loader/extractStyles',
       './client',
     ]
   },
@@ -73,7 +72,8 @@ module.exports = {
         loader: ExtractTextPlugin.extract(
           'style',
           'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]' +
-          '!sass?sourceMap'
+          '!sass?sourceMap' +
+          '!sass-resources'
         ),
       },
       {
@@ -82,4 +82,6 @@ module.exports = {
       },
     ],
   },
+
+  sassResources: './config/sass-resources.scss',
 }

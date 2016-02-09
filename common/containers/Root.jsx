@@ -8,7 +8,7 @@ export class Root extends React.Component {
   render() {
     return (
       <section className={styles.layout}>
-        <div className="display-1">Identity Management</div>
+        <h1>Identity Management</h1>
         <div>
           <a className="btn btn-primary" href="/graphql">View GraphiQL</a>
           <a className="btn btn-primary" onClick={() => this.props.dispatch(pushPath('/example'))}>Example</a>
