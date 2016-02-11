@@ -15,7 +15,7 @@ import iconsMetadata from '../dist/icons-metadata'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
-export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialState) {
+export function renderFullPage(renderedAppHtml, initialState) {
   const title = 'Identity Management'
   let appCss = ''
   if (process.env.NODE_ENV !== 'development') {
@@ -33,7 +33,7 @@ export function renderFullPage(iconsMetadataTagsHtml, renderedAppHtml, initialSt
         <meta name="description" content="Identity Management" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-        ${iconsMetadataTagsHtml}
+        ${iconsMetadata.join('\n        ')}
         ${appCss}
       </head>
       <body>
@@ -71,7 +71,7 @@ export default function handleRender(req, res) {
             <RoutingContext {...renderProps}/>
           </Provider>
         )
-        res.send(renderFullPage(iconsMetadata.join('\n        '), renderedAppHtml, store.getState()))
+        res.send(renderFullPage(renderedAppHtml, store.getState()))
       }
     })
   } catch (error) {
