@@ -5,7 +5,7 @@ export default function getRoutes(/* store */) {
     component: Root,
     path: '/',
     childRoutes: [
-      require('./example'),
+      require('./signUp'),
     ]
   }
 }

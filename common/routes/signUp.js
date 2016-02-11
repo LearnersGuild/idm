@@ -8,7 +8,7 @@
 
 function getComponent(route) {
   return async (location, cb) => {
-    const component = await System.import('../components/Example')
+    const component = await System.import('../components/SignUpForm')
     // That's right. We're actually wholesale replacing the asynchronous-
     // loading getComponent function with the actual component. UGLY.
     // But it works.
@@ -19,10 +19,10 @@ function getComponent(route) {
 }
 
 const route = {
-  path: 'example',
+  path: 'sign-up',
 }
 if (__SERVER__) {
-  route.component = require('../components/Example')
+  route.component = require('../components/SignUpForm')
 } else {
   route.getComponent = getComponent(route)
 }

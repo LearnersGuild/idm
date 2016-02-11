@@ -29,7 +29,7 @@ export class Root extends React.Component {
 
   handleExample() {
     this.handleClose()
-    this.props.dispatch(pushPath('/example'))
+    this.props.dispatch(pushPath('/sign-up'))
   }
 
   handleGraphQL() {
@@ -44,7 +44,7 @@ export class Root extends React.Component {
           open={this.state.open}
           onRequestChange={open => this.setState({open})}
           >
-          <MenuItem onTouchTap={this.handleExample.bind(this)}>Example</MenuItem>
+          <MenuItem onTouchTap={this.handleExample.bind(this)}>Sign-Up</MenuItem>
           <MenuItem onTouchTap={this.handleGraphQL.bind(this)}>View GraphiQL</MenuItem>
         </LeftNav>
         <AppBar

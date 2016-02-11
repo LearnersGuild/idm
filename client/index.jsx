@@ -2,7 +2,6 @@
 import React from 'react'
 import {render} from 'react-dom'
 
-import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
@@ -10,8 +9,8 @@ import {match, Router} from 'react-router'
 import {createHistory} from 'history'
 import {syncReduxAndRouter} from 'redux-simple-router'
 
+import configureStore from '../common/store/configureStore'
 import getRoutes from '../common/routes'
-import rootReducer from '../common/reducers'
 
 const Raven = require('raven-js').noConflict()
 Raven.config(window.sentryClientDSN)
@@ -20,7 +19,7 @@ const initialState = window.__INITIAL_STATE__
 const {pathname, search, hash} = window.location
 const location = `${pathname}${search}${hash}`
 
-const store = createStore(rootReducer, initialState)
+const store = configureStore(initialState)
 const history = createHistory()
 const routes = getRoutes(store)
 

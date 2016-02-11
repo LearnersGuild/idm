@@ -74,7 +74,9 @@
     "react-router": "^1.0.3",
     "react-tap-event-plugin": "^0.2.2",
     "redux": "^3.0.5",
+    "redux-form": "^4.1.10",
     "redux-simple-router": "^1.0.2",
+    "redux-thunk": "^1.0.3",
     "resolve-url-loader": "^1.4.3",
     "rethink-migrate": "jeffreywescott/rethink-migrate",
     "rethinkdb": "^2.2.1",
@@ -113,7 +115,10 @@
       "no-negated-condition": [
         0
       ],
-      "react/jsx-indent-props": [2, 2]
+      "react/jsx-indent-props": [
+        2,
+        2
+      ]
     },
     "esnext": true,
     "space": true,
