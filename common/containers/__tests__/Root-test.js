@@ -8,6 +8,7 @@ import TestUtils from 'react-addons-test-utils'
 test.before(() => {
   const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
   const win = doc.defaultView
+  global.__CLIENT__ = false
   global.document = doc
   global.window = win
   require('../../../server/configureCSSModules')()

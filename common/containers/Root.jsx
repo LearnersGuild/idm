@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React from 'react'
+import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {pushPath} from 'redux-simple-router'
 
@@ -9,10 +9,25 @@ import MenuItem from 'material-ui/lib/menus/menu-item'
 
 import styles from './Root.scss'
 
-export class Root extends React.Component {
+export class Root extends Component {
   constructor(props) {
     super(props)
     this.state = {open: false}
+  }
+
+  componentWillMount() {
+    this.ensureSignedIn(this.props)
+  }
+
+  ensureSignedIn(props) {
+    if (__CLIENT__) {
+      const {dispatch, auth} = props
+      if (!auth.currentUser || !auth.currentUser.idToken) {
+        const {pathname, search, hash} = window.location
+        const next = `${pathname}${search}${hash}`
+        dispatch(pushPath(`/sign-in?next=${next}`))
+      }
+    }
   }
 
   handleToggle() {
@@ -27,7 +42,7 @@ export class Root extends React.Component {
     this.props.dispatch(pushPath('/'))
   }
 
-  handleExample() {
+  handleSignUp() {
     this.handleClose()
     this.props.dispatch(pushPath('/sign-up'))
   }
@@ -37,6 +52,8 @@ export class Root extends React.Component {
   }
 
   render() {
+    const {children} = this.props
+
     return (
       <section>
         <LeftNav
@@ -44,7 +61,7 @@ export class Root extends React.Component {
           open={this.state.open}
           onRequestChange={open => this.setState({open})}
           >
-          <MenuItem onTouchTap={this.handleExample.bind(this)}>Sign-Up</MenuItem>
+          <MenuItem onTouchTap={this.handleSignUp.bind(this)}>Sign-Up</MenuItem>
           <MenuItem onTouchTap={this.handleGraphQL.bind(this)}>View GraphiQL</MenuItem>
         </LeftNav>
         <AppBar
@@ -53,15 +70,25 @@ export class Root extends React.Component {
           onLeftIconButtonTouchTap={this.handleToggle.bind(this)}
           onTitleTouchTap={this.handleHome.bind(this)}
           />
-        <div className={styles.layout}>{this.props.children}</div>
+        <div className={styles.layout}>{children}</div>
       </section>
     )
   }
 }
 
 Root.propTypes = {
-  dispatch: React.PropTypes.func,
-  children: React.PropTypes.any,
+  auth: PropTypes.shape({
+    isSigningIn: PropTypes.bool.isRequired,
+    currentUser: PropTypes.object,
+  }),
+  children: PropTypes.any,
+  dispatch: PropTypes.func,
 }
 
-export default connect()(Root)
+function mapStateToProps(state) {
+  return {
+    auth: state.auth,
+  }
+}
+
+export default connect(mapStateToProps)(Root)

@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 
 import Card from 'material-ui/lib/card/card'
 import CardTitle from 'material-ui/lib/card/card-title'

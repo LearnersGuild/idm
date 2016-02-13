@@ -1,4 +1,4 @@
-/* global window, document */
+/* global window, document, sessionStorage */
 import React from 'react'
 import {render} from 'react-dom'
 
@@ -15,7 +15,11 @@ import getRoutes from '../common/routes'
 const Raven = require('raven-js').noConflict()
 Raven.config(window.sentryClientDSN)
 
-const initialState = window.__INITIAL_STATE__
+const sessionUser = sessionStorage.currentUser ? JSON.parse(sessionStorage.currentUser) : null
+const initialState = window.__INITIAL_STATE__ || {}
+initialState.auth = initialState.auth || {}
+initialState.auth.currentUser = initialState.auth.currentUser || sessionUser
+
 const {pathname, search, hash} = window.location
 const location = `${pathname}${search}${hash}`
 
