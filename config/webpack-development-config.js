@@ -39,51 +39,41 @@ module.exports = {
 
   module: {
     loaders: [{
-        test: /\.jsx?$/,
-        loader: 'babel',
-        exclude: /node_modules/,
-        query: {
-          plugins: [
-            ['react-transform', {
-              transforms: [{
-                transform: 'react-transform-hmr',
-                imports: ['react'],
-                locals: ['module'],
-              }]
+      test: /\.jsx?$/,
+      loader: 'babel',
+      exclude: /node_modules/,
+      query: {
+        plugins: [
+          ['react-transform', {
+            transforms: [{
+              transform: 'react-transform-hmr',
+              imports: ['react'],
+              locals: ['module'],
             }]
-          ],
-        },
-      }, {
-        test: /\.css$/,
-        loaders: [
-          'style',
-          'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]',
+          }]
         ],
-      }, {
-        test: /\.scss$/,
-        loaders: [
-          'style',
-          'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]',
-          'sass?sourceMap',
-          'sass-resources',
-        ],
-      }, {
-        test: /\.json$/,
-        loader: 'json-loader'
-      }, {
-        test: /\.(woff2?|ttf|eot|svg)$/,
-        loaders: ['url?limit=10000'],
-      }, {
-        test: /node_modules\/auth0-lock\/.*\.js$/,
-        loaders: [
-          'transform-loader/cacheable?brfs',
-          'transform-loader/cacheable?packageify'
-        ]
-      }, {
-        test: /node_modules\/auth0-lock\/.*\.ejs$/,
-        loader: 'transform-loader/cacheable?ejsify'
       },
-    ],
+    }, {
+      test: /\.css$/,
+      loaders: [
+        'style',
+        'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]',
+      ],
+    }, {
+      test: /\.scss$/,
+      loaders: [
+        'style',
+        'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]',
+        'sass?sourceMap',
+        'sass-resources',
+      ],
+    }, {
+      test: /\.json$/,
+      loader: 'json-loader'
+    }, {
+      test: /\.(woff2?|ttf|eot|svg)$/,
+      loaders: ['url?limit=10000'],
+    }],
   },
 
   sassResources: './config/sass-resources.scss',

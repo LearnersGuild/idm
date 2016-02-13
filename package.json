@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/LearnersGuild/idm#readme",
   "dependencies": {
-    "auth0-lock": "^8.2.3",
+    "auth0-js": "^6.8.0",
     "babel-cli": "^6.3.17",
     "babel-core": "^6.4.5",
     "babel-loader": "^6.2.2",
@@ -87,7 +87,6 @@
     "serve-static": "^1.10.0",
     "style-loader": "^0.13.0",
     "supertest": "^1.1.0",
-    "transform-loader": "^0.2.3",
     "url-loader": "^0.5.7",
     "webpack": "^2.0.6-beta",
     "webpack-dev-middleware": "^1.5.1",
@@ -121,7 +120,8 @@
       "react/jsx-indent-props": [
         2,
         2
-      ]
+      ],
+      "quotes": [2, "single", "avoid-escape"]
     },
     "esnext": true,
     "space": true,
