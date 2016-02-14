@@ -42,7 +42,7 @@ export function renderFullPage(renderedAppHtml, initialState) {
 
         <script>
         window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
-        window.sentryClientDSN = ${process.env.SENTRY_CLIENT_DSN}
+        window.sentryClientDSN = '${process.env.SENTRY_CLIENT_DSN}'
         </script>
         <script src="/app.js"></script>
 
