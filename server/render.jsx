@@ -21,6 +21,8 @@ export function renderFullPage(renderedAppHtml, initialState) {
   if (process.env.NODE_ENV !== 'development') {
     appCss = `<link href="/app.css" media="screen,projection" rel="stylesheet" type="text/css" />`
   }
+  const sentryClientDSN = process.env.SENTRY_CLIENT_DSN ? `'${process.env.SENTRY_CLIENT_DSN}'` : undefined
+
 
   return `
     <!doctype html>
@@ -34,6 +36,7 @@ export function renderFullPage(renderedAppHtml, initialState) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
         ${iconsMetadata.join('\n        ')}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
         ${appCss}
       </head>
       <body>
@@ -42,7 +45,7 @@ export function renderFullPage(renderedAppHtml, initialState) {
 
         <script>
         window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
-        window.sentryClientDSN = '${process.env.SENTRY_CLIENT_DSN}'
+        window.sentryClientDSN = ${sentryClientDSN}
         </script>
         <script src="/app.js"></script>
 
@@ -53,7 +56,14 @@ export function renderFullPage(renderedAppHtml, initialState) {
 
 export default function handleRender(req, res) {
   try {
-    const store = createStore(rootReducer)
+    // console.log('user:', req.user)
+    const initialState = {
+      auth: {
+        isSigningIn: false,
+        currentUser: req.user,
+      }
+    }
+    const store = createStore(rootReducer, initialState)
     // This is terrible. See: https://github.com/callemall/material-ui/pull/2172
     global.navigator = {userAgent: req.headers['user-agent']}
 

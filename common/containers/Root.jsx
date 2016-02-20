@@ -15,21 +15,6 @@ export class Root extends Component {
     this.state = {open: false}
   }
 
-  componentWillMount() {
-    this.ensureSignedIn(this.props)
-  }
-
-  ensureSignedIn(props) {
-    if (__CLIENT__) {
-      const {dispatch, auth} = props
-      if (!auth.currentUser || !auth.currentUser.idToken) {
-        const {pathname, search, hash} = window.location
-        const next = `${pathname}${search}${hash}`
-        dispatch(pushPath(`/sign-in?next=${next}`))
-      }
-    }
-  }
-
   handleToggle() {
     this.setState({open: !this.state.open})
   }

@@ -6,10 +6,10 @@ const route = {
   path: 'sign-in',
 }
 if (__SERVER__) {
-  route.component = require('../containers/SignIn')
+  route.component = require('../components/SignIn')
 } else {
   route.getComponent = async (location, cb) => {
-    const component = await System.import('../containers/SignIn')
+    const component = await System.import('../components/SignIn')
     replaceComponent(route, component, cb)
   }
 }

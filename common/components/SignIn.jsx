@@ -1,22 +1,30 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 
 import RaisedButton from 'material-ui/lib/raised-button'
+import FontIcon from 'material-ui/lib/font-icon'
+
+const styles = {
+  button: {
+    margin: 12,
+  },
+  div: {
+    marginTop: 50,
+  }
+}
 
 export default class SignIn extends Component {
   render() {
     return (
       <div>
         <RaisedButton
-          label="Sign In"
+          label="Sign-in Using Google"
+          href="/auth/google"
+          linkButton
           primary
-          style={{margin: 12}}
-          onTouchTap={this.props.onSignIn}
+          style={styles.button}
+          icon={<FontIcon className="fa fa-google"/>}
           />
       </div>
     )
   }
-}
-
-SignIn.propTypes = {
-  onSignIn: PropTypes.func.isRequired,
 }
