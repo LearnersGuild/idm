@@ -27,7 +27,7 @@ function config() {
 }
 
 var createOptions = {
-  replicas: (process.env.NODE_ENV === 'production') ? 2 : 1
+  replicas: (process.env.NODE_ENV === 'production') ? 3 : 1
 }
 
 if (run) {
