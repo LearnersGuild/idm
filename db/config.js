@@ -14,7 +14,7 @@ function config() {
     _dbConfig = {
       host: parsedUrl.hostname,
       port: parseInt(parsedUrl.port, 10),
-      db: parsedUrl.pathname.slice(1),
+      db: parsedUrl.pathname ? parsedUrl.pathname.slice(1) : undefined,
       authKey: parsedUrl.auth ? parsedUrl.auth.split(':')[1] : undefined,
     }
     if (process.env.RETHINKDB_CERT) {
