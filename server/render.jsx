@@ -21,6 +21,10 @@ export function renderFullPage(renderedAppHtml, initialState) {
   if (process.env.NODE_ENV !== 'development') {
     appCss = `<link href="/app.css" media="screen,projection" rel="stylesheet" type="text/css" />`
   }
+  let vendorJs = ''
+  if (process.env.NODE_ENV !== 'development') {
+    vendorJs = `<script src="/vendor.js"></script>`
+  }
   const sentryClientDSN = process.env.SENTRY_CLIENT_DSN ? `'${process.env.SENTRY_CLIENT_DSN}'` : undefined
 
 
@@ -47,6 +51,7 @@ export function renderFullPage(renderedAppHtml, initialState) {
         window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
         window.sentryClientDSN = ${sentryClientDSN}
         </script>
+        ${vendorJs}
         <script src="/app.js"></script>
 
       </body>

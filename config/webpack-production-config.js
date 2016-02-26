@@ -12,11 +12,25 @@ module.exports = {
     app: [
       'babel-polyfill',
       './client',
-    ]
+    ],
+    vendor: [
+      'material-ui',
+      'raven-js',
+      'react',
+      'react-dom',
+      'react-redux',
+      'react-router',
+      'react-router-redux',
+      'react-tap-event-plugin',
+      'redux',
+      'redux-auth-wrapper',
+      'redux-form',
+      'redux-thunk',
+    ],
   },
 
   output: {
-    filename: 'app.js',
+    filename: '[name].js',
     chunkFilename: 'app_[name]_[chunkhash].js',
     path: path.join(root, 'dist'),
   },
@@ -33,6 +47,10 @@ module.exports = {
     new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {discardComments: {removeAll: true}},
       canPrint: false,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor'],
+      minChunks: Infinity
     }),
     new webpack.DefinePlugin({
       'process.env': {
