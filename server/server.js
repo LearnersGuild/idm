@@ -48,12 +48,11 @@ export async function start() {
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     authURL: '/auth/google',
     callbackURL: '/auth/callback',
-    jwtIgnorePaths: [
-      '/',              // home page
-      /\/auth\/.+/,     // auth routes
-      /\/sign-(in|up)/, // auth routes
+    jwtAPIPaths: [
+      // TODO: add graphql paths here
     ],
   })
+  app.get('/auth/callback', (req, res) => res.redirect('/'))
 
   // GraphQL middleware
   await configureGraphQL(app)

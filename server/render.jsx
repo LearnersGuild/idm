@@ -7,7 +7,7 @@ import {renderToString} from 'react-dom/server'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 
-import {RoutingContext, match} from 'react-router'
+import {RouterContext, match} from 'react-router'
 
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
@@ -78,7 +78,7 @@ export default function handleRender(req, res) {
       } else {
         const renderedAppHtml = renderToString(
           <Provider store={store}>
-            <RoutingContext {...renderProps}/>
+            <RouterContext {...renderProps}/>
           </Provider>
         )
         res.send(renderFullPage(renderedAppHtml, store.getState()))
