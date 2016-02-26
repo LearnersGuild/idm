@@ -85,6 +85,7 @@ export default function handleRender(req, res) {
       }
     })
   } catch (error) {
+    console.error(error)
     sentry.captureException(error)
     res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
   }
