@@ -8,6 +8,7 @@ import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 
 import {RouterContext, match} from 'react-router'
+import jsdom from 'jsdom'
 
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
@@ -40,7 +41,6 @@ export function renderFullPage(renderedAppHtml, initialState) {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
         ${iconsMetadata.join('\n        ')}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
         ${appCss}
       </head>
       <body>
@@ -90,7 +90,7 @@ export default function handleRender(req, res) {
       }
     })
   } catch (error) {
-    console.error(error)
+    console.error(error.stack)
     sentry.captureException(error)
     res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
   }

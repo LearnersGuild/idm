@@ -11,6 +11,8 @@ import {syncHistoryWithStore} from 'react-router-redux'
 import configureStore from '../common/store/configureStore'
 import getRoutes from '../common/routes'
 
+import './index.scss'
+
 const Raven = require('raven-js').noConflict()
 if (window.sentryClientDSN) {
   Raven.config(window.sentryClientDSN)

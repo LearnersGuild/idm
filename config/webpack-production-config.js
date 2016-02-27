@@ -77,19 +77,34 @@ module.exports = {
       loader: 'babel',
       exclude: /node_modules/,
     }, {
-      test: /\.css$/,
+      // global styles that SHOULDN'T be converted into component-specific modules
+      test: /\.s?css$/,
       loader: ExtractTextPlugin.extract(
         'style',
-        'css?sourceMap&modules&importLoaders=1&localIdentName=[name]__[local]__[hash:base64:5]'
-      ),
-    }, {
-      test: /\.scss$/,
-      loader: ExtractTextPlugin.extract(
-        'style',
-        'css?sourceMap&modules&importLoaders=2&localIdentName=[name]__[local]__[hash:base64:5]' +
+        'css?sourceMapimportLoaders=2' +
         '!sass?sourceMap' +
         '!sass-resources'
       ),
+      include: [
+        path.join(root, 'client', 'index.scss'),
+        path.join(root, 'node_modules', 'graphiql', 'graphiql.css')
+      ],
+    }, {
+      // component styles that SHOULD be converted into component-specific modules
+      test: /\.s?css$/,
+      loader: ExtractTextPlugin.extract(
+        'style',
+        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
+        '!sass?sourceMap' +
+        '!sass-resources'
+      ),
+      include: [
+        path.join(root, 'client'),
+        path.join(root, 'common'),
+      ],
+      exclude: [
+        path.join(root, 'client', 'index.scss'),
+      ],
     }, {
       test: /\.json$/,
       loader: 'json-loader'
