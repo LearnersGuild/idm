@@ -38,7 +38,8 @@ export class Root extends Component {
   }
 
   handleGraphQL() {
-    window.location = '/graphql'
+    this.handleClose()
+    this.props.dispatch(push('/graphiql'))
   }
 
   render() {

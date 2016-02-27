@@ -6,6 +6,7 @@ export default function getRoutes(/* store */) {
     path: '/',
     indexRoute: require('./home'),
     childRoutes: [
+      require('./graphiql'),
       require('./signIn'),
       require('./signUp'),
     ]

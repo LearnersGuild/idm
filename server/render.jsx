@@ -8,7 +8,6 @@ import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 
 import {RouterContext, match} from 'react-router'
-import jsdom from 'jsdom'
 
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
