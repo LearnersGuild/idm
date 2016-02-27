@@ -10,9 +10,8 @@ import enforceSecure from 'express-sslify'
 import cookieParser from 'cookie-parser'
 import raven from 'raven'
 
-import configureAuth0 from '@learnersguild/passport-auth0-jwt-cookie'
-
 import configureDevEnvironment from './configureDevEnvironment'
+import configureAuth from './configureAuth'
 import configureGraphQL from './configureGraphQL'
 import handleRender from './render'
 
@@ -42,17 +41,7 @@ export async function start() {
   app.use(serveStatic(path.join(__dirname, '../public')))
 
   // Configure authentication via Auth0.
-  configureAuth0(app, {
-    domain: 'learnersguild.auth0.com',
-    clientID: process.env.AUTH0_CLIENT_ID,
-    clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    authURL: '/auth/google',
-    callbackURL: '/auth/callback',
-    jwtAPIPaths: [
-      // TODO: add graphql paths here
-    ],
-  })
-  app.get('/auth/callback', (req, res) => res.redirect('/'))
+  configureAuth(app)
 
   // GraphQL middleware
   await configureGraphQL(app)
