@@ -8,7 +8,7 @@ import {
 } from '@learnersguild/passport-auth0-jwt-cookie'
 
 const domain = 'learnersguild.auth0.com'
-const successRedirect = '/'
+const defaultSuccessRedirect = '/'
 const failureRedirect = '/'
 
 export default function configureAuth(app) {
@@ -32,5 +32,10 @@ export default function configureAuth(app) {
   // set up authentication routes
   app.use('/auth/google', authMiddleware)
   app.use('/auth/callback', getCallbackMiddleware(failureRedirect), setCookieMiddleware)
-  app.get('/auth/callback', (req, res) => res.redirect(successRedirect))
+  app.get('/auth/callback', (req, res) => {
+    const redirectTo = req.appState ?
+      (req.appState.redirectTo || defaultSuccessRedirect) :
+      defaultSuccessRedirect
+    res.redirect(redirectTo)
+  })
 }

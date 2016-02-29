@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, PropTypes} from 'react'
 
 import RaisedButton from 'material-ui/lib/raised-button'
 import FontIcon from 'material-ui/lib/font-icon'
@@ -14,11 +14,13 @@ const styles = {
 
 export default class SignIn extends Component {
   render() {
+    const redirectTo = (this.props.location && this.props.location.query) ? this.props.location.query.redirect : null
+    const signInHref = redirectTo ? `/auth/google?redirectTo=${redirectTo}` : '/auth/google'
     return (
       <div>
         <RaisedButton
           label="Sign-in Using Google"
-          href="/auth/google"
+          href={signInHref}
           linkButton
           primary
           style={styles.button}
@@ -27,4 +29,10 @@ export default class SignIn extends Component {
       </div>
     )
   }
+}
+
+SignIn.propTypes = {
+  location: PropTypes.shape({
+    query: PropTypes.object.isRequired,
+  }),
 }
