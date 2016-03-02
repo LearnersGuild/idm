@@ -2,6 +2,8 @@ import r from 'rethinkdb'
 import raven from 'raven'
 
 import {GraphQLNonNull, GraphQLID} from 'graphql'
+import {GraphQLError} from 'graphql/error'
+
 import {User} from './schema'
 
 import dbConfig from '../../../../db/config'
@@ -22,7 +24,7 @@ export default {
         if (result) {
           return result
         }
-        throw new Error('No such user')
+        throw new GraphQLError('No such user')
       } catch (err) {
         sentry.captureException(err)
         throw err
