@@ -21,12 +21,13 @@ export default {
   createUser: {
     type: User,
     args: {
+      auth0Id: {type: new GraphQLNonNull(GraphQLString)},
       email: {type: new GraphQLNonNull(GraphQLEmailType)},
       name: {type: new GraphQLNonNull(GraphQLString)},
       dateOfBirth: {type: new GraphQLNonNull(GraphQLDateType)},
       socialURLs: {type: SocialURLsType},
     },
-    async resolve(source, {email, name, dateOfBirth, socialURLs}) {
+    async resolve(source, {auth0Id, email, name, dateOfBirth, socialURLs}) {
       try {
         const config = dbConfig()
         const conn = await r.connect(config)
@@ -38,6 +39,7 @@ export default {
           throw new GraphQLError('User already exists')
         } else {
           const userDoc = {
+            auth0Id,
             email,
             name,
             dateOfBirth,
