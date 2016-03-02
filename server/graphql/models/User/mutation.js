@@ -1,4 +1,3 @@
-import r from 'rethinkdb'
 import raven from 'raven'
 
 import {GraphQLNonNull, GraphQLString} from 'graphql'
@@ -8,7 +7,7 @@ import {GraphQLError} from 'graphql/error'
 import {GraphQLEmailType, GraphQLDateType, GraphQLURLType} from '../types'
 import {User, socialURLAttrs} from './schema'
 
-import dbConfig from '../../../../db/config'
+import r from '../../../../db/connect'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
@@ -29,10 +28,7 @@ export default {
     },
     async resolve(source, {auth0Id, email, name, dateOfBirth, socialURLs}) {
       try {
-        const config = dbConfig()
-        const conn = await r.connect(config)
-        const cursor = await r.table('users').getAll(email, {index: 'email'}).limit(1).run(conn)
-        const users = await cursor.toArray()
+        const users = await r.table('users').getAll(email, {index: 'email'}).limit(1).run()
         const user = users[0]
         // console.log('user:', user)
         if (user) {
@@ -47,7 +43,7 @@ export default {
             createdAt: r.now(),
             updatedAt: r.now(),
           }
-          let newUser = await r.table('users').insert(userDoc, {returnChanges: true}).run(conn)
+          let newUser = await r.table('users').insert(userDoc, {returnChanges: true}).run()
           if (!newUser.inserted) {
             throw new Error('Could not create user, please try again')
           }

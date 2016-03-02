@@ -1,4 +1,3 @@
-import r from 'rethinkdb'
 import raven from 'raven'
 
 import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
@@ -7,7 +6,7 @@ import {GraphQLError} from 'graphql/error'
 import {GraphQLEmailType} from '../types'
 import {User} from './schema'
 
-import dbConfig from '../../../../db/config'
+import r from '../../../../db/connect'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
@@ -19,9 +18,7 @@ export default {
     },
     async resolve(source, args) {
       try {
-        const config = dbConfig()
-        const conn = await r.connect(config)
-        const result = await r.table('users').get(args.id).run(conn)
+        const result = await r.table('users').get(args.id).run()
         if (result) {
           return result
         }
@@ -39,9 +36,8 @@ export default {
     },
     async resolve(source, args) {
       try {
-        const config = dbConfig()
-        const conn = await r.connect(config)
-        const result = await r.table('users').get(args.auth0Id).run(conn)
+        const users = await r.table('users').getAll(args.auth0Id, {index: 'auth0Id'}).limit(1).run()
+        const result = users[0]
         if (result) {
           return result
         }
@@ -59,9 +55,8 @@ export default {
     },
     async resolve(source, args) {
       try {
-        const config = dbConfig()
-        const conn = await r.connect(config)
-        const result = await r.table('users').get(args.email).run(conn)
+        const users = await r.table('users').getAll(args.email, {index: 'email'}).limit(1).run()
+        const result = users[0]
         if (result) {
           return result
         }

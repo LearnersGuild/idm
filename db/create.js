@@ -1,11 +1,10 @@
 /* eslint-disable no-console */
-import r from 'rethinkdb'
+import r from './connect'
 
 import dbConfig from './config'
 
 export async function create(config = dbConfig()) {
-  const conn = await r.connect(config)
-  return await r.dbCreate(config.db).run(conn)
+  return await r.dbCreate(config.db).run()
 }
 
 async function run() {

@@ -1,11 +1,9 @@
 /* eslint-disable no-console */
-import r from 'rethinkdb'
-
+import r from './connect'
 import dbConfig from './config'
 
 export async function drop(config = dbConfig()) {
-  const conn = await r.connect(config)
-  return await r.dbDrop(config.db).run(conn)
+  return await r.dbDrop(config.db).run()
 }
 
 async function run() {

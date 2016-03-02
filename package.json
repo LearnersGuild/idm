@@ -90,6 +90,7 @@
     "resolve-url-loader": "^1.4.3",
     "rethink-migrate": "^1.2.2",
     "rethinkdb": "^2.2.2",
+    "rethinkdbdash": "^2.2.18",
     "sass-loader": "^3.1.2",
     "sass-resources-loader": "^1.0.2",
     "serve-static": "^1.10.0",
