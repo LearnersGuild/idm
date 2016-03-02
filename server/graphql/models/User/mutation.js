@@ -4,7 +4,7 @@ import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {GraphQLEmailType, GraphQLDateType, GraphQLURLType} from '../types'
+import {GraphQLEmailType, GraphQLDateType} from '../types'
 import {User, socialURLAttrs} from './schema'
 
 import r from '../../../../db/connect'

@@ -46,15 +46,13 @@ export const GraphQLDateType = new GraphQLScalarType({
         // boundary-check: from the year 0 A.D. too 5000 A.D.
         if (ast.value >= -62167219200000 && ast.value <= 95617584000000) {
           return new Date(ast.value)
-        } else {
-          throw new GraphQLError('Invalid date timestamp (< 0 A.D or > 5,000 A.D.).')
         }
+        throw new GraphQLError('Invalid date timestamp (< 0 A.D or > 5,000 A.D.).')
       case Kind.OBJECT:
         if (ast.value instanceof Date) {
           return ast.value
-        } else {
-          throw new GraphQLError('Cannot parse date from non-date object.')
         }
+        throw new GraphQLError('Cannot parse date from non-date object.')
       default:
         throw new GraphQLError(`Date must be a string, int, or date, but is a: ${ast.kind}`, [ast])
     }
@@ -78,8 +76,8 @@ export const GraphQLURLType = new GraphQLScalarType({
       case Kind.STRING:
         return parseURLFromString(ast.value).href
       case Kind.OBJECT:
-        if (typeof(ast.value.href) === 'undefined') {
-          return reject('Cannot parse URL from non-URL object.')
+        if (typeof ast.value.href === 'undefined') {
+          throw new GraphQLError('Cannot parse URL from non-URL object.')
         }
         return ast.value.href
       default:

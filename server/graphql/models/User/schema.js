@@ -3,10 +3,10 @@ import {GraphQLObjectType} from 'graphql/type'
 import {GraphQLEmailType, GraphQLDateType, GraphQLURLType} from '../types'
 
 export const socialURLAttrs = {
-  github: { type: GraphQLURLType },
-  linkedin: { type: GraphQLURLType },
-  facebook: { type: GraphQLURLType },
-  twitter: { type: GraphQLURLType },
+  github: {type: GraphQLURLType},
+  linkedin: {type: GraphQLURLType},
+  facebook: {type: GraphQLURLType},
+  twitter: {type: GraphQLURLType},
 }
 
 const SocialURLsType = new GraphQLObjectType({

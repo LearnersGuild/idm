@@ -1,18 +1,17 @@
 /* eslint-disable no-var */
 
-var r = require('../connect')
 var config = require('../config')
 var createOptions = config.createOptions
 
 exports.up = function up(r, conn) {
   return r.tableCreate('users', createOptions)
-    .run()
+    .run(conn)
     .then(() => {
-      r.table('users').indexCreate('email').run()
-      return r.table('users').indexCreate('auth0Id').run()
+      r.table('users').indexCreate('email').run(conn)
+      return r.table('users').indexCreate('auth0Id').run(conn)
     })
 }
 
 exports.down = function down(r, conn) {
-  return r.tableDrop('users').run()
+  return r.tableDrop('users').run(conn)
 }
