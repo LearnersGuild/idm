@@ -20,7 +20,6 @@ export default {
   createUser: {
     type: User,
     args: {
-      auth0Id: {type: new GraphQLNonNull(GraphQLString)},
       email: {type: new GraphQLNonNull(GraphQLEmailType)},
       name: {type: new GraphQLNonNull(GraphQLString)},
       dateOfBirth: {type: new GraphQLNonNull(GraphQLDateType)},

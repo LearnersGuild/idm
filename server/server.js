@@ -24,6 +24,13 @@ export async function start() {
 
   const app = new Express()
 
+  // catch-all error handler
+  app.use((err, req, res) => {
+    const errInfo = (process.env.NODE_ENV === 'production') ? '500 Internal Server Error' : err.stack
+    console.error(errInfo)
+    res.status(500).send(errInfo)
+  })
+
   if (process.env.NODE_ENV === 'development') {
     configureDevEnvironment(app)
   }
