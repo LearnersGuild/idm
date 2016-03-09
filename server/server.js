@@ -1,4 +1,4 @@
-/* eslint-disable no-console, no-undef */
+/* eslint-disable no-console, no-undef, no-unused-vars */
 /* eslint new-cap: [2, {"capIsNewExceptions": ["HTTPS"]}] */
 
 process.env.PORT = process.env.PORT || '8080'
@@ -25,7 +25,7 @@ export async function start() {
   const app = new Express()
 
   // catch-all error handler
-  app.use((err, req, res) => {
+  app.use((err, req, res, next) => {
     const errInfo = (process.env.NODE_ENV === 'production') ? '500 Internal Server Error' : err.stack
     console.error(errInfo)
     res.status(500).send(errInfo)

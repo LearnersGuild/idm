@@ -13,12 +13,12 @@ async function createOrUpdateUser(accessToken, refreshToken, profile, cb) {
     name: profile.displayName,
     email: profile.emails[0].value,
     authProviders: {
-      googleOAuth2: profile.id.toString()
+      googleOAuth2: {accessToken, refreshToken, profile},
     },
   }
 
   let user = (await r.table('users')
-    .getAll(userInfo.authProviders.googleOAuth2, {index: 'googleOAuth2Id'})
+    .getAll(userInfo.authProviders.googleOAuth2.profile.id, {index: 'googleOAuth2Id'})
     .limit(1)
     .run())[0]
   const result = user ? (
@@ -85,6 +85,8 @@ export default function configureAuth(app) {
     const appState = redirectTo ? JSON.stringify({redirectTo}) : JSON.stringify({})
     passport.authenticate('google', {
       scope: ['email', 'profile'],
+      accessType: 'offline',
+      approvalPrompt: 'auto',
       state: encrypt(appState),
     })(req, res)
   })
