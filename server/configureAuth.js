@@ -1,6 +1,8 @@
+import {merge} from 'lodash'
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20'
+
 
 import r from '../db/connect'
 import {encrypt, decrypt} from './symmetricCryptoAES'
@@ -8,7 +10,7 @@ import {encrypt, decrypt} from './symmetricCryptoAES'
 const defaultSuccessRedirect = '/'
 const failureRedirect = '/'
 
-async function createOrUpdateUser(accessToken, refreshToken, profile, cb) {
+async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, cb) {
   const userInfo = {
     name: profile.displayName,
     email: profile.emails[0].value,
@@ -21,16 +23,20 @@ async function createOrUpdateUser(accessToken, refreshToken, profile, cb) {
     .getAll(userInfo.authProviders.googleOAuth2.profile.id, {index: 'googleOAuth2Id'})
     .limit(1)
     .run())[0]
-  const result = user ? (
-    await r.table('users').update(Object.assign({}, user, userInfo), {returnChanges: true}).run()
-  ) : (
-    await r.table('users').insert(userInfo, {returnChanges: true}).run()
-  )
+  const result = await createOrUpdateUser(user, userInfo)
   user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
   cb(null, user)
 }
 
-function getUserById(id) {
+export function createOrUpdateUser(user, userInfo) {
+  return user ? (
+    r.table('users').update(merge(user, userInfo), {returnChanges: true}).run()
+  ) : (
+    r.table('users').insert(userInfo, {returnChanges: true}).run()
+  )
+}
+
+export function getUserById(id) {
   return r.table('users').get(id).pluck('id', 'email', 'name').run()
 }
 
@@ -69,7 +75,7 @@ export default function configureAuth(app) {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: '/auth/google/callback',
-  }, createOrUpdateUser))
+  }, createOrUpdateUserFromGoogle))
   passport.serializeUser((user, done) => done(null, user.id))
   passport.deserializeUser(async (id, done) => done(null, await getUserById(id)))
 
