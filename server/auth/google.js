@@ -1,3 +1,4 @@
+import raven from 'raven'
 import passport from 'passport'
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20'
 
@@ -6,22 +7,29 @@ import {encrypt, decrypt} from '../symmetricCryptoAES'
 
 import {createOrUpdateUser, setJWTCookie, defaultSuccessRedirect, failureRedirect} from './helpers'
 
-async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, cb) {
-  const userInfo = {
-    name: profile.displayName,
-    email: profile.emails[0].value,
-    authProviders: {
-      googleOAuth2: {accessToken, refreshToken, profile},
-    },
-  }
+const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
-  let user = (await r.table('users')
-    .getAll(userInfo.authProviders.googleOAuth2.profile.id, {index: 'googleOAuth2Id'})
-    .limit(1)
-    .run())[0]
-  const result = await createOrUpdateUser(user, userInfo)
-  user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
-  cb(null, user)
+async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, cb) {
+  try {
+    const userInfo = {
+      name: profile.displayName,
+      email: profile.emails[0].value,
+      authProviders: {
+        googleOAuth2: {accessToken, refreshToken, profile},
+      },
+    }
+
+    let user = (await r.table('users')
+      .getAll(userInfo.authProviders.googleOAuth2.profile.id, {index: 'googleOAuth2Id'})
+      .limit(1)
+      .run())[0]
+    const result = await createOrUpdateUser(user, userInfo)
+    user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
+    cb(null, user)
+  } catch (err) {
+    console.error(err.stack)
+    sentry.captureException(err)
+  }
 }
 
 export function configureAuthWithGoogle(app) {

@@ -1,3 +1,4 @@
+import raven from 'raven'
 import fetch from 'isomorphic-fetch'
 import passport from 'passport'
 import {Strategy as GitHubStrategy} from 'passport-github'
@@ -7,23 +8,30 @@ import {encrypt, decrypt} from '../symmetricCryptoAES'
 
 import {createOrUpdateUser, setJWTCookie, defaultSuccessRedirect, failureRedirect} from './helpers'
 
-async function createOrUpdateUserFromGitHub(accessToken, refreshToken, profile, cb) {
-  const emails = await fetch(`https://api.github.com/user/emails?access_token=${accessToken}`).then(resp => resp.json())
-  const userInfo = {
-    name: profile.displayName,
-    email: emails[0].email,
-    authProviders: {
-      githubOAuth2: {accessToken, refreshToken, profile},
-    },
-  }
+const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
-  let user = (await r.table('users')
-    .getAll(userInfo.authProviders.githubOAuth2.profile.id, {index: 'githubOAuth2Id'})
-    .limit(1)
-    .run())[0]
-  const result = await createOrUpdateUser(user, userInfo)
-  user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
-  cb(null, user)
+async function createOrUpdateUserFromGitHub(accessToken, refreshToken, profile, cb) {
+  try {
+    const emails = await fetch(`https://api.github.com/user/emails?access_token=${accessToken}`).then(resp => resp.json())
+    const userInfo = {
+      name: profile.displayName,
+      email: emails[0].email,
+      authProviders: {
+        githubOAuth2: {accessToken, refreshToken, profile},
+      },
+    }
+
+    let user = (await r.table('users')
+      .getAll(userInfo.authProviders.githubOAuth2.profile.id, {index: 'githubOAuth2Id'})
+      .limit(1)
+      .run())[0]
+    const result = await createOrUpdateUser(user, userInfo)
+    user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
+    cb(null, user)
+  } catch (err) {
+    console.error(err.stack)
+    sentry.captureException(err)
+  }
 }
 
 export function configureAuthWithGitHub(app) {
