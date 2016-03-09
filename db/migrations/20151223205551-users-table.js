@@ -8,7 +8,8 @@ exports.up = function up(r, conn) {
     .run(conn)
     .then(() => {
       r.table('users').indexCreate('email').run(conn)
-      return r.table('users').indexCreate('googleOAuth2Id', r.row('authProviders')('googleOAuth2')('profile')('id')).run(conn)
+      r.table('users').indexCreate('googleOAuth2Id', r.row('authProviders')('googleOAuth2')('profile')('id')).run(conn)
+      return r.table('users').indexCreate('githubOAuth2Id', r.row('authProviders')('githubOAuth2')('profile')('id')).run(conn)
     })
 }
 

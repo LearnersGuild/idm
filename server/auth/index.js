@@ -3,6 +3,7 @@ import passport from 'passport'
 
 import {getUserById} from './helpers'
 import {configureAuthWithGoogle} from './google'
+import {configureAuthWithGitHub} from './github'
 
 async function addUserToRequestFromJWTCookie(req, res, next) {
   if (!req.cookies || !req.cookies.jwt) {
@@ -45,4 +46,5 @@ export default function configureAuth(app) {
 
   // provider configuration
   configureAuthWithGoogle(app)
+  configureAuthWithGitHub(app)
 }
