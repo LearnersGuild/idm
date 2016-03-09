@@ -11,7 +11,7 @@ import cookieParser from 'cookie-parser'
 import raven from 'raven'
 
 import configureDevEnvironment from './configureDevEnvironment'
-import configureAuth from './configureAuth'
+import configureAuth from './auth'
 import configureGraphQL from './configureGraphQL'
 import handleRender from './render'
 
