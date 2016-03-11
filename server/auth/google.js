@@ -10,10 +10,13 @@ import {createOrUpdateUser, setJWTCookie, defaultSuccessRedirect, failureRedirec
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, cb) {
+  const primaryEmail = profile.emails.filter(email => (email.type === 'account'))[0].value
+  const emails = profile.emails.map(email => email.value)
   try {
     const userInfo = {
       name: profile.displayName,
-      email: profile.emails[0].value,
+      email: primaryEmail,
+      emails: emails,
       authProviders: {
         googleOAuth2: {accessToken, refreshToken, profile},
       },

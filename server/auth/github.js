@@ -12,10 +12,13 @@ const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 async function createOrUpdateUserFromGitHub(accessToken, refreshToken, profile, cb) {
   try {
-    const emails = await fetch(`https://api.github.com/user/emails?access_token=${accessToken}`).then(resp => resp.json())
+    const ghEmails = await fetch(`https://api.github.com/user/emails?access_token=${accessToken}`).then(resp => resp.json())
+    const primaryEmail = ghEmails.filter(email => email.primary)[0].email
+    const emails = ghEmails.map(email => email.email)
     const userInfo = {
       name: profile.displayName,
-      email: emails[0].email,
+      email: primaryEmail,
+      emails: emails,
       authProviders: {
         githubOAuth2: {accessToken, refreshToken, profile},
       },
