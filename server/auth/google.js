@@ -5,7 +5,7 @@ import {Strategy as GoogleStrategy} from 'passport-google-oauth20'
 import r from '../../db/connect'
 import {encrypt, decrypt} from '../symmetricCryptoAES'
 
-import {createOrUpdateUser, setJWTCookie, defaultSuccessRedirect, failureRedirect} from './helpers'
+import {createOrUpdateUser, setJWTCookie, getUsersForEmails, defaultSuccessRedirect, failureRedirect} from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
@@ -22,10 +22,7 @@ async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, 
       },
     }
 
-    let user = (await r.table('users')
-      .getAll(userInfo.authProviders.googleOAuth2.profile.id, {index: 'googleOAuth2Id'})
-      .limit(1)
-      .run())[0]
+    let user = (await getUsersForEmails(emails))[0]
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
     cb(null, user)

@@ -12,6 +12,10 @@ export function createOrUpdateUser(user, userInfo) {
   )
 }
 
+export function getUsersForEmails(emails) {
+  return r.table('users').getAll(...emails, {index: 'emails'}).distinct().run()
+}
+
 export function getUserById(id) {
   return r.table('users').get(id).pluck('id', 'email', 'name').run()
 }
