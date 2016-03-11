@@ -20,6 +20,7 @@ export function githubProfileToUserInfo(accessToken, refreshToken, profile, prim
   return addRolesDeducibleFromEmails({
     name: profile.displayName,
     email: primaryEmail,
+    handle: profile.username,
     emails,
     authProviders: {
       githubOAuth2: {accessToken, refreshToken, profile},
