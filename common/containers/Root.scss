@@ -1,3 +1,7 @@
 .layout {
   @include outer-container;
 }
+
+.link {
+  cursor: pointer;
+}

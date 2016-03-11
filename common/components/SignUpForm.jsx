@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 import {reduxForm} from 'redux-form'
 
-import TextField from 'material-ui/lib/text-field'
-import RaisedButton from 'material-ui/lib/raised-button'
+import Input from 'react-toolbox/lib/input'
+import {Button} from 'react-toolbox/lib/button'
 
 class SignUpForm extends Component {
 
@@ -22,23 +22,23 @@ class SignUpForm extends Component {
           })
         }
         >
-        <TextField
-          floatingLabelText="Email"
-          hintText="me@example.com"
-          errorText={email.valid ? null : 'This field is required'}
+        <Input
+          type="text"
+          label="Email"
+          error={email.valid ? null : 'This field is required'}
           {...email}
           /><br/>
-        <TextField
-          floatingLabelText="Name"
-          hintText="Ivanna Lernkoding"
-          errorText={name.valid ? null : 'Please enter your full name'}
+        <Input
+          type="text"
+          label="Name"
+          error={name.valid ? null : 'Please enter your full name'}
           {...name}
           /><br/>
-        <RaisedButton
+        <Button
           label="Sign Up"
           primary
+          raised
           disabled={submitting}
-          style={{margin: 12}}
           type="submit"
           />
       </form>

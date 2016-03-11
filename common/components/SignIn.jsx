@@ -1,15 +1,14 @@
 import React, {Component, PropTypes} from 'react'
 
-import RaisedButton from 'material-ui/lib/raised-button'
-import FontIcon from 'material-ui/lib/font-icon'
+import {Button} from 'react-toolbox/lib/button'
 
 const styles = {
   button: {
-    margin: 12,
+    marginTop: 25,
   },
   div: {
     marginTop: 50,
-  }
+  },
 }
 
 export default class SignIn extends Component {
@@ -19,23 +18,25 @@ export default class SignIn extends Component {
     const signInGitHubHref = redirectTo ? `/auth/github?redirectTo=${redirectTo}` : '/auth/github'
     return (
       <div>
-        <RaisedButton
-          label="Sign-in Using Google"
+        <Button
           href={signInGoogleHref}
           linkButton
-          primary
+          raised
+          accent
           style={styles.button}
-          icon={<FontIcon className="fa fa-google"/>}
-          />
+          >
+          <span className="socicon socicon-google button-icon"></span> Sign-in Using Google
+        </Button>
         <br/>
-        <RaisedButton
-          label="Sign-in Using GitHub"
+        <Button
           href={signInGitHubHref}
           linkButton
-          primary
+          raised
+          accent
           style={styles.button}
-          icon={<FontIcon className="fa fa-github"/>}
-          />
+          >
+          <span className="socicon socicon-github button-icon"></span> Sign-in Using GitHub
+        </Button>
       </div>
     )
   }

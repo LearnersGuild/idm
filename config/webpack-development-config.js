@@ -23,7 +23,7 @@ module.exports = {
   devtool: '#cheap-module-eval-source-map',
 
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js', '.jsx', '.scss'],
     root,
   },
 
@@ -74,8 +74,10 @@ module.exports = {
         'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2',
         'sass?sourceMap',
         'sass-resources',
+        'toolbox',
       ],
       include: [
+        path.join(root, 'node_modules', 'react-toolbox'),
         path.join(root, 'client'),
         path.join(root, 'common'),
       ],
@@ -92,4 +94,5 @@ module.exports = {
   },
 
   sassResources: './config/sass-resources.scss',
+  toolbox: {theme: './common/theme.scss'},
 }

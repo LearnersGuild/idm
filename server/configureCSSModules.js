@@ -18,8 +18,8 @@ export default function configureCSSModules() {
       const generateScopedName = genericNames('[name]__[local]__[hash:base64:5]', {context: path.join(__dirname, '..')})
       return generateScopedName(name, filepath)
     },
-    preprocessCss: css => {
-      const includePaths = [path.join(__dirname, '..')]
+    preprocessCss: (css, file) => {
+      const includePaths = [path.join(__dirname, '..'), path.dirname(file)]
       const resourcesScss = fs.readFileSync(path.join(__dirname, '..', 'config', 'sass-resources.scss'))
       const result = sass.renderSync({
         data: resourcesScss + css,

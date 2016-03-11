@@ -14,7 +14,7 @@ test.before(() => {
   require('../../../server/configureCSSModules')()
 })
 
-test('Root links to the API docs', t => {
+test('Root shows app title', t => {
   // This is admittedly a stupid test, but it's here just to demonstrate
   // best practices around testing.
   t.plan(1)
@@ -25,5 +25,5 @@ test('Root links to the API docs', t => {
   )
   const rootNode = ReactDOM.findDOMNode(root)
 
-  t.regex(rootNode.textContent, /View GraphiQL/)
+  t.regex(rootNode.textContent, /Identity Management/)
 })

@@ -14,14 +14,12 @@ module.exports = {
       './client',
     ],
     vendor: [
-      'material-ui',
       'raven-js',
       'react',
       'react-dom',
       'react-redux',
       'react-router',
       'react-router-redux',
-      'react-tap-event-plugin',
       'redux',
       'redux-auth-wrapper',
       'redux-form',
@@ -38,7 +36,7 @@ module.exports = {
   devtool: '#cheap-module-source-map',
 
   resolve: {
-    extensions: ['', '.js', '.jsx'],
+    extensions: ['', '.js', '.jsx', '.scss'],
     root,
   },
 
@@ -96,9 +94,11 @@ module.exports = {
         'style',
         'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
         '!sass?sourceMap' +
-        '!sass-resources'
+        '!sass-resources' +
+        '!toolbox'
       ),
       include: [
+        path.join(root, 'node_modules', 'react-toolbox'),
         path.join(root, 'client'),
         path.join(root, 'common'),
       ],
@@ -115,4 +115,5 @@ module.exports = {
   },
 
   sassResources: './config/sass-resources.scss',
+  toolbox: {theme: './common/theme.scss'},
 }

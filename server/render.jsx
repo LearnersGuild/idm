@@ -9,6 +9,8 @@ import {Provider} from 'react-redux'
 
 import {RouterContext, match} from 'react-router'
 
+import ToolboxApp from 'react-toolbox/lib/app'
+
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
 import iconsMetadata from '../dist/icons-metadata'
@@ -81,9 +83,11 @@ export default function handleRender(req, res) {
         res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
       } else {
         const renderedAppHtml = renderToString(
-          <Provider store={store}>
-            <RouterContext {...renderProps}/>
-          </Provider>
+          <ToolboxApp>
+            <Provider store={store}>
+              <RouterContext {...renderProps}/>
+            </Provider>
+          </ToolboxApp>
         )
         res.send(renderFullPage(renderedAppHtml, store.getState()))
       }

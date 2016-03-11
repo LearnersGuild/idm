@@ -3,16 +3,18 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 
-import AppBar from 'material-ui/lib/app-bar'
-import LeftNav from 'material-ui/lib/left-nav'
-import MenuItem from 'material-ui/lib/menus/menu-item'
+import AppBar from 'react-toolbox/lib/app_bar'
+import {Button, IconButton} from 'react-toolbox/lib/button'
+import Drawer from 'react-toolbox/lib/drawer'
+import Navigation from 'react-toolbox/lib/navigation'
+import {MenuItem} from 'react-toolbox'
 
 import styles from './Root.scss'
 
 export class Root extends Component {
   constructor(props) {
     super(props)
-    this.state = {open: false}
+    this.state = {drawerOpen: false}
     this.handleToggle = this.handleToggle.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleHome = this.handleHome.bind(this)
@@ -21,11 +23,11 @@ export class Root extends Component {
   }
 
   handleToggle() {
-    this.setState({open: !this.state.open})
+    this.setState({drawerOpen: !this.state.drawerOpen})
   }
 
   handleClose() {
-    this.setState({open: false})
+    this.setState({drawerOpen: false})
   }
 
   handleHome() {
@@ -47,20 +49,20 @@ export class Root extends Component {
 
     return (
       <section>
-        <LeftNav
+        <Drawer
           docked={false}
-          open={this.state.open}
-          onRequestChange={this.handleClose}
+          active={this.state.drawerOpen}
+          onOverlayClick={this.handleClose}
           >
-          <MenuItem onTouchTap={this.handleSignUp}>Sign-Up</MenuItem>
-          <MenuItem onTouchTap={this.handleGraphQL}>View GraphiQL</MenuItem>
-        </LeftNav>
-        <AppBar
-          title="Identity Management"
-          titleStyle={{cursor: 'pointer'}}
-          onLeftIconButtonTouchTap={this.handleToggle}
-          onTitleTouchTap={this.handleHome}
-          />
+          <Navigation type="vertical">
+            <MenuItem onClick={this.handleSignUp} caption="Sign-Up"/>
+            <MenuItem onClick={this.handleGraphQL} caption="View GraphiQL"/>
+          </Navigation>
+        </Drawer>
+        <AppBar flat>
+          <IconButton inverse icon="menu" onClick={this.handleToggle}/>
+          <Button inverse onClick={this.handleHome}>Identity Management</Button>
+        </AppBar>
         <div className={styles.layout}>{children}</div>
       </section>
     )
