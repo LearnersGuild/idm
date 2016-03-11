@@ -5,7 +5,8 @@ import r from '../../db/connect'
 
 export function createOrUpdateUser(user, userInfo) {
   return user ? (
-    r.table('users').update(merge(user, userInfo), {returnChanges: true}).run()
+    // don't overwrite primary email address
+    r.table('users').update(merge(user, userInfo, {email: user.email}), {returnChanges: true}).run()
   ) : (
     r.table('users').insert(userInfo, {returnChanges: true}).run()
   )
