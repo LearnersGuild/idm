@@ -27,5 +27,17 @@ export function setJWTCookie(req, res) {
   res.cookie('jwt', token, {domain, secure, httpOnly: true})
 }
 
+export function addRolesDeducibleFromEmails(userInfo) {
+  const rolesToAdd = userInfo.emails.reduce((rolesSoFar, email) => {
+    if (email.match(/learnersguild\.org/)) {
+      rolesSoFar.push('staff')
+    }
+    return rolesSoFar
+  }, [])
+  userInfo.roles = userInfo.roles || []
+  userInfo.roles = userInfo.roles.concat(rolesToAdd)
+  return userInfo
+}
+
 export const defaultSuccessRedirect = '/'
 export const failureRedirect = '/'

@@ -2,26 +2,35 @@ import raven from 'raven'
 import passport from 'passport'
 import {Strategy as GoogleStrategy} from 'passport-google-oauth20'
 
-import r from '../../db/connect'
 import {encrypt, decrypt} from '../symmetricCryptoAES'
 
-import {createOrUpdateUser, setJWTCookie, getUsersForEmails, defaultSuccessRedirect, failureRedirect} from './helpers'
+import {
+  createOrUpdateUser,
+  setJWTCookie,
+  getUsersForEmails,
+  addRolesDeducibleFromEmails,
+  defaultSuccessRedirect,
+  failureRedirect
+} from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
+
+export function googleProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails) {
+  return addRolesDeducibleFromEmails({
+    name: profile.displayName,
+    email: primaryEmail,
+    emails,
+    authProviders: {
+      googleOAuth2: {accessToken, refreshToken, profile},
+    },
+  })
+}
 
 async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, cb) {
   const primaryEmail = profile.emails.filter(email => (email.type === 'account'))[0].value
   const emails = profile.emails.map(email => email.value)
   try {
-    const userInfo = {
-      name: profile.displayName,
-      email: primaryEmail,
-      emails: emails,
-      authProviders: {
-        googleOAuth2: {accessToken, refreshToken, profile},
-      },
-    }
-
+    const userInfo = googleProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails)
     let user = (await getUsersForEmails(emails))[0]
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user

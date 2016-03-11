@@ -3,27 +3,36 @@ import fetch from 'isomorphic-fetch'
 import passport from 'passport'
 import {Strategy as GitHubStrategy} from 'passport-github'
 
-import r from '../../db/connect'
 import {encrypt, decrypt} from '../symmetricCryptoAES'
 
-import {createOrUpdateUser, setJWTCookie, getUsersForEmails, defaultSuccessRedirect, failureRedirect} from './helpers'
+import {
+  createOrUpdateUser,
+  setJWTCookie,
+  getUsersForEmails,
+  addRolesDeducibleFromEmails,
+  defaultSuccessRedirect,
+  failureRedirect
+} from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
+
+export function githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails) {
+  return addRolesDeducibleFromEmails({
+    name: profile.displayName,
+    email: primaryEmail,
+    emails,
+    authProviders: {
+      githubOAuth2: {accessToken, refreshToken, profile},
+    },
+  })
+}
 
 async function createOrUpdateUserFromGitHub(accessToken, refreshToken, profile, cb) {
   try {
     const ghEmails = await fetch(`https://api.github.com/user/emails?access_token=${accessToken}`).then(resp => resp.json())
     const primaryEmail = ghEmails.filter(email => email.primary)[0].email
     const emails = ghEmails.map(email => email.email)
-    const userInfo = {
-      name: profile.displayName,
-      email: primaryEmail,
-      emails: emails,
-      authProviders: {
-        githubOAuth2: {accessToken, refreshToken, profile},
-      },
-    }
-
+    const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails)
     let user = (await getUsersForEmails(emails))[0]
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
