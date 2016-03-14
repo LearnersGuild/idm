@@ -58,7 +58,6 @@ export function configureAuthWithGitHub(app) {
     const appState = redirectTo ? JSON.stringify({redirectTo}) : JSON.stringify({})
     passport.authenticate('github', {
       scope: ['user', 'repo'],
-      accessType: 'offline',
       approvalPrompt: 'auto',
       state: encrypt(appState),
     })(req, res)
