@@ -45,7 +45,7 @@ export function configureAuthWithGoogle(app) {
   passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/callback',
+    callbackURL: `${process.env.APP_BASEURL}/auth/google/callback`,
   }, createOrUpdateUserFromGoogle))
 
   app.get('/auth/google', (req, res) => {
