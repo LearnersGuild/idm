@@ -32,6 +32,11 @@ async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, 
   try {
     const userInfo = googleProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails)
     let user = (await getUsersForEmails(emails))[0]
+    if (user) {
+      // don't overwrite refreshToken
+      // See: https://developers.google.com/identity/protocols/OAuth2WebServer#handlingresponse
+      userInfo.authProviders.googleOAuth2.refreshToken = user.authProviders.googleOAuth2.refreshToken
+    }
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
     cb(null, user)
