@@ -21,7 +21,10 @@ export function googleProfileToUserInfo(accessToken, refreshToken, profile, prim
     email: primaryEmail,
     emails,
     authProviders: {
-      googleOAuth2: {accessToken, refreshToken, profile},
+      googleOAuth2: {accessToken, refreshToken},
+    },
+    authProviderProfiles: {
+      googleOAuth2: profile,
     },
   })
 }

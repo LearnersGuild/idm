@@ -11,8 +11,10 @@ test('githubProfileToUserInfo extracts correct information', t => {
       githubOAuth2: {
         accessToken: 'abcd1234',
         refreshToken: 'wxyz9876',
-        profile: {displayName: 'Me', username: 'me'},
       },
+    },
+    authProviderProfiles: {
+      githubOAuth2: {displayName: 'Me', username: 'me'},
     },
     roles: [],
   }

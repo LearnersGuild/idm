@@ -10,8 +10,10 @@ test('githubProfileToUserInfo extracts correct information', t => {
       googleOAuth2: {
         accessToken: 'abcd1234',
         refreshToken: 'wxyz9876',
-        profile: {displayName: 'Me'},
       },
+    },
+    authProviderProfiles: {
+      googleOAuth2: {displayName: 'Me'},
     },
     roles: [],
   }

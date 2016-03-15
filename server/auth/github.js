@@ -23,7 +23,10 @@ export function githubProfileToUserInfo(accessToken, refreshToken, profile, prim
     handle: profile.username,
     emails,
     authProviders: {
-      githubOAuth2: {accessToken, refreshToken, profile},
+      githubOAuth2: {accessToken, refreshToken},
+    },
+    authProviderProfiles: {
+      githubOAuth2: profile,
     },
   })
 }
