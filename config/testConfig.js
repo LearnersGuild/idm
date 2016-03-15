@@ -1,8 +1,7 @@
-import path from 'path'
 import jsdom from 'jsdom'
 
 // environment setup
-require('dotenv').load({path: path.join(__dirname, '..', '.env')})
+process.env.RETHINKDB_URL = 'rethinkdb://localhost:28015/idm_test'
 
 // jsdom setup
 const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
