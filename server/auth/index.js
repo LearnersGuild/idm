@@ -5,10 +5,7 @@ import {getUserById} from './helpers'
 import {configureAuthWithGoogle} from './google'
 import {configureAuthWithGitHub} from './github'
 
-function getJWTFromAuthHeader(authHeader) {
-  const idToken = authHeader.match(/^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/)[1]
-  return jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
-}
+const authHeaderRegex = /^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/
 
 async function addUserToRequestFromJWTCookie(req, res, next) {
   try {
@@ -30,7 +27,8 @@ async function addUserToRequestFromJWT(req, res, next) {
     if (!authHeader) {
       return next()
     }
-    const jwtObject = getJWTFromAuthHeader(authHeader)
+    const idToken = authHeader.match(authHeaderRegex)[1]
+    const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
     req.user = Object.assign({idToken}, await getUserById(jwtObject.sub))
   } catch (err) {
     console.info("Invalid JWT or non-existent 'Authorization: Bearer' header")
@@ -44,7 +42,8 @@ export function verifyJWT(req, res, next) {
     return res.status(401).json({code: 401, type: 'Unauthorized', message: 'No Authorization header found.'})
   }
   try {
-    const jwtObject = getJWTFromAuthHeader(authHeader)
+    const idToken = authHeader.match(authHeaderRegex)[1]
+    const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
     if (jwtObject.iss !== 'idm.learnersguild.org') {
       return res.status(401).json({code: 401, type: 'Unauthorized', message: 'Invalid JWT issuer.'})
     }
