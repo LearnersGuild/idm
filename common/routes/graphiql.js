@@ -18,8 +18,12 @@ if (__SERVER__) {
   route.component = userIsAuthenticated(component)
 } else {
   route.getComponent = async (location, cb) => {
-    const component = await System.import('../containers/GraphiQL')
-    replaceComponent(route, userIsAuthenticated(component), cb)
+    try {
+      const component = await System.import('../containers/GraphiQL')
+      replaceComponent(route, userIsAuthenticated(component), cb)
+    } catch (err) {
+      console.error(err.stack)
+    }
   }
 }
 

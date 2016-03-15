@@ -3,7 +3,11 @@ import r from './connect'
 import dbConfig from './config'
 
 export async function drop(config = dbConfig()) {
-  return await r.dbDrop(config.db).run()
+  try {
+    return await r.dbDrop(config.db).run()
+  } catch (err) {
+    console.error(err.stack)
+  }
 }
 
 async function run() {

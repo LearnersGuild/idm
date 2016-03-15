@@ -4,7 +4,11 @@ import r from './connect'
 import dbConfig from './config'
 
 export async function create(config = dbConfig()) {
-  return await r.dbCreate(config.db).run()
+  try {
+    return await r.dbCreate(config.db).run()
+  } catch (err) {
+    console.error(err.stack)
+  }
 }
 
 async function run() {

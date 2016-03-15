@@ -27,9 +27,9 @@ export function googleProfileToUserInfo(accessToken, refreshToken, profile, prim
 }
 
 async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, cb) {
-  const primaryEmail = profile.emails.filter(email => (email.type === 'account'))[0].value
-  const emails = profile.emails.map(email => email.value)
   try {
+    const primaryEmail = profile.emails.filter(email => (email.type === 'account'))[0].value
+    const emails = profile.emails.map(email => email.value)
     const userInfo = googleProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails)
     let user = (await getUsersForEmails(emails))[0]
     if (user) {
