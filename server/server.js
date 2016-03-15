@@ -27,8 +27,11 @@ export async function start() {
 
     // catch-all error handler
     app.use((err, req, res, next) => {
-      const errInfo = (process.env.NODE_ENV === 'production') ? '500 Internal Server Error' : err.stack
-      console.error(errInfo)
+      const errCode = err.code || 500
+      const errType = err.type || 'Internal Server Error'
+      const errMessage = err.message || (process.env.NODE_ENV === 'production') ? err.toString() : err.stack
+      const errInfo = `<h1>${errCode} - ${errType}</h1><p>${errMessage}</p>`
+      console.error(err.stack)
       res.status(500).send(errInfo)
     })
 
