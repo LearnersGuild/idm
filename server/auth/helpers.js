@@ -3,10 +3,14 @@ import jwt from 'jsonwebtoken'
 
 import r from '../../db/connect'
 
+export function mergeUserInfo(user, userInfo) {
+  // don't overwrite primary email address
+  return merge(user, userInfo, {email: user.email})
+}
+
 export function createOrUpdateUser(user, userInfo) {
   return user ? (
-    // don't overwrite primary email address
-    r.table('users').update(merge(user, userInfo, {email: user.email}), {returnChanges: true}).run()
+    r.table('users').update(mergeUserInfo(user, userInfo), {returnChanges: true}).run()
   ) : (
     r.table('users').insert(userInfo, {returnChanges: true}).run()
   )
