@@ -7,8 +7,10 @@
 @import url(https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css); // brand icons
 
 // Global CSS.
-html, body, {
+html {
   font-size: 62.5%;
+}
+html, body, {
   height: 100%;
 }
 
