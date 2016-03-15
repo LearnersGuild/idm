@@ -45,7 +45,7 @@ export function verifyJWT(req, res, next) {
   }
   try {
     const jwtObject = getJWTFromAuthHeader(authHeader)
-    if (jwtObject !== 'idm.learnersguild.org') {
+    if (jwtObject.iss !== 'idm.learnersguild.org') {
       return res.status(401).json({code: 401, type: 'Unauthorized', message: 'Invalid JWT issuer.'})
     }
   } catch (err) {
