@@ -1,0 +1,20 @@
+.card {
+  @include span-columns(11);
+  margin: 2em;
+  @include media($desktop) {
+    @include span-columns(4);
+    @include shift(4);
+  }
+  margin-top: 5rem;
+}
+
+.cardContent {
+  padding: 2rem;
+  text-align: center;
+}
+
+.lgIcon {
+  display: block;
+  margin: auto;
+  margin-bottom: 1rem;
+}
