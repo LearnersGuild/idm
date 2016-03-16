@@ -9,8 +9,6 @@ import configureStore from '../common/store/configureStore'
 import getRoutes from '../common/routes'
 import Root from '../common/containers/Root'
 
-import './index.scss'
-
 const Raven = require('raven-js').noConflict()
 if (window.sentryClientDSN) {
   Raven.config(window.sentryClientDSN)

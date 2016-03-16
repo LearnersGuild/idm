@@ -4,6 +4,8 @@ import {Provider} from 'react-redux'
 
 import ToolboxApp from 'react-toolbox/lib/app'
 
+import './Root.scss'
+
 export class Root extends Component {
   render() {
     const {store, children} = this.props
