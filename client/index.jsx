@@ -2,15 +2,12 @@
 import React from 'react'
 import {render} from 'react-dom'
 
-import {Provider} from 'react-redux'
-
 import {match, browserHistory, Router} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
 
-import ToolboxApp from 'react-toolbox/lib/app'
-
 import configureStore from '../common/store/configureStore'
 import getRoutes from '../common/routes'
+import Root from '../common/containers/Root'
 
 import './index.scss'
 
@@ -20,7 +17,6 @@ if (window.sentryClientDSN) {
 }
 
 const initialState = window.__INITIAL_STATE__ || {}
-
 const {pathname, search, hash} = window.location
 const location = `${pathname}${search}${hash}`
 
@@ -33,13 +29,11 @@ syncHistoryWithStore(browserHistory, store)
 // code for the initial location. See also: 'routes/loadRoute.js'
 match({routes, location}, () => {
   render(
-    <ToolboxApp>
-      <Provider store={store}>
-        <Router history={browserHistory}>
-          {routes}
-        </Router>
-      </Provider>
-    </ToolboxApp>,
+    <Root store={store}>
+      <Router history={browserHistory}>
+        {routes}
+      </Router>
+    </Root>,
     document.getElementById('root')
   )
 })

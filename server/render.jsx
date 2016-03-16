@@ -5,12 +5,10 @@ import raven from 'raven'
 import React from 'react'
 import {renderToString} from 'react-dom/server'
 import {createStore} from 'redux'
-import {Provider} from 'react-redux'
 
 import {RouterContext, match} from 'react-router'
 
-import ToolboxApp from 'react-toolbox/lib/app'
-
+import Root from '../common/containers/Root'
 import getRoutes from '../common/routes'
 import rootReducer from '../common/reducers'
 import iconsMetadata from '../dist/icons-metadata'
@@ -83,11 +81,9 @@ export default function handleRender(req, res) {
         res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
       } else {
         const renderedAppHtml = renderToString(
-          <ToolboxApp>
-            <Provider store={store}>
-              <RouterContext {...renderProps}/>
-            </Provider>
-          </ToolboxApp>
+          <Root store={store}>
+            <RouterContext {...renderProps}/>
+          </Root>
         )
         res.send(renderFullPage(renderedAppHtml, store.getState()))
       }
