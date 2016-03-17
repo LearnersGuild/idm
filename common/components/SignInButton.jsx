@@ -6,10 +6,9 @@ import styles from './SignInUp.scss'
 
 export default function signInButton(props) {
   const {
-    location,
     buttonLabel,
+    redirectTo,
   } = props
-  const redirectTo = (location && location.query) ? location.query.redirect : null
   const signInGitHubHref = redirectTo ? `/auth/github?redirectTo=${redirectTo}` : '/auth/github'
   return (
     <Button
@@ -25,8 +24,6 @@ export default function signInButton(props) {
 }
 
 signInButton.propTypes = {
-  location: PropTypes.shape({
-    query: PropTypes.object.isRequired,
-  }),
   buttonLabel: PropTypes.string,
+  redirectTo: PropTypes.string,
 }
