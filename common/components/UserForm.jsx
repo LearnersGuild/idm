@@ -4,11 +4,11 @@
 import React, {Component, PropTypes} from 'react'
 import {reduxForm} from 'redux-form'
 
+import {Button} from 'react-toolbox/lib/button'
 import DatePicker from 'react-toolbox/lib/date_picker'
 import Dropdown from 'react-toolbox/lib/dropdown'
 import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
-import {Button} from 'react-toolbox/lib/button'
 
 import styles from './UserForm.scss'
 
@@ -16,11 +16,11 @@ class UserForm extends Component {
   render() {
     const {
       fields: {email, handle, name, phone, dateOfBirth, timezone},
+      handleSubmit,
+      submitting,
+      errors,
       buttonLabel,
       currentUser,
-      handleSubmit,
-      onSubmit,
-      submitting,
     } = this.props
 
     // email
@@ -59,13 +59,7 @@ class UserForm extends Component {
     const tz = timezone.value || Intl.DateTimeFormat().resolved.timeZone
 
     return (
-      <form
-        onSubmit={
-          handleSubmit(() => {
-            onSubmit()
-          })
-        }
-        >
+      <form onSubmit={handleSubmit}>
         <Dropdown
           auto
           icon="email"
@@ -93,13 +87,14 @@ class UserForm extends Component {
           onKeyUp={handlePhoneKeyUp}
           {...phone}
           />
-        <div className={styles.dateOfBirth}>
+        <div className={`${styles.dateOfBirth} ${errors.dateOfBirth ? styles.dateOfBirthErrored : ''}`}>
           <DatePicker
             label="Date of Birth"
             maxDate={maxDate}
             value={dob}
             onChange={handleDateOfBirthChange}
             />
+          <span className={styles.dateOfBirthError}>{errors.dateOfBirth}</span>
           <FontIcon value="today" className={styles.dateOfBirthIcon}/>
         </div>
         <div className={styles.timezone}>
@@ -129,21 +124,24 @@ class UserForm extends Component {
 }
 
 UserForm.propTypes = {
-  buttonLabel: PropTypes.string,
-  currentUser: PropTypes.object.isRequired,
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func/* .isRequired */,
   submitting: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  buttonLabel: PropTypes.string,
+  currentUser: PropTypes.object.isRequired,
 }
 
-function validate({name, phone}) {
+function validate({name, phone, dateOfBirth}) {
   const errors = {}
   if (!name || !name.match(/\w{2,}\ \w{2,}/)) {
     errors.name = 'Include both family and given name'
   }
   if (!phone || !phone.match(/(\d{3}\-?){2}\d{4}/)) {
     errors.phone = '3-digit area code and 7-digit phone number'
+  }
+  if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
+    errors.dateOfBirth = 'Your birth date'
   }
   return errors
 }
@@ -155,6 +153,4 @@ export default reduxForm({
 }, state => ({
   currentUser: state.auth.currentUser,
   initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
-}), {
-  // onSubmit:
-})(UserForm)
+}))(UserForm)
