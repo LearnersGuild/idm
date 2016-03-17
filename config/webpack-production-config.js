@@ -84,7 +84,7 @@ module.exports = {
         '!sass-resources'
       ),
       include: [
-        path.join(root, 'client', 'index.scss'),
+        path.join(root, 'common', 'containers', 'Root.scss'),
         path.join(root, 'node_modules', 'graphiql', 'graphiql.css')
       ],
     }, {
@@ -103,7 +103,7 @@ module.exports = {
         path.join(root, 'common'),
       ],
       exclude: [
-        path.join(root, 'client', 'index.scss'),
+        path.join(root, 'common', 'containers', 'Root.scss'),
       ],
     }, {
       test: /\.json$/,
