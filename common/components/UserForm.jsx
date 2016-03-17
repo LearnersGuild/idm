@@ -127,7 +127,6 @@ UserForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
-  onSubmit: PropTypes.func.isRequired,
   buttonLabel: PropTypes.string,
   currentUser: PropTypes.object.isRequired,
 }
