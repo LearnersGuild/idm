@@ -6,7 +6,11 @@ import styles from './SignInUp.scss'
 
 export default class SignIn extends Component {
   render() {
-    const redirectTo = (this.props.location && this.props.location.query) ? this.props.location.query.redirect : null
+    const {
+      location,
+      buttonLabel,
+    } = this.props
+    const redirectTo = (location && location.query) ? location.query.redirect : null
     const signInGitHubHref = redirectTo ? `/auth/github?redirectTo=${redirectTo}` : '/auth/github'
     return (
       <Button
@@ -16,7 +20,7 @@ export default class SignIn extends Component {
         primary
         style={styles.button}
         >
-        <span className="socicon socicon-github button-icon"></span> Sign-in Using GitHub
+        <span className="socicon socicon-github button-icon"></span> {`${buttonLabel || "Sign-in"} Using GitHub`}
       </Button>
     )
   }
@@ -26,4 +30,5 @@ SignIn.propTypes = {
   location: PropTypes.shape({
     query: PropTypes.object.isRequired,
   }),
+  buttonLabel: PropTypes.string,
 }

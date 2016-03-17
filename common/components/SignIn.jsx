@@ -13,7 +13,7 @@ export default class SignIn extends Component {
       <Card className={styles.card}>
         <div className={styles.cardContent}>
           <img className={styles.lgIcon} src="https://icons.learnersguild.org/apple-touch-icon-60x60.png"/>
-          <SignInButton/>
+          <SignInButton buttonLabel="Sign-in"/>
         </div>
       </Card>
     )
