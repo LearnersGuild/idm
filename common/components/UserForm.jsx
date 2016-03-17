@@ -141,7 +141,7 @@ function validate({name, phone, dateOfBirth}) {
     errors.phone = '3-digit area code and 7-digit phone number'
   }
   if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
-    errors.dateOfBirth = 'Your birth date'
+    errors.dateOfBirth = 'Your birth date (YYYY-MM-DD)'
   }
   return errors
 }

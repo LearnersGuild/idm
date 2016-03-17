@@ -1,7 +1,8 @@
 .card {
   @include span-columns(11);
-  margin: 2em;
+  margin: 1rem;
   @include media($desktop) {
+    margin: 2rem;
     @include span-columns(4);
     @include shift(4);
   }

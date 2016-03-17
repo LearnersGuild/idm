@@ -48,10 +48,14 @@
 .timezone {
   >div {
     display: inline-block;
-    width: 70%;
+    width: 65%;
   }
   button {
     margin-top: $input-padding;
+    margin-left: 1rem;
+    @include media($desktop) {
+      margin-left: 2.3rem;
+    }
     min-width: $input-icon-size;
     width: $input-icon-size;
     height: $input-icon-size;
