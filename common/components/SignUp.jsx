@@ -1,14 +1,13 @@
 import React from 'react'
 
 import {Card} from 'react-toolbox/lib/card'
-import {Button} from 'react-toolbox/lib/button'
 
 import UserForm from './UserForm'
 
 import styles from './SignInUp.scss'
 
 export default function signUp() {
-  const handleSubmit = (data) => {
+  const handleSubmit = data => {
     console.log('SUBMIT:', data)
   }
 

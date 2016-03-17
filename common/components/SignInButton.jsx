@@ -20,7 +20,7 @@ export default class SignIn extends Component {
         primary
         style={styles.button}
         >
-        <span className="socicon socicon-github button-icon"></span> {`${buttonLabel || "Sign-in"} Using GitHub`}
+        <span className="socicon socicon-github button-icon"></span> {`${buttonLabel || 'Sign-in'} Using GitHub`}
       </Button>
     )
   }

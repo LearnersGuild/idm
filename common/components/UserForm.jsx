@@ -53,7 +53,7 @@ class UserForm extends Component {
     }
 
     // timezone
-    const handleRefreshTimezoneFromBrowser = e => {
+    const handleRefreshTimezoneFromBrowser = () => {
       timezone.onChange(Intl.DateTimeFormat().resolved.timeZone)
     }
     const tz = timezone.value || Intl.DateTimeFormat().resolved.timeZone
@@ -112,7 +112,7 @@ class UserForm extends Component {
             />
         </div>
         <Button
-          label={buttonLabel || "Save"}
+          label={buttonLabel || 'Save'}
           primary
           raised
           disabled={submitting}
@@ -124,6 +124,7 @@ class UserForm extends Component {
 }
 
 UserForm.propTypes = {
+  errors: PropTypes.object.isRequired,
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
