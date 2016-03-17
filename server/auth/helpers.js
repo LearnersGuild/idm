@@ -21,7 +21,7 @@ export function getUsersForEmails(emails) {
 }
 
 export function getUserById(id) {
-  return r.table('users').get(id).pluck('id', 'email', 'name', 'handle', 'roles', 'authProviders').run()
+  return r.table('users').get(id).pluck('id', 'email', 'emails', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone', 'roles', 'authProviders').run()
 }
 
 export function setJWTCookie(req, res) {
