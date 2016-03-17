@@ -16,6 +16,7 @@ class UserForm extends Component {
   render() {
     const {
       fields: {email, handle, name, phone, dateOfBirth, timezone},
+      buttonLabel,
       currentUser,
       handleSubmit,
       onSubmit,
@@ -116,7 +117,7 @@ class UserForm extends Component {
             />
         </div>
         <Button
-          label="Sign Up"
+          label={buttonLabel || "Save"}
           primary
           raised
           disabled={submitting}
@@ -128,6 +129,7 @@ class UserForm extends Component {
 }
 
 UserForm.propTypes = {
+  buttonLabel: PropTypes.string,
   currentUser: PropTypes.object.isRequired,
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
