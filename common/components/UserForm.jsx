@@ -1,3 +1,6 @@
+/* global Intl */
+/* eslint new-cap: [2, {"capIsNewExceptions": ["DateTimeFormat"]}] */
+/* eslint-disable react/jsx-handler-names */
 import React, {Component, PropTypes} from 'react'
 import {reduxForm} from 'redux-form'
 
@@ -23,15 +26,15 @@ class UserForm extends Component {
     const handlePhoneKeyUp = e => {
       const fieldValue = e.target.value
       const phoneDigits = fieldValue.replace(/\D/g, '')
-      let areaCode = phoneDigits.slice(0, 3)
-      let prefix = phoneDigits.slice(3, 6)
-      let suffix = phoneDigits.slice(6, 10)
-      let formatted = '' + areaCode
+      const areaCode = phoneDigits.slice(0, 3)
+      const prefix = phoneDigits.slice(3, 6)
+      const suffix = phoneDigits.slice(6, 10)
+      let formatted = String(areaCode)
       if (formatted.length > 2) {
-        formatted += '-' + prefix
+        formatted += `-${prefix}`
       }
       if (formatted.length > 6) {
-        formatted += '-' + suffix
+        formatted += `-${suffix}`
       }
       phone.onChange(formatted)
     }
@@ -105,9 +108,10 @@ class UserForm extends Component {
 }
 
 UserForm.propTypes = {
+  currentUser: PropTypes.object.isRequired,
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func/*.isRequired*/,
+  onSubmit: PropTypes.func/* .isRequired */,
   submitting: PropTypes.bool.isRequired,
 }
 
