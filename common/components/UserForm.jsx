@@ -6,8 +6,11 @@ import {reduxForm} from 'redux-form'
 
 import DatePicker from 'react-toolbox/lib/date_picker'
 import Dropdown from 'react-toolbox/lib/dropdown'
+import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 import {Button} from 'react-toolbox/lib/button'
+
+import styles from './UserForm.scss'
 
 class UserForm extends Component {
   render() {
@@ -49,7 +52,10 @@ class UserForm extends Component {
     }
 
     // timezone
-    const tz = timezone.defaultValue || Intl.DateTimeFormat().resolved.timeZone
+    const handleRefreshTimezoneFromBrowser = e => {
+      timezone.onChange(Intl.DateTimeFormat().resolved.timeZone)
+    }
+    const tz = timezone.value || Intl.DateTimeFormat().resolved.timeZone
 
     return (
       <form
@@ -61,40 +67,54 @@ class UserForm extends Component {
         >
         <Dropdown
           auto
+          icon="email"
           label="Email"
           source={emails}
           {...email}
           />
         <Input
           disabled
+          icon="account_circle"
           type="text"
-          label="Handle (update on GitHub)"
+          label="Handle (from GitHub)"
           value={handle.defaultValue}
           />
         <Input
+          icon="title"
           type="text"
           label="Name"
           {...name}
           />
         <Input
+          icon="phone"
           type="tel"
           label="Phone"
           onKeyUp={handlePhoneKeyUp}
           {...phone}
           />
-        <DatePicker
-          label="Date of Birth"
-          maxDate={maxDate}
-          value={dob}
-          onChange={handleDateOfBirthChange}
-          />
-        <Input
-          disabled
-          type="text"
-          label="Timezone (from browser)"
-          {...timezone}
-          value={tz}
-          />
+        <div className={styles.dateOfBirth}>
+          <DatePicker
+            label="Date of Birth"
+            maxDate={maxDate}
+            value={dob}
+            onChange={handleDateOfBirthChange}
+            />
+          <FontIcon value="today" className={styles.dateOfBirthIcon}/>
+        </div>
+        <div className={styles.timezone}>
+          <Input
+            disabled
+            icon="place"
+            type="text"
+            label="Timezone (from browser)"
+            {...timezone}
+            value={tz}
+            />
+          <Button
+            icon="refresh"
+            onClick={handleRefreshTimezoneFromBrowser}
+            />
+        </div>
         <Button
           label="Sign Up"
           primary
