@@ -10,12 +10,14 @@ import Dropdown from 'react-toolbox/lib/dropdown'
 import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 
+import {formatPhoneNumber} from '../util'
+
 import styles from './UserForm.scss'
 
 class UserForm extends Component {
   render() {
     const {
-      fields: {email, handle, name, phone, dateOfBirth, timezone},
+      fields: {id, email, handle, name, phone, dateOfBirth, timezone},
       handleSubmit,
       submitting,
       errors,
@@ -27,20 +29,10 @@ class UserForm extends Component {
     const emails = currentUser ? currentUser.emails.map(email => ({value: email, label: email})) : []
 
     // phone
-    const handlePhoneKeyUp = e => {
-      const fieldValue = e.target.value
-      const phoneDigits = fieldValue.replace(/\D/g, '')
-      const areaCode = phoneDigits.slice(0, 3)
-      const prefix = phoneDigits.slice(3, 6)
-      const suffix = phoneDigits.slice(6, 10)
-      let formatted = String(areaCode)
-      if (formatted.length > 2) {
-        formatted += `-${prefix}`
-      }
-      if (formatted.length > 6) {
-        formatted += `-${suffix}`
-      }
-      phone.onChange(formatted)
+    const phoneNum = formatPhoneNumber(phone.value)
+    const handlePhoneChange = newPhone => {
+      const onlyDigits = newPhone.replace(/\D/g, '')
+      phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
     }
 
     // dateOfBirth
@@ -60,6 +52,10 @@ class UserForm extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
+        <Input
+          type="hidden"
+          {...id}
+          />
         <Dropdown
           auto
           icon="email"
@@ -84,17 +80,18 @@ class UserForm extends Component {
           icon="phone"
           type="tel"
           label="Phone"
-          onKeyUp={handlePhoneKeyUp}
-          {...phone}
+          value={phoneNum}
+          onChange={handlePhoneChange}
+          error={errors.phone}
           />
-        <div className={`${styles.dateOfBirth} ${errors.dateOfBirth ? styles.dateOfBirthErrored : ''}`}>
+        <div className={styles.dateOfBirth}>
           <DatePicker
             label="Date of Birth"
             maxDate={maxDate}
             value={dob}
             onChange={handleDateOfBirthChange}
+            error={errors.dateOfBirth}
             />
-          <span className={styles.dateOfBirthError}>{errors.dateOfBirth}</span>
           <FontIcon value="today" className={styles.dateOfBirthIcon}/>
         </div>
         <div className={styles.timezone}>
@@ -137,18 +134,18 @@ function validate({name, phone, dateOfBirth}) {
   if (!name || !name.match(/\w{2,}\ \w{2,}/)) {
     errors.name = 'Include both family and given name'
   }
-  if (!phone || !phone.match(/(\d{3}\-?){2}\d{4}/)) {
+  if (!phone || phone < 100000000 || phone > 9999999999) {
     errors.phone = '3-digit area code and 7-digit phone number'
   }
   if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
-    errors.dateOfBirth = 'Your birth date (YYYY-MM-DD)'
+    errors.dateOfBirth = 'Your birth date'
   }
   return errors
 }
 
 export default reduxForm({
   form: 'signUp',
-  fields: ['email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
+  fields: ['id', 'email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
   validate,
 }, state => ({
   currentUser: state.auth.currentUser,

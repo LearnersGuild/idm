@@ -3,6 +3,8 @@ import {connect} from 'react-redux'
 
 import {Card, CardText} from 'react-toolbox/lib/card'
 
+import updateUser from '../actions/updateUser'
+
 import SignInButton from './SignInButton'
 import UserForm from './UserForm'
 
@@ -11,10 +13,11 @@ import styles from './SignInUp.scss'
 export default function signUp(props) {
   const {
     auth: {currentUser},
+    dispatch,
   } = props
 
-  const handleSubmit = data => {
-    console.log('SUBMIT:', data)
+  const handleSubmit = userData => {
+    dispatch(updateUser(userData, '/'))
   }
 
   const cardContent = currentUser ? (
@@ -49,6 +52,7 @@ signUp.propTypes = {
     isSigningIn: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }),
+  dispatch: PropTypes.func,
 }
 
 function mapStateToProps(state) {

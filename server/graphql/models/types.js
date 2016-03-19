@@ -59,6 +59,29 @@ export const GraphQLDateType = new GraphQLScalarType({
   },
 })
 
+function parsePhoneNumber(str) {
+  const phoneDigits = str.toString().replace(/\D/g, '')
+  if (phoneDigits.length !== 10) {
+    throw new GraphQLError('Phone numbers must be 10 digits.')
+  }
+  return parseInt(phoneDigits, 10)
+}
+
+export const GraphQLPhoneNumberType = new GraphQLScalarType({
+  name: 'PhoneNumber',
+  serialize: parsePhoneNumber,
+  parseValue: parsePhoneNumber,
+  parseLiteral: ast => {
+    switch (ast.kind) {
+      case Kind.INT:
+      case Kind.STRING:
+        return parsePhoneNumber(ast.value)
+      default:
+        throw new GraphQLError(`PhoneNumber must be an integer or a string, but it is a: ${ast.kind}`, [ast])
+    }
+  },
+})
+
 function parseURLFromString(str) {
   try {
     return url.parse(str, true)

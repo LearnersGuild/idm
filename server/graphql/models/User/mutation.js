@@ -1,55 +1,48 @@
 import raven from 'raven'
 
-import {GraphQLNonNull, GraphQLString} from 'graphql'
+import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {GraphQLEmailType, GraphQLDateType} from '../types'
-import {User, socialURLAttrs} from './schema'
+import {User} from './schema'
+import {GraphQLEmailType, GraphQLDateType, GraphQLPhoneNumberType} from '../types'
 
 import r from '../../../../db/connect'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
-const SocialURLsType = new GraphQLInputObjectType({
-  name: 'InputSocialURLs',
-  fields: () => socialURLAttrs,
+const InputUser = new GraphQLInputObjectType({
+  name: 'InputUser',
+  description: 'The user account',
+  fields: () => ({
+    id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
+    email: {type: new GraphQLNonNull(GraphQLEmailType), description: 'The user email'},
+    handle: {type: new GraphQLNonNull(GraphQLString), description: 'The user handle'},
+    name: {type: new GraphQLNonNull(GraphQLString), description: 'The user name'},
+    phone: {type: GraphQLPhoneNumberType, description: 'The user phone number'},
+    dateOfBirth: {type: GraphQLDateType, description: "The user's date of birth"},
+    timezone: {type: GraphQLString, description: 'The user phone number'},
+  })
 })
 
 export default {
-  createUser: {
+  updateUser: {
     type: User,
     args: {
-      email: {type: new GraphQLNonNull(GraphQLEmailType)},
-      name: {type: new GraphQLNonNull(GraphQLString)},
-      dateOfBirth: {type: new GraphQLNonNull(GraphQLDateType)},
-      socialURLs: {type: SocialURLsType},
+      user: {type: new GraphQLNonNull(InputUser)},
     },
-    async resolve(source, {auth0Id, email, name, dateOfBirth, socialURLs}) {
+    async resolve(source, {user}) {
       try {
-        const users = await r.table('users').getAll(email, {index: 'email'}).limit(1).run()
-        const user = users[0]
-        // console.log('user:', user)
-        if (user) {
-          throw new GraphQLError('User already exists')
-        } else {
-          const userDoc = {
-            auth0Id,
-            email,
-            name,
-            dateOfBirth,
-            socialURLs,
-            createdAt: r.now(),
-            updatedAt: r.now(),
-          }
-          let newUser = await r.table('users').insert(userDoc, {returnChanges: true}).run()
-          if (!newUser.inserted) {
-            throw new Error('Could not create user, please try again')
-          }
-          newUser = newUser.changes[0].new_val
-          // console.log('newUser:', newUser)
-          return newUser
+        const updatedUser = await r.table('users')
+          .get(user.id)
+          .update(user, {returnChanges: 'always'})
+          .run()
+        if (updatedUser.replaced) {
+          return updatedUser.changes[0].new_val
+        } else if (updatedUser.unchanged) {
+          return updatedUser.changes[0].old_val
         }
+        throw new GraphQLError('Could not update user, please try again')
       } catch (err) {
         sentry.captureException(err)
         throw err

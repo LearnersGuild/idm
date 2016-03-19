@@ -1,17 +1,23 @@
 import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
-import {GraphQLObjectType} from 'graphql/type'
-import {GraphQLEmailType, GraphQLDateType, GraphQLURLType} from '../types'
+import {GraphQLObjectType, GraphQLList} from 'graphql/type'
+import {GraphQLEmailType, GraphQLDateType, GraphQLPhoneNumberType} from '../types'
 
-export const socialURLAttrs = {
-  github: {type: GraphQLURLType},
-  linkedin: {type: GraphQLURLType},
-  facebook: {type: GraphQLURLType},
-  twitter: {type: GraphQLURLType},
-}
+const AuthProvider = new GraphQLObjectType({
+  name: 'AuthProvider',
+  description: 'An auth provider',
+  fields: () => ({
+    accessToken: {type: new GraphQLNonNull(GraphQLString), description: 'The access token'},
+    refreshToken: {type: GraphQLString, description: 'The refresh token'},
+  })
+})
 
-const SocialURLsType = new GraphQLObjectType({
-  name: 'SocialURLs',
-  fields: () => socialURLAttrs,
+const AuthProviders = new GraphQLObjectType({
+  name: 'AuthProviders',
+  description: 'The auth providers',
+  fields: () => ({
+    githubOAuth2: {type: new GraphQLNonNull(AuthProvider), description: 'The GitHub token(s)'},
+    googleOAuth2: {type: new GraphQLNonNull(AuthProvider), description: 'The Google token(s)'},
+  })
 })
 
 export const User = new GraphQLObjectType({
@@ -20,10 +26,13 @@ export const User = new GraphQLObjectType({
   fields: () => ({
     id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
     email: {type: new GraphQLNonNull(GraphQLEmailType), description: 'The user email'},
+    emails: {type: new GraphQLNonNull(new GraphQLList(GraphQLEmailType)), description: 'The user emails'},
+    handle: {type: new GraphQLNonNull(GraphQLString), description: 'The user handle'},
     name: {type: new GraphQLNonNull(GraphQLString), description: 'The user name'},
+    phone: {type: GraphQLPhoneNumberType, description: 'The user phone number'},
     dateOfBirth: {type: GraphQLDateType, description: "The user's date of birth"},
-    socialURLs: {type: SocialURLsType, description: 'Social URLs for the user'},
-    createdAt: {type: GraphQLDateType, description: 'The datetime the user was created'},
-    updatedAt: {type: GraphQLDateType, description: 'The datetime the user was last updated'},
+    timezone: {type: GraphQLString, description: 'The user phone number'},
+    roles: {type: new GraphQLList(GraphQLString), description: 'The user roles'},
+    authProviders: {type: AuthProviders, description: 'The user auth providers'},
   })
 })

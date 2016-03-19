@@ -4,7 +4,6 @@
 
 .dateOfBirth {
   position: relative;
-  padding-top: $input-padding;
   margin-left: $input-icon-size;
 }
 
@@ -23,29 +22,8 @@
   transition: color $animation-duration $animation-curve-default;
 }
 
-.dateOfBirthError {
-  margin-bottom: - $input-underline-height;
-  font-size: $input-label-font-size;
-  line-height: $input-underline-height;
-  color: $input-text-error-color;
-}
-
-.dateOfBirthErrored {
-  padding-bottom: $input-padding;
-  > div > div {
-    padding-bottom: 0;
-    > input {
-      margin-top: 1px;
-      border-bottom-color: $input-text-error-color;
-    }
-    > label {
-      color: $input-text-error-color;
-    }
-  }
-}
-
-
 .timezone {
+  margin-top: $input-padding;
   >div {
     display: inline-block;
     width: 65%;
