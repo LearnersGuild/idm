@@ -8,8 +8,10 @@ export default function signInButton(props) {
   const {
     buttonLabel,
     redirectTo,
+    authURL,
   } = props
-  const signInGitHubHref = redirectTo ? `/auth/github?redirectTo=${redirectTo}` : '/auth/github'
+  const baseURL = authURL ? authURL : '/auth/github'
+  const signInGitHubHref = redirectTo ? `${baseURL}?redirectTo=${redirectTo}` : baseURL
   return (
     <Button
       href={signInGitHubHref}
@@ -25,5 +27,6 @@ export default function signInButton(props) {
 
 signInButton.propTypes = {
   buttonLabel: PropTypes.string,
+  authURL: PropTypes.string,
   redirectTo: PropTypes.string,
 }

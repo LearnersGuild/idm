@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react'
 
 import {Card, CardText} from 'react-toolbox/lib/card'
 
-import SignInButton from './SignInButton'
+import AuthButton from './AuthButton'
 import UserForm from './UserForm'
 
 import styles from './SignInUp.scss'
@@ -26,7 +26,7 @@ export default function signUp(props) {
       <CardText>
         We'll need your <a target="_blank" href="https://github.com">GitHub</a> account information, so the first step is to authenticate using GitHub. If you haven't yet created a GitHub account, you should <a target="_blank" href="https://github.com/join">do that now</a>.
       </CardText>
-      <SignInButton buttonLabel="Authenticate" redirectTo="/sign-up"/>
+      <AuthButton authURL="/auth/github/sign-up" buttonLabel="Authenticate" redirectTo="/sign-up"/>
     </div>
   )
 
