@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken'
 import passport from 'passport'
 
 import {getUserById} from './helpers'
-import {configureAuthWithGoogle} from './google'
 import {configureAuthWithGitHub} from './github'
 
 const authHeaderRegex = /^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/
@@ -70,6 +69,5 @@ export default function configureAuth(app) {
   app.use(addUserToRequestFromJWT)
 
   // provider configuration
-  configureAuthWithGoogle(app)
   configureAuthWithGitHub(app)
 }
