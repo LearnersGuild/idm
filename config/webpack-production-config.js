@@ -41,7 +41,7 @@ module.exports = {
   },
 
   plugins: [
-    new ExtractTextPlugin('app.css', {allChunks: true}),
+    new ExtractTextPlugin('[name].css'),
     new OptimizeCssAssetsPlugin({
       cssProcessorOptions: {discardComments: {removeAll: true}},
       canPrint: false,
@@ -57,7 +57,6 @@ module.exports = {
       },
       '__CLIENT__': true,
       '__SERVER__': false,
-      '__DEVTOOLS__': false  // <-------- DISABLE redux-devtools HERE
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
@@ -79,7 +78,7 @@ module.exports = {
       test: /\.s?css$/,
       loader: ExtractTextPlugin.extract(
         'style',
-        'css?sourceMapimportLoaders=2' +
+        'css?sourceMap&importLoaders=2' +
         '!sass?sourceMap' +
         '!sass-resources'
       ),
@@ -92,14 +91,13 @@ module.exports = {
       test: /\.s?css$/,
       loader: ExtractTextPlugin.extract(
         'style',
-        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
+        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=3' +
         '!sass?sourceMap' +
         '!sass-resources' +
         '!toolbox'
       ),
       include: [
         path.join(root, 'node_modules', 'react-toolbox'),
-        path.join(root, 'client'),
         path.join(root, 'common'),
       ],
       exclude: [

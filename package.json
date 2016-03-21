@@ -12,7 +12,7 @@
     "email": "jeffrey@learnersguild.org"
   },
   "scripts": {
-    "build": "mkdir -p dist && webpack --config config/webpack-production-config.js",
+    "build": "mkdir -p dist && webpack --debug --display-chunks --display-modules --config config/webpack-production-config.js",
     "icons:fetch": "mkdir -p dist && curl -s https://icons.learnersguild.org/tags > dist/icons-metadata.json",
     "db:create": "./node_modules/.bin/babel-node ./db/create.js",
     "db:drop": "./node_modules/.bin/babel-node ./db/drop.js",

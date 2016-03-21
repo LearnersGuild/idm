@@ -9,7 +9,6 @@
 
 .dateOfBirthIcon {
   position: absolute;
-  padding-top: $input-padding;
   top: $input-icon-offset;
   left: -$input-icon-size;
   display: block;
@@ -23,7 +22,6 @@
 }
 
 .timezone {
-  margin-top: $input-padding;
   >div {
     display: inline-block;
     width: 65%;

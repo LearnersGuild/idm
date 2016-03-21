@@ -33,7 +33,6 @@ module.exports = {
     new webpack.DefinePlugin({
       __CLIENT__: true,
       __SERVER__: false,
-      __DEVTOOLS__: false  // <-------- DISABLE redux-devtools HERE
     }),
   ],
 
@@ -78,7 +77,6 @@ module.exports = {
       ],
       include: [
         path.join(root, 'node_modules', 'react-toolbox'),
-        path.join(root, 'client'),
         path.join(root, 'common'),
       ],
       exclude: [
