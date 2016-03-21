@@ -44,6 +44,7 @@ async function createOrUpdateUserFromGitHub(accessToken, refreshToken, profile, 
   } catch (err) {
     console.error(err.stack)
     sentry.captureException(err)
+    cb(err)
   }
 }
 

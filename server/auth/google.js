@@ -46,6 +46,7 @@ async function createOrUpdateUserFromGoogle(accessToken, refreshToken, profile, 
   } catch (err) {
     console.error(err.stack)
     sentry.captureException(err)
+    cb(err)
   }
 }
 
