@@ -1,7 +1,7 @@
-import SignedIn from '../containers/SignedIn'
+import FramedLayout from '../containers/FramedLayout'
 
 const route = {
-  component: SignedIn,
+  component: FramedLayout,
   indexRoute: require('./home'),
   childRoutes: [
     require('./graphiql'),

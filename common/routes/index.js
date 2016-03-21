@@ -5,8 +5,8 @@ export default function getRoutes(/* store */) {
     component: App,
     path: '/',
     childRoutes: [
-      require('./signedIn'),
-      require('./notSignedIn'),
+      require('./framedLayout'),
+      require('./blankLayout'),
     ]
   }
 }

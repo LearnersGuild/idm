@@ -1,7 +1,7 @@
-import NotSignedIn from '../containers/NotSignedIn'
+import BlankLayout from '../containers/BlankLayout'
 
 const route = {
-  component: NotSignedIn,
+  component: BlankLayout,
   childRoutes: [
     require('./signIn'),
     require('./signUp'),

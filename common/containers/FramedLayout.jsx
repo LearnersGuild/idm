@@ -11,9 +11,9 @@ import {MenuItem} from 'react-toolbox'
 
 import Errors from './Errors'
 
-import styles from './SignedIn.scss'
+import styles from './FramedLayout.scss'
 
-export class SignedIn extends Component {
+export class FramedLayout extends Component {
   constructor(props) {
     super(props)
     this.state = {drawerOpen: false}
@@ -74,9 +74,9 @@ export class SignedIn extends Component {
   }
 }
 
-SignedIn.propTypes = {
+FramedLayout.propTypes = {
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
 }
 
-export default connect()(SignedIn)
+export default connect()(FramedLayout)

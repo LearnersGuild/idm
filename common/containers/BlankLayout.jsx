@@ -3,9 +3,9 @@ import {connect} from 'react-redux'
 
 import Errors from './Errors'
 
-import styles from './NotSignedIn.scss'
+import styles from './BlankLayout.scss'
 
-export function notSignedIn({children}) {
+export function blankLayout({children}) {
   return (
     <div className={styles.layout}>
       {children}
@@ -14,8 +14,8 @@ export function notSignedIn({children}) {
   )
 }
 
-notSignedIn.propTypes = {
+blankLayout.propTypes = {
   children: PropTypes.any,
 }
 
-export default connect()(notSignedIn)
+export default connect()(blankLayout)
