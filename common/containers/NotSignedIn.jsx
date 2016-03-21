@@ -1,11 +1,21 @@
 import React, {PropTypes} from 'react'
+import {connect} from 'react-redux'
+
+import Errors from './Errors'
 
 import styles from './NotSignedIn.scss'
 
-export default function render({children}) {
-  return <div className={styles.layout}>{children}</div>
+export function notSignedIn({children}) {
+  return (
+    <div className={styles.layout}>
+      {children}
+      <Errors/>
+    </div>
+  )
 }
 
-render.propTypes = {
+notSignedIn.propTypes = {
   children: PropTypes.any,
 }
+
+export default connect()(notSignedIn)

@@ -9,6 +9,8 @@ import Drawer from 'react-toolbox/lib/drawer'
 import Navigation from 'react-toolbox/lib/navigation'
 import {MenuItem} from 'react-toolbox'
 
+import Errors from './Errors'
+
 import styles from './SignedIn.scss'
 
 export class SignedIn extends Component {
@@ -63,7 +65,10 @@ export class SignedIn extends Component {
           <IconButton inverse icon="menu" onClick={this.handleToggle}/>
           <Button inverse onClick={this.handleHome}>Identity Management</Button>
         </AppBar>
-        <div className={styles.layout}>{children}</div>
+        <div className={styles.layout}>
+          {children}
+          <Errors/>
+        </div>
       </section>
     )
   }
