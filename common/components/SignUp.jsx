@@ -1,9 +1,6 @@
 import React, {PropTypes} from 'react'
-import {connect} from 'react-redux'
 
 import {Card, CardText} from 'react-toolbox/lib/card'
-
-import updateUser from '../actions/updateUser'
 
 import SignInButton from './SignInButton'
 import UserForm from './UserForm'
@@ -13,19 +10,15 @@ import styles from './SignInUp.scss'
 export default function signUp(props) {
   const {
     auth: {currentUser},
-    dispatch,
+    onSubmit,
   } = props
-
-  const handleSubmit = userData => {
-    dispatch(updateUser(userData, '/'))
-  }
 
   const cardContent = currentUser ? (
     <div>
       <CardText style={{textAlign: 'left'}}>
         Complete the sign-up process by providing the information below.
       </CardText>
-      <UserForm buttonLabel="Sign Up" onSubmit={handleSubmit}/>
+      <UserForm buttonLabel="Sign Up" onSubmit={onSubmit}/>
     </div>
   ) : (
     <div>
@@ -52,13 +45,5 @@ signUp.propTypes = {
     isSigningIn: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }),
-  dispatch: PropTypes.func,
+  onSubmit: PropTypes.func.isRequired,
 }
-
-function mapStateToProps(state) {
-  return {
-    auth: state.auth,
-  }
-}
-
-export default connect(mapStateToProps)(signUp)

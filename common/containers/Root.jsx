@@ -23,7 +23,7 @@ Root.propTypes = {
   auth: PropTypes.shape({
     isSigningIn: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
-  }),
+  }).isRequired,
   store: PropTypes.object.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func,
