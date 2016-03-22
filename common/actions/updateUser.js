@@ -49,21 +49,15 @@ mutation ($user: InputUser!) {
     }
     const {currentUser} = getState().auth
 
-    return graphQLFetchPost(currentUser, mutation).then(response => {
-      if (!response.ok) {
-        return response.json().then(err => {
-          console.error('ERROR updating user:', err)
-          throw new Error("Couldn't update user.")
-        })
-      }
-      return response.json()
-    }).then(result => {
-      dispatch(updateUserSuccess(result.data.updateUser))
-      if (successPath) {
-        dispatch(push(successPath))
-      }
-    }).catch(error => {
-      dispatch(updateUserFailure(error))
-    })
+    return graphQLFetchPost(currentUser, mutation)
+      .then(result => {
+        dispatch(updateUserSuccess(result.data.updateUser))
+        if (successPath) {
+          dispatch(push(successPath))
+        }
+      })
+      .catch(error => {
+        dispatch(updateUserFailure(error))
+      })
   }
 }

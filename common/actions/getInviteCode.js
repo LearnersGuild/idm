@@ -36,18 +36,12 @@ query ($code: String!) {
     }
     const {currentUser} = getState().auth
 
-    return graphQLFetchPost(currentUser, query).then(response => {
-      if (!response.ok) {
-        return response.json().then(err => {
-          console.error('ERROR getting invite code:', err)
-          throw new Error("Couldn't get invite code.")
-        })
-      }
-      return response.json()
-    }).then(result => {
-      dispatch(getInviteCodeSuccess(code, result.data.getInviteCodeByCode))
-    }).catch(error => {
-      dispatch(getInviteCodeFailure(code, error))
-    })
+    return graphQLFetchPost(currentUser, query)
+      .then(result => {
+        dispatch(getInviteCodeSuccess(code, result.data.getInviteCodeByCode))
+      })
+      .catch(error => {
+        dispatch(getInviteCodeFailure(code, error))
+      })
   }
 }

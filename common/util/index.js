@@ -19,12 +19,32 @@ export function formatPhoneNumber(phone) {
 }
 
 export function graphQLFetchPost(currentUser, mutation) {
-  return fetch('/graphql', {
+  const options = {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${currentUser.idToken}`,
     },
     body: JSON.stringify(mutation),
-  })
+  }
+  if (currentUser && currentUser.idToken) {
+    options.headers = Object.assign(options.headers, {
+      Authorization: `Bearer ${currentUser.idToken}`,
+    })
+  }
+
+  return fetch('/graphql', options)
+    .then(resp => {
+      if (!resp.ok) {
+        console.error('GraphQL ERROR:', resp.statusText)
+        throw new Error(`GraphQL ERROR: ${resp.statusText}`)
+      }
+      return resp.json()
+    })
+    .then(graphQLResponse => {
+      if (graphQLResponse.errors && graphQLResponse.errors.length) {
+        // throw the first error
+        throw new Error(graphQLResponse.errors[0].message)
+      }
+      return graphQLResponse
+    })
 }
