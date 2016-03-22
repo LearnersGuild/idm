@@ -15,7 +15,7 @@ export default {
     args: {
       code: {type: new GraphQLNonNull(GraphQLString)}
     },
-    async resolve(source, args) {
+    async resolve(source, args/* , {rootValue: {currentUser}} */) { // no authorization needed -- invite code queries are public
       try {
         const inviteCodes = await r.table('inviteCodes').getAll(args.code, {index: 'code'}).limit(1).run()
         const result = inviteCodes[0]

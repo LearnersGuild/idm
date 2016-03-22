@@ -16,7 +16,11 @@ export default {
     args: {
       id: {type: new GraphQLNonNull(GraphQLID)}
     },
-    async resolve(source, args) {
+    async resolve(source, args, {rootValue: {currentUser}}) {
+      const currentUserIsStaff = currentUser.roles.indexOf('staff') >= 0
+      if (args.id !== currentUser.id && !currentUserIsStaff) {
+        throw new GraphQLError('You are not authorized to do that.')
+      }
       try {
         const result = await r.table('users').get(args.id).run()
         if (result) {
@@ -34,7 +38,7 @@ export default {
     args: {
       email: {type: new GraphQLNonNull(GraphQLEmailType)}
     },
-    async resolve(source, args) {
+    async resolve(source, args/* , {rootValue: {currentUser}} */) {
       try {
         const users = await r.table('users').getAll(args.email, {index: 'email'}).limit(1).run()
         const result = users[0]

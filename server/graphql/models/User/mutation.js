@@ -31,7 +31,11 @@ export default {
     args: {
       user: {type: new GraphQLNonNull(InputUser)},
     },
-    async resolve(source, {user}) {
+    async resolve(source, {user}, {rootValue: {currentUser}}) {
+      const currentUserIsStaff = (currentUser.roles.indexOf('staff') >= 0)
+      if (user.id !== currentUser.id && !currentUserIsStaff) {
+        throw new GraphQLError('You are not authorized to do that.')
+      }
       try {
         const updatedUser = await r.table('users')
           .get(user.id)

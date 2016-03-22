@@ -15,59 +15,55 @@ import configureAuth from './auth'
 import configureGraphQL from './configureGraphQL'
 import handleRender from './render'
 
-export async function start() {
-  try {
-    // error handling
-    raven.patchGlobal(process.env.SENTRY_SERVER_DSN)
+export function start() {
+  // error handling
+  raven.patchGlobal(process.env.SENTRY_SERVER_DSN)
 
-    const serverPort = parseInt(process.env.PORT, 10)
-    const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
+  const serverPort = parseInt(process.env.PORT, 10)
+  const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
 
-    const app = new Express()
+  const app = new Express()
 
-    // catch-all error handler
-    app.use((err, req, res, next) => {
-      const errCode = err.code || 500
-      const errType = err.type || 'Internal Server Error'
-      const errMessage = err.message || (process.env.NODE_ENV === 'production') ? err.toString() : err.stack
-      const errInfo = `<h1>${errCode} - ${errType}</h1><p>${errMessage}</p>`
-      console.error(err.stack)
-      res.status(500).send(errInfo)
-    })
-
-    if (process.env.NODE_ENV === 'development') {
-      configureDevEnvironment(app)
-    }
-
-    // Parse cookies.
-    app.use(cookieParser())
-
-    // Ensure secure connection in production.
-    if (process.env.NODE_ENV === 'production') {
-      app.use(enforceSecure.HTTPS({trustProtoHeader: true}))
-    }
-
-    // Use this middleware to server up static files
-    app.use(serveStatic(path.join(__dirname, '../dist')))
-    app.use(serveStatic(path.join(__dirname, '../public')))
-
-    // Configure authentication via Auth0.
-    configureAuth(app)
-
-    // GraphQL middleware
-    await configureGraphQL(app)
-
-    // Default React application
-    app.use(handleRender)
-
-    return app.listen(serverPort, error => {
-      if (error) {
-        console.error(error)
-      } else {
-        console.info('🌍  Listening at %s', baseUrl)
-      }
-    })
-  } catch (err) {
+  // catch-all error handler
+  app.use((err, req, res, next) => {
+    const errCode = err.code || 500
+    const errType = err.type || 'Internal Server Error'
+    const errMessage = err.message || (process.env.NODE_ENV === 'production') ? err.toString() : err.stack
+    const errInfo = `<h1>${errCode} - ${errType}</h1><p>${errMessage}</p>`
     console.error(err.stack)
+    res.status(500).send(errInfo)
+  })
+
+  if (process.env.NODE_ENV === 'development') {
+    configureDevEnvironment(app)
   }
+
+  // Parse cookies.
+  app.use(cookieParser())
+
+  // Ensure secure connection in production.
+  if (process.env.NODE_ENV === 'production') {
+    app.use(enforceSecure.HTTPS({trustProtoHeader: true}))
+  }
+
+  // Use this middleware to server up static files
+  app.use(serveStatic(path.join(__dirname, '../dist')))
+  app.use(serveStatic(path.join(__dirname, '../public')))
+
+  // Configure authentication via Auth0.
+  configureAuth(app)
+
+  // GraphQL middleware
+  configureGraphQL(app)
+
+  // Default React application
+  app.use(handleRender)
+
+  return app.listen(serverPort, error => {
+    if (error) {
+      console.error(error)
+    } else {
+      console.info('🌍  Listening at %s', baseUrl)
+    }
+  })
 }
