@@ -1,20 +1,29 @@
-import React, {PropTypes} from 'react'
+import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 import updateUser from '../actions/updateUser'
 import SignUp from '../components/SignUp'
 
-function signUp({dispatch, auth}) {
-  const handleSubmit = userData => {
-    dispatch(updateUser(userData, '/'))
+class SignUpContainer extends Component {
+  constructor(props) {
+    super(props)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  return (
-    <SignUp onSubmit={handleSubmit} auth={auth}/>
-  )
+  handleSubmit(userData) {
+    this.props.dispatch(updateUser(userData, '/'))
+  }
+
+  render() {
+    const {dispatch, auth} = this.props
+
+    return (
+      <SignUp onSubmit={this.handleSubmit} auth={auth}/>
+    )
+  }
 }
 
-signUp.propTypes = {
+SignUpContainer.propTypes = {
   auth: PropTypes.shape({
     isSigningIn: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
@@ -28,4 +37,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(signUp)
+export default connect(mapStateToProps)(SignUpContainer)
