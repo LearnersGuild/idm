@@ -15,7 +15,7 @@ class SignUpContainer extends Component {
   }
 
   render() {
-    const {dispatch, auth} = this.props
+    const {auth} = this.props
 
     return (
       <SignUp onSubmit={this.handleSubmit} auth={auth}/>

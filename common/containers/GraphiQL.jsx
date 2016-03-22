@@ -1,4 +1,5 @@
 /* global __CLIENT__ */
+import './graphiQLHacks' // this is terrible, but GraphiQL doesn't support SSR
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'

@@ -9,7 +9,7 @@ import {createStore} from 'redux'
 import {RouterContext, match} from 'react-router'
 
 import Root from '../common/containers/Root'
-import getRoutes from '../common/routes'
+import routes from '../common/routes'
 import rootReducer from '../common/reducers'
 import iconsMetadata from '../dist/icons-metadata'
 
@@ -71,7 +71,7 @@ export default function handleRender(req, res) {
     // This is terrible. See: https://github.com/callemall/material-ui/pull/2172
     global.navigator = {userAgent: req.headers['user-agent']}
 
-    match({routes: getRoutes(store), location: req.originalUrl}, (error, redirectLocation, renderProps) => {
+    match({routes, location: req.originalUrl}, (error, redirectLocation, renderProps) => {
       // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
       if (error) {
         throw new Error(error)
