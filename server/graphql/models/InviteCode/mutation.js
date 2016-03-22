@@ -1,6 +1,6 @@
 import raven from 'raven'
 
-import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
+import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 

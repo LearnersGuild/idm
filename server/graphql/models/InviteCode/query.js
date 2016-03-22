@@ -1,6 +1,6 @@
 import raven from 'raven'
 
-import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
+import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLError} from 'graphql/error'
 
 import {InviteCode} from './schema'
