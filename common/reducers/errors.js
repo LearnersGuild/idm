@@ -1,5 +1,6 @@
-import {UPDATE_USER_FAILURE} from '../actions/updateUser'
 import {DISMISS_ERROR} from '../actions/dismissError'
+import {UPDATE_USER_FAILURE} from '../actions/updateUser'
+import {GET_INVITE_CODE_FAILURE} from '../actions/getInviteCode'
 
 const initialState = {
   messages: [],
@@ -24,6 +25,10 @@ export function errors(state = initialState, action) {
         messages: removeMessage(state, action.index)
       })
     case UPDATE_USER_FAILURE:
+      return Object.assign({}, state, {
+        messages: appendMessage(state, action.error),
+      })
+    case GET_INVITE_CODE_FAILURE:
       return Object.assign({}, state, {
         messages: appendMessage(state, action.error),
       })

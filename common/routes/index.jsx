@@ -25,7 +25,7 @@ const userIsAuthenticated = UserAuthWrapper({
 const routes = (
   <Route path="/" component={App}>
     <Route component={BlankLayout}>
-      <Route path="sign-up" component={SignUp}/>
+      <Route path="sign-up/:code" component={SignUp}/>
       <Route path="sign-in" component={SignIn}/>
     </Route>
     <Route component={FramedLayout}>
