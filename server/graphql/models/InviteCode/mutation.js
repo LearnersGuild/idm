@@ -25,8 +25,12 @@ export default {
     args: {
       inviteCode: {type: new GraphQLNonNull(InputInviteCode)},
     },
-    async resolve(source, {inviteCode}) {
+    async resolve(source, {inviteCode}, {rootValue: currentUser}) {
       try {
+        const currentUserIsStaff = (currentUser && currentUser.roles && currentUser.roles.indexOf('staff') >= 0)
+        if (!currentUserIsStaff) {
+          throw new GraphQLError('You are not authorized to do that')
+        }
         const inviteCodes = await r.table('inviteCodes').getAll(inviteCode.code, {index: 'code'}).limit(1).run()
         const result = inviteCodes[0]
         if (result) {
