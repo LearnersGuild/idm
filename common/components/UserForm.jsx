@@ -143,6 +143,7 @@ function validate({name, phone, dateOfBirth}) {
   return errors
 }
 
+// TODO: separate out the reduxForm logic into a container component
 export default reduxForm({
   form: 'signUp',
   fields: ['id', 'email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
