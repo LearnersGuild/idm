@@ -38,13 +38,13 @@ export function setJWTCookie(req, res) {
   const token = jwt.sign({iss: 'idm.learnersguild.org', sub: req.user.id}, process.env.SHARED_JWT_SECRET)
   const secure = (process.env.NODE_ENV === 'production')
   const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
-  res.cookie('jwt', token, {domain, secure, httpOnly: true})
+  res.cookie('lgJWT', token, {domain, secure, httpOnly: true})
 }
 
 export function clearJWTCookie(req, res) {
   const secure = (process.env.NODE_ENV === 'production')
   const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
-  res.clearCookie('jwt', {domain, secure, httpOnly: true})
+  res.clearCookie('lgJWT', {domain, secure, httpOnly: true})
 }
 
 export function addRolesDeducibleFromEmails(userInfo) {

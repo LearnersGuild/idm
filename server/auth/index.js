@@ -8,10 +8,10 @@ const authHeaderRegex = /^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/
 
 async function addUserToRequestFromJWTCookie(req, res, next) {
   try {
-    if (!req.cookies || !req.cookies.jwt) {
+    if (!req.cookies || !req.cookies.lgJWT) {
       return next()
     }
-    const idToken = req.cookies.jwt
+    const idToken = req.cookies.lgJWT
     const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
     const user = await getUserById(jwtObject.sub)
     if (user) {
