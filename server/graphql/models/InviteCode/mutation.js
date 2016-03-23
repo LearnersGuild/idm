@@ -25,7 +25,7 @@ export default {
     args: {
       inviteCode: {type: new GraphQLNonNull(InputInviteCode)},
     },
-    async resolve(source, {inviteCode}, {rootValue: currentUser}) {
+    async resolve(source, {inviteCode}, {rootValue: {currentUser}}) {
       try {
         const currentUserIsStaff = (currentUser && currentUser.roles && currentUser.roles.indexOf('staff') >= 0)
         if (!currentUserIsStaff) {
@@ -36,8 +36,9 @@ export default {
         if (result) {
           throw new GraphQLError('Invite codes must be unique')
         }
+        const inviteCodeWithTimestamps = Object.assign(inviteCode, {createdAt: r.now(), updatedAt: r.now()})
         const insertedInviteCode = await r.table('inviteCodes')
-          .insert(inviteCode, {returnChanges: 'always'})
+          .insert(inviteCodeWithTimestamps, {returnChanges: 'always'})
           .run()
         if (insertedInviteCode.inserted) {
           return insertedInviteCode.changes[0].new_val

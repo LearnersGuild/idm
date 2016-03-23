@@ -37,9 +37,10 @@ export default {
         throw new GraphQLError('You are not authorized to do that.')
       }
       try {
+        const userWithTimestamps = Object.assign(user, {updatedAt: r.now()})
         const updatedUser = await r.table('users')
           .get(user.id)
-          .update(user, {returnChanges: 'always'})
+          .update(userWithTimestamps, {returnChanges: 'always'})
           .run()
         if (updatedUser.replaced) {
           return updatedUser.changes[0].new_val

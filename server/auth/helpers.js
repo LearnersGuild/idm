@@ -9,11 +9,12 @@ export function mergeUserInfo(user, userInfo) {
 }
 
 export function createOrUpdateUser(user, userInfo) {
-  return user ? (
-    r.table('users').update(mergeUserInfo(user, userInfo), {returnChanges: true}).run()
-  ) : (
-    r.table('users').insert(userInfo, {returnChanges: true}).run()
-  )
+  const timestamps = {updatedAt: r.now()}
+  if (user) {
+    return r.table('users').update(mergeUserInfo(user, userInfo), {returnChanges: true}).run()
+  }
+  timestamps.createdAt = r.now()
+  return r.table('users').insert(userInfo, {returnChanges: true}).run()
 }
 
 export function getUsersForEmails(emails) {
