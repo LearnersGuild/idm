@@ -21,7 +21,16 @@ export function getUsersForEmails(emails) {
 }
 
 export function getUserById(id) {
-  return r.table('users').get(id).pluck('id', 'email', 'emails', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone', 'roles', 'authProviders').run()
+  return r.table('users')
+    .get(id)
+    .do(user => {
+      return r.branch(
+        user.ne(null),
+        user.pluck('id', 'email', 'emails', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone', 'roles', 'authProviders'),
+        null
+      )
+    })
+    .run()
 }
 
 export function setJWTCookie(req, res) {
@@ -29,6 +38,12 @@ export function setJWTCookie(req, res) {
   const secure = (process.env.NODE_ENV === 'production')
   const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
   res.cookie('jwt', token, {domain, secure, httpOnly: true})
+}
+
+export function clearJWTCookie(req, res) {
+  const secure = (process.env.NODE_ENV === 'production')
+  const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
+  res.clearCookie('jwt', {domain, secure, httpOnly: true})
 }
 
 export function addRolesDeducibleFromEmails(userInfo) {

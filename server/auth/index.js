@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import passport from 'passport'
 
-import {getUserById} from './helpers'
+import {getUserById, clearJWTCookie} from './helpers'
 import {configureAuthWithGitHub} from './github'
 
 const authHeaderRegex = /^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/
@@ -13,7 +13,12 @@ async function addUserToRequestFromJWTCookie(req, res, next) {
     }
     const idToken = req.cookies.jwt
     const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
-    req.user = Object.assign({idToken}, await getUserById(jwtObject.sub))
+    const user = await getUserById(jwtObject.sub)
+    if (user) {
+      req.user = Object.assign({idToken}, user)
+    } else {
+      clearJWTCookie(req, res)
+    }
   } catch (err) {
     console.info('Invalid or non-existent JWT cookie')
   }
@@ -28,7 +33,12 @@ async function addUserToRequestFromJWT(req, res, next) {
     }
     const idToken = authHeader.match(authHeaderRegex)[1]
     const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
-    req.user = Object.assign({idToken}, await getUserById(jwtObject.sub))
+    const user = await getUserById(jwtObject.sub)
+    if (user) {
+      req.user = Object.assign({idToken}, user)
+    } else {
+      clearJWTCookie(req, res)
+    }
   } catch (err) {
     console.info("Invalid JWT or non-existent 'Authorization: Bearer' header")
   }
