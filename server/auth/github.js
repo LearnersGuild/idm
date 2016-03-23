@@ -75,8 +75,8 @@ function authWithGitHub(strategyName) {
   return (req, res) => {
     // if the app passed-in a place to which we should redirect after the
     // authentication, we'll use it as part of the OAuth2 'state' parameter
-    const {redirectTo} = req.query
-    const appState = redirectTo ? JSON.stringify({strategyName, redirectTo}) : JSON.stringify({strategyName})
+    const {redirect} = req.query
+    const appState = redirect ? JSON.stringify({strategyName, redirect}) : JSON.stringify({strategyName})
     passport.authenticate(strategyName, {
       scope: ['user', 'repo'],
       approvalPrompt: 'auto',
@@ -107,15 +107,15 @@ export function configureAuthWithGitHub(app) {
       const {state} = req.query
       const appState = JSON.parse(decrypt(state))
       // sign-up and sign-in have different strategy names, but use the same OAuth2 app
-      const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirectTo)}&err=auth`
+      const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirect)}&err=auth`
       return passport.authenticate(appState.strategyName, {failureRedirect})(req, res, next)
     },
     (req, res) => {
       const {state} = req.query
       const appState = JSON.parse(decrypt(state))
-      const redirectTo = appState.redirectTo || defaultSuccessRedirect
+      const redirect = appState.redirect || defaultSuccessRedirect
       setJWTCookie(req, res)
-      res.redirect(redirectTo)
+      res.redirect(redirect)
     }
   )
 }

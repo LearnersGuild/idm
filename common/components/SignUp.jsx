@@ -41,7 +41,7 @@ class SignUp extends Component {
               <CardText>
                 We'll need your <a target="_blank" href="https://github.com">GitHub</a> account information, so the first step is to authenticate using GitHub. If you haven't yet created a GitHub account, you should <a target="_blank" href="https://github.com/join">do that now</a>.
               </CardText>
-              <AuthButton authURL="/auth/github/sign-up" buttonLabel="Authenticate" redirectTo={`/sign-up/${code}`}/>
+              <AuthButton authURL="/auth/github/sign-up" buttonLabel="Authenticate" redirect={`/sign-up/${code}`}/>
             </div>
           )
         }

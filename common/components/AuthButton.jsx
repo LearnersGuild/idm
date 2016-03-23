@@ -7,11 +7,11 @@ import styles from './SignInUp.scss'
 export default function signInButton(props) {
   const {
     buttonLabel,
-    redirectTo,
+    redirect,
     authURL,
   } = props
   const baseURL = authURL ? authURL : '/auth/github'
-  const signInGitHubHref = redirectTo ? `${baseURL}?redirectTo=${redirectTo}` : baseURL
+  const signInGitHubHref = redirect ? `${baseURL}?redirect=${redirect}` : baseURL
   return (
     <Button
       href={signInGitHubHref}
@@ -28,5 +28,5 @@ export default function signInButton(props) {
 signInButton.propTypes = {
   buttonLabel: PropTypes.string,
   authURL: PropTypes.string,
-  redirectTo: PropTypes.string,
+  redirect: PropTypes.string,
 }

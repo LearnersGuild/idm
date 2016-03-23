@@ -8,12 +8,12 @@ import styles from './SignInUp.scss'
 
 export default function signIn(props) {
   const {location} = props
-  const redirectTo = (location && location.query) ? location.query.redirect : null
+  const redirect = (location && location.query) ? location.query.redirect : null
   return (
     <Card className={styles.card}>
       <div className={styles.cardContent}>
         <img className={styles.lgIcon} src="https://icons.learnersguild.org/apple-touch-icon-60x60.png"/>
-        <AuthButton buttonLabel="Sign-in" redirectTo={redirectTo}/>
+        <AuthButton buttonLabel="Sign-in" redirect={redirect}/>
       </div>
     </Card>
   )
