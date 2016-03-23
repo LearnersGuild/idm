@@ -38,9 +38,10 @@ export class FramedLayout extends Component {
 
   handleSignOut() {
     this.handleClose()
-    // this.props.dispatch(push('/sign-out'))
-    /* eslint-disable no-alert */
-    alert('Not implemented!')
+    /* global __CLIENT__ */
+    if (__CLIENT__) {
+      window.location.href = '/auth/sign-out'
+    }
   }
 
   handleGraphQL() {

@@ -78,6 +78,12 @@ export default function configureAuth(app) {
   app.use(addUserToRequestFromJWTCookie)
   app.use(addUserToRequestFromJWT)
 
+  // sign-out
+  app.get('/auth/sign-out', (req, res) => {
+    clearJWTCookie(req, res)
+    res.redirect('/')
+  })
+
   // provider configuration
   configureAuthWithGitHub(app)
 }
