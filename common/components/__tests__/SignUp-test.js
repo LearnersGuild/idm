@@ -9,10 +9,10 @@ import SignUp from '../SignUp'
 const defaultProps = {
   auth: {
     currentUser: null,
-    isSigningIn: false,
+    isBusy: false,
   },
   inviteCodes: {
-    isLoading: true,
+    isBusy: true,
     codes: {},
   },
   code: 'invitecode',
@@ -23,7 +23,7 @@ test('SignUp renders validation message when invite code is being loaded', t => 
   t.plan(1)
 
   const root = TestUtils.renderIntoDocument(
-    React.createElement(SignUp, Object.assign(defaultProps, {inviteCodes: {isLoading: true}}))
+    React.createElement(SignUp, Object.assign(defaultProps, {inviteCodes: {isBusy: true}}))
   )
   const rootNode = ReactDOM.findDOMNode(root)
 
@@ -36,7 +36,7 @@ test('SignUp renders error message when invite code is not valid', t => {
   const root = TestUtils.renderIntoDocument(
     React.createElement(SignUp, Object.assign(defaultProps, {
       inviteCodes: {
-        isLoading: false,
+        isBusy: false,
         codes: {
           f6sa15: false,
         }
@@ -58,7 +58,7 @@ test('SignUp renders authenticate button if user has not authenticated', t => {
         currentUser: null,
       },
       inviteCodes: {
-        isLoading: false,
+        isBusy: false,
         codes: {
           f6sa15: true,
         }

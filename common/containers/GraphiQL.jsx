@@ -53,7 +53,7 @@ class GraphiQL extends Component {
 
 GraphiQL.propTypes = {
   auth: PropTypes.shape({
-    isSigningIn: PropTypes.bool.isRequired,
+    isBusy: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }),
 }

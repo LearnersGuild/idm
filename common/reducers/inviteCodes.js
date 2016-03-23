@@ -6,23 +6,23 @@ import {
 
 const initialState = {
   codes: {},
-  isLoading: false,
+  isBusy: false,
 }
 
 export function inviteCodes(state = initialState, action) {
   switch (action.type) {
     case GET_INVITE_CODE_REQUEST:
       return Object.assign({}, state, {
-        isLoading: true,
+        isBusy: true,
       })
     case GET_INVITE_CODE_SUCCESS:
       return Object.assign({}, state, {
-        isLoading: false,
+        isBusy: false,
         codes: {[action.code]: action.inviteCode},
       })
     case GET_INVITE_CODE_FAILURE:
       return Object.assign({}, state, {
-        isLoading: false,
+        isBusy: false,
         codes: {[action.code]: false}
       })
     default:

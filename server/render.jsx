@@ -62,7 +62,7 @@ function getInitialState(req) {
   // console.log('user:', req.user)
   const initialState = {
     auth: {
-      isSigningIn: false,
+      isBusy: false,
       currentUser: req.user,
     }
   }

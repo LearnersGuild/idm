@@ -21,7 +21,7 @@ export class Root extends Component {
 
 Root.propTypes = {
   auth: PropTypes.shape({
-    isSigningIn: PropTypes.bool.isRequired,
+    isBusy: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }).isRequired,
   store: PropTypes.object.isRequired,

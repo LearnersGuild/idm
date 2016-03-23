@@ -37,11 +37,11 @@ class SignUpContainer extends Component {
 
 SignUpContainer.propTypes = {
   auth: PropTypes.shape({
-    isSigningIn: PropTypes.bool.isRequired,
+    isBusy: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }).isRequired,
   inviteCodes: PropTypes.shape({
-    isLoading: PropTypes.bool.isRequired,
+    isBusy: PropTypes.bool.isRequired,
     codes: PropTypes.object.isRequired,
   }).isRequired,
   dispatch: PropTypes.func.isRequired,

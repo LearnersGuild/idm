@@ -23,7 +23,7 @@ class SignUp extends Component {
         <ProgressBar type="linear" mode="indeterminate"/>
       </div>
     )
-    if (!inviteCodes.isLoading) {
+    if (!inviteCodes.isBusy) {
       if (inviteCodes.codes[code]) {
         if (currentUser) {
           cardContent = (
@@ -65,11 +65,11 @@ class SignUp extends Component {
 
 SignUp.propTypes = {
   auth: PropTypes.shape({
-    isSigningIn: PropTypes.bool.isRequired,
+    isBusy: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }),
   inviteCodes: PropTypes.shape({
-    isLoading: PropTypes.bool.isRequired,
+    isBusy: PropTypes.bool.isRequired,
     codes: PropTypes.object.isRequired,
   }).isRequired,
   code: PropTypes.string.isRequired,
