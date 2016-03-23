@@ -12,11 +12,11 @@ class SignUpContainer extends Component {
   }
 
   componentDidMount() {
-    this.constructor.fetchData(this.props)
+    this.constructor.fetchData(this.props.dispatch, this.props)
   }
 
-  static fetchData(props) {
-    const {dispatch, params: {code}} = props
+  static fetchData(dispatch, props) {
+    const {params: {code}} = props
     if (code) {
       dispatch(getInviteCode(code))
     }

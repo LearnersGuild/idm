@@ -4,7 +4,8 @@ import raven from 'raven'
 
 import React from 'react'
 import {renderToString} from 'react-dom/server'
-import {createStore} from 'redux'
+import {createStore, applyMiddleware, compose} from 'redux'
+import thunk from 'redux-thunk'
 
 import {RouterContext, match} from 'react-router'
 
@@ -81,33 +82,55 @@ function getInitialState(req) {
   return initialState
 }
 
+function fetchAllComponentData(dispatch, renderProps) {
+  const {routes} = renderProps
+  const funcs = routes.map(route => {
+    if (route.component && typeof route.component.fetchData === 'function') {
+      return route.component.fetchData(dispatch, renderProps)
+    }
+  })
+  return Promise.all(funcs)
+}
+
+function handleError(error, res) {
+  console.error(error.stack)
+  sentry.captureException(error)
+  res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
+}
+
 export default function handleRender(req, res) {
   try {
     const initialState = getInitialState(req)
-    const store = createStore(rootReducer, initialState)
+    const store = createStore(rootReducer, initialState, compose(
+      applyMiddleware(thunk),
+    ))
+
     // This is terrible. See: https://github.com/callemall/material-ui/pull/2172
     global.navigator = {userAgent: req.headers['user-agent']}
 
-    match({routes, location: req.originalUrl}, (error, redirectLocation, renderProps) => {
-      // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
-      if (error) {
-        throw new Error(error)
-      } else if (redirectLocation) {
-        res.redirect(redirectLocation.pathname + redirectLocation.search)
-      } else if (!renderProps) {
-        res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
-      } else {
-        const renderedAppHtml = renderToString(
-          <Root store={store}>
-            <RouterContext {...renderProps}/>
-          </Root>
-        )
-        res.send(renderFullPage(renderedAppHtml, store.getState()))
+    match({routes, location: req.originalUrl}, async (error, redirectLocation, renderProps) => {
+      try {
+        // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
+        if (error) {
+          throw new Error(error)
+        } else if (redirectLocation) {
+          res.redirect(redirectLocation.pathname + redirectLocation.search)
+        } else if (!renderProps) {
+          res.status(404).send(`<h1>404 - Not Found</h1><p>No such URL: ${req.originalUrl}</p>`)
+        } else {
+          await fetchAllComponentData(store.dispatch, renderProps)
+          const renderedAppHtml = renderToString(
+            <Root store={store}>
+              <RouterContext {...renderProps}/>
+            </Root>
+          )
+          res.status(200).send(renderFullPage(renderedAppHtml, store.getState()))
+        }
+      } catch (error) {
+        handleError(error)
       }
     })
   } catch (error) {
-    console.error(error.stack)
-    sentry.captureException(error)
-    res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
+    handleError(error, res)
   }
 }
