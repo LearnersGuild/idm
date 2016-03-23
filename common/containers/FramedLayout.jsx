@@ -20,7 +20,7 @@ export class FramedLayout extends Component {
     this.handleToggle = this.handleToggle.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleHome = this.handleHome.bind(this)
-    this.handleSignUp = this.handleSignUp.bind(this)
+    this.handleSignOut = this.handleSignOut.bind(this)
     this.handleGraphQL = this.handleGraphQL.bind(this)
   }
 
@@ -36,9 +36,11 @@ export class FramedLayout extends Component {
     this.props.dispatch(push('/'))
   }
 
-  handleSignUp() {
+  handleSignOut() {
     this.handleClose()
-    this.props.dispatch(push('/sign-up'))
+    // this.props.dispatch(push('/sign-out'))
+    /* eslint-disable no-alert */
+    alert('Not implemented!')
   }
 
   handleGraphQL() {
@@ -57,7 +59,7 @@ export class FramedLayout extends Component {
           onOverlayClick={this.handleClose}
           >
           <Navigation type="vertical">
-            <MenuItem onClick={this.handleSignUp} caption="Sign-Up"/>
+            <MenuItem onClick={this.handleSignOut} caption="Sign Out"/>
             <MenuItem onClick={this.handleGraphQL} caption="View GraphiQL"/>
           </Navigation>
         </Drawer>
