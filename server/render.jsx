@@ -58,15 +58,32 @@ export function renderFullPage(renderedAppHtml, initialState) {
     `
 }
 
+function getInitialState(req) {
+  // console.log('user:', req.user)
+  const initialState = {
+    auth: {
+      isSigningIn: false,
+      currentUser: req.user,
+    }
+  }
+  // This is kind of a hack. Rather than enabling sessions (which would require
+  // Redis or another store of some kind), we just pass error codes through the
+  // query string so that they can be rendered properly in the UI.
+  switch (req.query.err) {
+    case 'auth':
+      initialState.errors = {
+        messages: ['Authentication failed. Are you sure you have an account?']
+      }
+      break
+    default:
+      break
+  }
+  return initialState
+}
+
 export default function handleRender(req, res) {
   try {
-    // console.log('user:', req.user)
-    const initialState = {
-      auth: {
-        isSigningIn: false,
-        currentUser: req.user,
-      }
-    }
+    const initialState = getInitialState(req)
     const store = createStore(rootReducer, initialState)
     // This is terrible. See: https://github.com/callemall/material-ui/pull/2172
     global.navigator = {userAgent: req.headers['user-agent']}

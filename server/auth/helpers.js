@@ -59,4 +59,3 @@ export function addRolesDeducibleFromEmails(userInfo) {
 }
 
 export const defaultSuccessRedirect = '/'
-export const failureRedirect = '/'

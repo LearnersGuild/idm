@@ -11,7 +11,6 @@ import {
   getUsersForEmails,
   addRolesDeducibleFromEmails,
   defaultSuccessRedirect,
-  failureRedirect
 } from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
@@ -108,6 +107,7 @@ export function configureAuthWithGitHub(app) {
       const {state} = req.query
       const appState = JSON.parse(decrypt(state))
       // sign-up and sign-in have different strategy names, but use the same OAuth2 app
+      const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirectTo)}&err=auth`
       return passport.authenticate(appState.strategyName, {failureRedirect})(req, res, next)
     },
     (req, res) => {
