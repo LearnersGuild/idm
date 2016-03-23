@@ -15,7 +15,7 @@ function getGraphQLFetcher(auth) {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth.currentUser.idToken}`,
+        'Authorization': `Bearer ${auth.currentUser.lgJWT}`,
       },
       body: JSON.stringify(graphQLParams),
     }).then(response => response.json())

@@ -26,9 +26,9 @@ export function graphQLFetchPost(currentUser, mutation) {
     },
     body: JSON.stringify(mutation),
   }
-  if (currentUser && currentUser.idToken) {
+  if (currentUser && currentUser.lgJWT) {
     options.headers = Object.assign(options.headers, {
-      Authorization: `Bearer ${currentUser.idToken}`,
+      Authorization: `Bearer ${currentUser.lgJWT}`,
     })
   }
 

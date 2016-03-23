@@ -11,11 +11,11 @@ async function addUserToRequestFromJWTCookie(req, res, next) {
     if (!req.cookies || !req.cookies.lgJWT) {
       return next()
     }
-    const idToken = req.cookies.lgJWT
-    const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
+    const lgJWT = req.cookies.lgJWT
+    const jwtObject = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET)
     const user = await getUserById(jwtObject.sub)
     if (user) {
-      req.user = Object.assign({idToken}, user)
+      req.user = Object.assign({lgJWT}, user)
     } else {
       clearJWTCookie(req, res)
     }
@@ -31,11 +31,11 @@ async function addUserToRequestFromJWT(req, res, next) {
     if (!authHeader) {
       return next()
     }
-    const idToken = authHeader.match(authHeaderRegex)[1]
-    const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
+    const lgJWT = authHeader.match(authHeaderRegex)[1]
+    const jwtObject = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET)
     const user = await getUserById(jwtObject.sub)
     if (user) {
-      req.user = Object.assign({idToken}, user)
+      req.user = Object.assign({lgJWT}, user)
     } else {
       clearJWTCookie(req, res)
     }
@@ -51,8 +51,8 @@ export function verifyJWT(req, res, next) {
     return res.status(401).json({code: 401, type: 'Unauthorized', message: 'No Authorization header found.'})
   }
   try {
-    const idToken = authHeader.match(authHeaderRegex)[1]
-    const jwtObject = jwt.verify(idToken, process.env.SHARED_JWT_SECRET)
+    const lgJWT = authHeader.match(authHeaderRegex)[1]
+    const jwtObject = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET)
     if (jwtObject.iss !== 'idm.learnersguild.org') {
       return res.status(401).json({code: 401, type: 'Unauthorized', message: 'Invalid JWT issuer.'})
     }
