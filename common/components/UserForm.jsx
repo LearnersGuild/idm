@@ -22,7 +22,7 @@ class UserForm extends Component {
       submitting,
       errors,
       buttonLabel,
-      currentUser,
+      auth: {isBusy, currentUser},
     } = this.props
 
     // email
@@ -112,7 +112,7 @@ class UserForm extends Component {
           label={buttonLabel || 'Save'}
           primary
           raised
-          disabled={submitting}
+          disabled={submitting || isBusy}
           type="submit"
           />
       </form>
@@ -126,7 +126,10 @@ UserForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   buttonLabel: PropTypes.string,
-  currentUser: PropTypes.object.isRequired,
+  auth: PropTypes.shape({
+    isBusy: PropTypes.bool.isRequired,
+    currentUser: PropTypes.object,
+  }),
 }
 
 function validate({name, phone, dateOfBirth}) {
@@ -149,6 +152,6 @@ export default reduxForm({
   fields: ['id', 'email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
   validate,
 }, state => ({
-  currentUser: state.auth.currentUser,
+  auth: state.auth,
   initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
 }))(UserForm)
