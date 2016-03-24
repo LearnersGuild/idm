@@ -41,7 +41,9 @@ class UserForm extends Component {
     maxDate.setYear(now.getFullYear() - 21)
     const dob = dateOfBirth.value ? new Date(dateOfBirth.value) : undefined
     const handleDateOfBirthChange = newDateOfBirth => {
-      dateOfBirth.onChange(newDateOfBirth.toISOString())
+      // ensure that the date is stored as UTC
+      const dobWithoutTime = new Date(Date.UTC(newDateOfBirth.getFullYear(), newDateOfBirth.getMonth(), newDateOfBirth.getDate(), 0, 0, 0, 0))
+      dateOfBirth.onChange(dobWithoutTime.toISOString().slice(0, 10))
     }
 
     // timezone
