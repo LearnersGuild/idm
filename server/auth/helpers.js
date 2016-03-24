@@ -39,6 +39,7 @@ export function getUserById(id) {
 }
 
 export function jwtClaimsForUser(user) {
+  /* eslint-disable camelcase */
   const now = Math.floor(Date.now() / 1000)
   return {
     iss: jwtIssuer,
@@ -48,7 +49,8 @@ export function jwtClaimsForUser(user) {
     name: user.name,
     preferred_username: user.handle,
     email: user.email,
-    birthdate: user.dateOfBirth.toISOString().slice(0,10),
+    emails: user.emails.join(','),
+    birthdate: user.dateOfBirth.toISOString().slice(0, 10),
     zoneinfo: user.timezone,
     phone_number: phoneToE164(user.phone),
     roles: user.roles.join(','),
@@ -61,6 +63,7 @@ export function userFromJWTClaims(jwtClaims) {
     name: jwtClaims.name,
     handle: jwtClaims.preferred_username,
     email: jwtClaims.email,
+    emails: jwtClaims.emails.split(','),
     dateOfBirth: new Date(jwtClaims.birthdate),
     timezone: jwtClaims.zoneinfo,
     phone: jwtClaims.phone_number,
@@ -68,19 +71,42 @@ export function userFromJWTClaims(jwtClaims) {
   }
 }
 
-export function setJWTCookie(req, res) {
-  const jwtClaims = jwtClaimsForUser(req.user)
-  const expires = new Date(jwtClaims.exp * 1000)
-  const token = jwt.sign(jwtClaims, process.env.SHARED_JWT_SECRET)
-  const secure = (process.env.NODE_ENV === 'production')
-  const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
-  res.cookie('lgJWT', token, {domain, secure, httpOnly: true, expires})
+function userFromJWT(lgJWT) {
+  const jwtClaims = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET, {issuer: jwtIssuer})
+  return Object.assign({lgJWT}, userFromJWTClaims(jwtClaims))
 }
 
-export function clearJWTCookie(req, res) {
+export function cookieOptsJWT(req) {
   const secure = (process.env.NODE_ENV === 'production')
   const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
-  res.clearCookie('lgJWT', {domain, secure, httpOnly: true})
+  return {secure, domain, httpOnly: true}
+}
+
+export function slideJWTSession(req, res, next) {
+  try {
+    if (!req.user || !req.user.lgJWT) {
+      const authHeaderRegex = /^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/
+      const authHeader = req.get('Authorization')
+      if (authHeader) {
+        req.user = userFromJWT(authHeader.match(authHeaderRegex)[1])
+      } else if (req.cookies && req.cookies.lgJWT) {
+        req.user = userFromJWT(req.cookies.lgJWT)
+      }
+    }
+    if (req.user) {
+      const jwtClaims = jwtClaimsForUser(req.user)
+      const expires = new Date(jwtClaims.exp * 1000)
+      const token = jwt.sign(jwtClaims, process.env.SHARED_JWT_SECRET)
+      res.set('LearnersGuild-JWT', token)
+      res.cookie('lgJWT', token, Object.assign(cookieOptsJWT(req), {expires}))
+    }
+  } catch (err) {
+    console.info("Invalid JWT or non-existent 'Authorization: Bearer' header:", err.message ? err.message : err)
+    res.clearCookie('lgJWT', cookieOptsJWT(req))
+  }
+  if (next) {
+    next()
+  }
 }
 
 export function addRolesDeducibleFromEmails(userInfo) {

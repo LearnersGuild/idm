@@ -5,22 +5,10 @@ import ReactDOM from 'react-dom'
 import {connect} from 'react-redux'
 
 import GraphiQLComponent from 'graphiql'
-import fetch from 'isomorphic-fetch'
+
+import {getGraphQLFetcher} from '../util'
 
 import 'graphiql/graphiql.css'
-
-function getGraphQLFetcher(auth) {
-  return graphQLParams => {
-    return fetch('/graphql', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth.currentUser.lgJWT}`,
-      },
-      body: JSON.stringify(graphQLParams),
-    }).then(response => response.json())
-  }
-}
 
 class GraphiQL extends Component {
   constructor(props) {
@@ -44,9 +32,9 @@ class GraphiQL extends Component {
   }
 
   render() {
-    const {auth} = this.props
+    const {dispatch, auth: {currentUser}} = this.props
     return (
-      <GraphiQLComponent ref={this.resizeGraphiQL} fetcher={getGraphQLFetcher(auth)}/>
+      <GraphiQLComponent ref={this.resizeGraphiQL} fetcher={getGraphQLFetcher(dispatch, currentUser, false)}/>
     )
   }
 }
@@ -56,6 +44,7 @@ GraphiQL.propTypes = {
     isBusy: PropTypes.bool.isRequired,
     currentUser: PropTypes.object,
   }),
+  dispatch: PropTypes.func.isRequired,
 }
 
 function mapStateToProps(state) {

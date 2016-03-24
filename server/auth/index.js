@@ -1,42 +1,7 @@
-import jwt from 'jsonwebtoken'
 import passport from 'passport'
 
-import {getUserById, clearJWTCookie, userFromJWTClaims, jwtIssuer} from './helpers'
+import {getUserById, slideJWTSession, cookieOptsJWT} from './helpers'
 import {configureAuthWithGitHub} from './github'
-
-const authHeaderRegex = /^Bearer\s([A-Za-z0-9+\/_\-\.]+)$/
-
-function userFromJWT(lgJWT) {
-  const jwtClaims = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET, {issuer: jwtIssuer})
-  return Object.assign({lgJWT}, userFromJWTClaims(jwtClaims))
-}
-
-function addUserToRequestFromJWTCookie(req, res, next) {
-  try {
-    if (!req.cookies || !req.cookies.lgJWT) {
-      return next()
-    }
-    req.user = userFromJWT(req.cookies.lgJWT)
-  } catch (err) {
-    console.info('Invalid or non-existent JWT cookie:', err.message ? err.message : err)
-    clearJWTCookie(req, res)
-  }
-  next()
-}
-
-function addUserToRequestFromJWT(req, res, next) {
-  try {
-    const authHeader = req.get('Authorization')
-    if (!authHeader) {
-      return next()
-    }
-    req.user = userFromJWT(authHeader.match(authHeaderRegex)[1])
-  } catch (err) {
-    console.info("Invalid JWT or non-existent 'Authorization: Bearer' header:", err.message ? err.message : err)
-    clearJWTCookie(req, res)
-  }
-  next()
-}
 
 export default function configureAuth(app) {
   // set up passport
@@ -52,12 +17,11 @@ export default function configureAuth(app) {
 
   // app configuration
   app.use(passport.initialize())
-  app.use(addUserToRequestFromJWTCookie)
-  app.use(addUserToRequestFromJWT)
+  app.use(slideJWTSession)
 
   // sign-out
   app.get('/auth/sign-out', (req, res) => {
-    clearJWTCookie(req, res)
+    res.clearCookie('lgJWT', cookieOptsJWT(req))
     res.redirect('/')
   })
 

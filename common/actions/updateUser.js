@@ -1,6 +1,6 @@
 import {push} from 'react-router-redux'
 
-import {graphQLFetchPost} from '../util'
+import {getGraphQLFetcher} from '../util'
 
 export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST'
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS'
@@ -10,7 +10,7 @@ function updateUserRequest() {
   return {type: UPDATE_USER_REQUEST}
 }
 
-function updateUserSuccess(currentUser) {
+export function updateUserSuccess(currentUser) {
   return {type: UPDATE_USER_SUCCESS, currentUser}
 }
 
@@ -49,9 +49,10 @@ mutation ($user: InputUser!) {
     }
     const {currentUser} = getState().auth
 
-    return graphQLFetchPost(currentUser, mutation)
+    return getGraphQLFetcher(dispatch, currentUser)(mutation)
       .then(result => {
-        dispatch(updateUserSuccess(result.data.updateUser))
+        // TODO: separate lgJWT from user object
+        dispatch(updateUserSuccess(Object.assign({}, currentUser, result.data.updateUser)))
         if (successPath) {
           dispatch(push(successPath))
         }

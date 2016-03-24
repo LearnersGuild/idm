@@ -7,10 +7,10 @@ import {encrypt, decrypt} from '../symmetricCryptoAES'
 
 import {
   createOrUpdateUser,
-  setJWTCookie,
   getUsersForEmails,
   addRolesDeducibleFromEmails,
   defaultSuccessRedirect,
+  slideJWTSession,
 } from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
@@ -114,7 +114,7 @@ export function configureAuthWithGitHub(app) {
       const {state} = req.query
       const appState = JSON.parse(decrypt(state))
       const redirect = appState.redirect || defaultSuccessRedirect
-      setJWTCookie(req, res)
+      slideJWTSession(req, res)
       res.redirect(redirect)
     }
   )

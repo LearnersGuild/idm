@@ -1,5 +1,12 @@
 import fetch from 'isomorphic-fetch'
 
+import {updateUserSuccess} from '../actions/updateUser'
+
+export function phoneToE164(phone) {
+  const phoneStr = phone.toString()
+  return `+1 (${phoneStr.slice(0, 3)}) ${phoneStr.slice(3, 6)}-${phoneStr.slice(6)}`
+}
+
 export function formatPhoneNumber(phone) {
   if (!phone) {
     return phone
@@ -18,38 +25,44 @@ export function formatPhoneNumber(phone) {
   return formatted
 }
 
-export function graphQLFetchPost(currentUser, mutation) {
-  const options = {
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(mutation),
-  }
-  if (currentUser && currentUser.lgJWT) {
-    options.headers = Object.assign(options.headers, {
-      Authorization: `Bearer ${currentUser.lgJWT}`,
-    })
-  }
+export function getGraphQLFetcher(dispatch, currentUser, throwErrors = true) {
+  return graphQLParams => {
+    const options = {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(graphQLParams),
+    }
+    if (currentUser && currentUser.lgJWT) {
+      options.headers = Object.assign(options.headers, {
+        Authorization: `Bearer ${currentUser.lgJWT}`,
+      })
+    }
 
-  return fetch('/graphql', options)
-    .then(resp => {
-      if (!resp.ok) {
-        console.error('GraphQL ERROR:', resp.statusText)
-        throw new Error(`GraphQL ERROR: ${resp.statusText}`)
-      }
-      return resp.json()
-    })
-    .then(graphQLResponse => {
-      if (graphQLResponse.errors && graphQLResponse.errors.length) {
-        // throw the first error
-        throw new Error(graphQLResponse.errors[0].message)
-      }
-      return graphQLResponse
-    })
-}
-
-export function phoneToE164(phone) {
-  const phoneStr = phone.toString()
-  return `+1 (${phoneStr.slice(0, 3)}) ${phoneStr.slice(3, 6)}-${phoneStr.slice(6)}`
+    return fetch('/graphql', options)
+      .then(resp => {
+        if (!resp.ok) {
+          console.error('GraphQL ERROR:', resp.statusText)
+          if (throwErrors) {
+            throw new Error(`GraphQL ERROR: ${resp.statusText}`)
+          }
+        }
+        // for sliding-sessions, update our JWT from the LearnersGuild-JWT header
+        const lgJWT = resp.headers.get('LearnersGuild-JWT')
+        if (lgJWT) {
+          dispatch(updateUserSuccess(Object.assign({}, currentUser, {lgJWT})))
+        }
+        return resp.json()
+      })
+      .then(graphQLResponse => {
+        if (graphQLResponse.errors && graphQLResponse.errors.length) {
+          if (throwErrors) {
+            // throw the first error
+            throw new Error(graphQLResponse.errors[0].message)
+          }
+        }
+        return graphQLResponse
+      })
+  }
 }
