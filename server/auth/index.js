@@ -18,7 +18,7 @@ function addUserToRequestFromJWTCookie(req, res, next) {
     }
     req.user = userFromJWT(req.cookies.lgJWT)
   } catch (err) {
-    console.info('Invalid or non-existent JWT cookie')
+    console.info('Invalid or non-existent JWT cookie:', err.message ? err.message : err)
     clearJWTCookie(req, res)
   }
   next()
@@ -32,7 +32,7 @@ function addUserToRequestFromJWT(req, res, next) {
     }
     req.user = userFromJWT(authHeader.match(authHeaderRegex)[1])
   } catch (err) {
-    console.info("Invalid JWT or non-existent 'Authorization: Bearer' header")
+    console.info("Invalid JWT or non-existent 'Authorization: Bearer' header:", err.message ? err.message : err)
     clearJWTCookie(req, res)
   }
   next()
