@@ -2,6 +2,10 @@ import {merge} from 'lodash'
 import jwt from 'jsonwebtoken'
 
 import r from '../../db/connect'
+import {phoneToE164} from '../../common/util'
+
+export const defaultSuccessRedirect = '/'
+export const jwtIssuer = 'learnersguild.org'
 
 export function mergeUserInfo(user, userInfo) {
   // don't overwrite primary email address
@@ -34,11 +38,43 @@ export function getUserById(id) {
     .run()
 }
 
+export function jwtClaimsForUser(user) {
+  const now = Math.floor(Date.now() / 1000)
+  return {
+    iss: jwtIssuer,
+    iat: now,
+    exp: now + (60 * 60 * 24),  // 1 day from now
+    sub: user.id,
+    name: user.name,
+    preferred_username: user.handle,
+    email: user.email,
+    birthdate: user.dateOfBirth.toISOString().slice(0,10),
+    zoneinfo: user.timezone,
+    phone_number: phoneToE164(user.phone),
+    roles: user.roles.join(','),
+  }
+}
+
+export function userFromJWTClaims(jwtClaims) {
+  return {
+    id: jwtClaims.sub,
+    name: jwtClaims.name,
+    handle: jwtClaims.preferred_username,
+    email: jwtClaims.email,
+    dateOfBirth: new Date(jwtClaims.birthdate),
+    timezone: jwtClaims.zoneinfo,
+    phone: jwtClaims.phone_number,
+    roles: jwtClaims.roles.split(','),
+  }
+}
+
 export function setJWTCookie(req, res) {
-  const token = jwt.sign({iss: 'idm.learnersguild.org', sub: req.user.id}, process.env.SHARED_JWT_SECRET)
+  const jwtClaims = jwtClaimsForUser(req.user)
+  const expires = new Date(jwtClaims.exp * 1000)
+  const token = jwt.sign(jwtClaims, process.env.SHARED_JWT_SECRET)
   const secure = (process.env.NODE_ENV === 'production')
   const domain = (process.env.NODE_ENV === 'production') ? '.learnersguild.org' : req.hostname
-  res.cookie('lgJWT', token, {domain, secure, httpOnly: true})
+  res.cookie('lgJWT', token, {domain, secure, httpOnly: true, expires})
 }
 
 export function clearJWTCookie(req, res) {
@@ -58,5 +94,3 @@ export function addRolesDeducibleFromEmails(userInfo) {
   userInfo.roles = userInfo.roles.concat(rolesToAdd)
   return userInfo
 }
-
-export const defaultSuccessRedirect = '/'

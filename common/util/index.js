@@ -48,3 +48,8 @@ export function graphQLFetchPost(currentUser, mutation) {
       return graphQLResponse
     })
 }
+
+export function phoneToE164(phone) {
+  const phoneStr = phone.toString()
+  return `+1 (${phoneStr.slice(0, 3)}) ${phoneStr.slice(3, 6)}-${phoneStr.slice(6)}`
+}
