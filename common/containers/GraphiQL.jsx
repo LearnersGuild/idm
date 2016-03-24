@@ -32,9 +32,9 @@ class GraphiQL extends Component {
   }
 
   render() {
-    const {dispatch, auth: {currentUser}} = this.props
+    const {dispatch, auth} = this.props
     return (
-      <GraphiQLComponent ref={this.resizeGraphiQL} fetcher={getGraphQLFetcher(dispatch, currentUser, false)}/>
+      <GraphiQLComponent ref={this.resizeGraphiQL} fetcher={getGraphQLFetcher(dispatch, auth, false)}/>
     )
   }
 }

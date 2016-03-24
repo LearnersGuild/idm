@@ -34,9 +34,9 @@ query ($code: String!) {
         code,
       },
     }
-    const {currentUser} = getState().auth
+    const {auth} = getState()
 
-    return getGraphQLFetcher(dispatch, currentUser)(query)
+    return getGraphQLFetcher(dispatch, auth)(query)
       .then(result => {
         dispatch(getInviteCodeSuccess(code, result.data.getInviteCodeByCode))
       })

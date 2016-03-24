@@ -1,8 +1,11 @@
 import fetch from 'isomorphic-fetch'
 
-import {updateUserSuccess} from '../actions/updateUser'
+import {updateJWT} from '../actions/updateJWT'
 
 export function phoneToE164(phone) {
+  if (!phone) {
+    return phone
+  }
   const phoneStr = phone.toString()
   return `+1 (${phoneStr.slice(0, 3)}) ${phoneStr.slice(3, 6)}-${phoneStr.slice(6)}`
 }
@@ -25,7 +28,7 @@ export function formatPhoneNumber(phone) {
   return formatted
 }
 
-export function getGraphQLFetcher(dispatch, currentUser, throwErrors = true) {
+export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
   return graphQLParams => {
     const options = {
       method: 'post',
@@ -34,9 +37,9 @@ export function getGraphQLFetcher(dispatch, currentUser, throwErrors = true) {
       },
       body: JSON.stringify(graphQLParams),
     }
-    if (currentUser && currentUser.lgJWT) {
+    if (auth.lgJWT) {
       options.headers = Object.assign(options.headers, {
-        Authorization: `Bearer ${currentUser.lgJWT}`,
+        Authorization: `Bearer ${auth.lgJWT}`,
       })
     }
 
@@ -51,7 +54,7 @@ export function getGraphQLFetcher(dispatch, currentUser, throwErrors = true) {
         // for sliding-sessions, update our JWT from the LearnersGuild-JWT header
         const lgJWT = resp.headers.get('LearnersGuild-JWT')
         if (lgJWT) {
-          dispatch(updateUserSuccess(Object.assign({}, currentUser, {lgJWT})))
+          dispatch(updateJWT(lgJWT))
         }
         return resp.json()
       })

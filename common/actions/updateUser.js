@@ -47,12 +47,11 @@ mutation ($user: InputUser!) {
         user: userData,
       },
     }
-    const {currentUser} = getState().auth
+    const {auth} = getState()
 
-    return getGraphQLFetcher(dispatch, currentUser)(mutation)
+    return getGraphQLFetcher(dispatch, auth)(mutation)
       .then(result => {
-        // TODO: separate lgJWT from user object
-        dispatch(updateUserSuccess(Object.assign({}, currentUser, result.data.updateUser)))
+        dispatch(updateUserSuccess(result.data.updateUser))
         if (successPath) {
           dispatch(push(successPath))
         }

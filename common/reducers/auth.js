@@ -1,7 +1,9 @@
 import {UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE} from '../actions/updateUser'
+import {UPDATE_JWT} from '../actions/updateJWT'
 
 const initialState = {
   currentUser: null,
+  lgJWT: null,
   isBusy: false,
 }
 
@@ -20,6 +22,10 @@ export function auth(state = initialState, action) {
       console.error('Update user FAILURE:', action.error)
       return Object.assign({}, state, {
         isBusy: false,
+      })
+    case UPDATE_JWT:
+      return Object.assign({}, state, {
+        lgJWT: action.lgJWT,
       })
     default:
       return state

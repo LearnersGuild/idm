@@ -61,10 +61,12 @@ export function renderFullPage(renderedAppHtml, initialState) {
 
 function getInitialState(req) {
   // console.log('user:', req.user)
+  // console.log('lgJWT:', req.lgJWT)
   const initialState = {
     auth: {
-      isBusy: false,
       currentUser: req.user,
+      lgJWT: req.lgJWT,
+      isBusy: false,
     }
   }
   // This is kind of a hack. Rather than enabling sessions (which would require

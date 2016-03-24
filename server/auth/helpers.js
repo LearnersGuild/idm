@@ -50,7 +50,7 @@ export function jwtClaimsForUser(user) {
     preferred_username: user.handle,
     email: user.email,
     emails: user.emails.join(','),
-    birthdate: user.dateOfBirth.toISOString().slice(0, 10),
+    birthdate: user.dateOfBirth ? user.dateOfBirth.toISOString().slice(0, 10) : undefined,
     zoneinfo: user.timezone,
     phone_number: phoneToE164(user.phone),
     roles: user.roles.join(','),
@@ -64,7 +64,7 @@ export function userFromJWTClaims(jwtClaims) {
     handle: jwtClaims.preferred_username,
     email: jwtClaims.email,
     emails: jwtClaims.emails.split(','),
-    dateOfBirth: new Date(jwtClaims.birthdate),
+    dateOfBirth: jwtClaims.birthdate ? new Date(jwtClaims.birthdate) : undefined,
     timezone: jwtClaims.zoneinfo,
     phone: jwtClaims.phone_number,
     roles: jwtClaims.roles.split(','),
@@ -73,7 +73,7 @@ export function userFromJWTClaims(jwtClaims) {
 
 function userFromJWT(lgJWT) {
   const jwtClaims = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET, {issuer: jwtIssuer})
-  return Object.assign({lgJWT}, userFromJWTClaims(jwtClaims))
+  return userFromJWTClaims(jwtClaims)
 }
 
 export function cookieOptsJWT(req) {
@@ -97,12 +97,14 @@ export function slideJWTSession(req, res, next) {
       const jwtClaims = jwtClaimsForUser(req.user)
       const expires = new Date(jwtClaims.exp * 1000)
       const token = jwt.sign(jwtClaims, process.env.SHARED_JWT_SECRET)
+      req.lgJWT = token
       res.set('LearnersGuild-JWT', token)
       res.cookie('lgJWT', token, Object.assign(cookieOptsJWT(req), {expires}))
     }
   } catch (err) {
-    console.info("Invalid JWT or non-existent 'Authorization: Bearer' header:", err.message ? err.message : err)
+    console.info('Invalid JWT:', err.message ? err.message : err)
     res.clearCookie('lgJWT', cookieOptsJWT(req))
+    req.lgJWT = null
   }
   if (next) {
     next()
