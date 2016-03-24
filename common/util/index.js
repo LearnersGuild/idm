@@ -2,14 +2,6 @@ import fetch from 'isomorphic-fetch'
 
 import {updateJWT} from '../actions/updateJWT'
 
-export function phoneToE164(phone) {
-  if (!phone) {
-    return phone
-  }
-  const phoneStr = phone.toString()
-  return `+1 (${phoneStr.slice(0, 3)}) ${phoneStr.slice(3, 6)}-${phoneStr.slice(6)}`
-}
-
 export function formatPhoneNumber(phone) {
   if (!phone) {
     return phone

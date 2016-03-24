@@ -2,7 +2,6 @@ import {merge} from 'lodash'
 import jwt from 'jsonwebtoken'
 
 import r from '../../db/connect'
-import {phoneToE164} from '../../common/util'
 
 export const defaultSuccessRedirect = '/'
 export const jwtIssuer = 'learnersguild.org'
@@ -52,7 +51,7 @@ export function jwtClaimsForUser(user) {
     emails: user.emails.join(','),
     birthdate: user.dateOfBirth ? user.dateOfBirth.toISOString().slice(0, 10) : undefined,
     zoneinfo: user.timezone,
-    phone_number: phoneToE164(user.phone),
+    phone_number: user.phone,
     roles: user.roles.join(','),
   }
 }
