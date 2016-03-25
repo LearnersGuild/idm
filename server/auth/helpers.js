@@ -71,7 +71,7 @@ export function userFromJWTClaims(jwtClaims) {
 }
 
 function userFromJWT(lgJWT) {
-  const jwtClaims = jwt.verify(lgJWT, process.env.SHARED_JWT_SECRET, {issuer: jwtIssuer})
+  const jwtClaims = jwt.verify(lgJWT, process.env.JWT_PUBLIC_KEY, {issuer: jwtIssuer})
   return userFromJWTClaims(jwtClaims)
 }
 
@@ -95,7 +95,7 @@ export function slideJWTSession(req, res, next) {
     if (req.user) {
       const jwtClaims = jwtClaimsForUser(req.user)
       const expires = new Date(jwtClaims.exp * 1000)
-      const token = jwt.sign(jwtClaims, process.env.SHARED_JWT_SECRET)
+      const token = jwt.sign(jwtClaims, process.env.JWT_PRIVATE_KEY, {algorithm: 'RS512'})
       req.lgJWT = token
       res.set('LearnersGuild-JWT', token)
       res.cookie('lgJWT', token, Object.assign(cookieOptsJWT(req), {expires}))
