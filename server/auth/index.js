@@ -1,23 +1,18 @@
 import passport from 'passport'
 
-import {getUserById, slideJWTSession, cookieOptsJWT} from './helpers'
+import {getUserById, addUserToRequestFromJWT, extendJWTExpiration, cookieOptsJWT} from './helpers'
 import {configureAuthWithGitHub} from './github'
 
 export default function configureAuth(app) {
-  // set up passport
-  passport.serializeUser((user, done) => done(null, user.id))
-  passport.deserializeUser(async (id, done) => {
-    try {
-      console.log('deserializeUser')
-      done(null, await getUserById(id))
-    } catch (err) {
-      console.error(err.stack)
-    }
-  })
+  // set up passport -- we're not using sessions, so these are likely unused
+  // but passport still requires we implement them
+  passport.serializeUser((user, done) => done(null, user))
+  passport.deserializeUser((user, done) => done(null, user))
 
   // app configuration
   app.use(passport.initialize())
-  app.use(slideJWTSession)
+  app.use(addUserToRequestFromJWT)
+  app.use(extendJWTExpiration)
 
   // sign-out
   app.get('/auth/sign-out', (req, res) => {
