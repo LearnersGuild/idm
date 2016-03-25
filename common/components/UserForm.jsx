@@ -40,10 +40,13 @@ class UserForm extends Component {
     const maxDate = new Date(now)
     maxDate.setYear(now.getFullYear() - 21)
     const dob = dateOfBirth.value ? new Date(dateOfBirth.value) : undefined
-    const handleDateOfBirthChange = newDateOfBirth => {
+    const handleDateOfBirthChange = date => {
       // ensure that the date is stored as UTC
-      const dobWithoutTime = new Date(Date.UTC(newDateOfBirth.getFullYear(), newDateOfBirth.getMonth(), newDateOfBirth.getDate(), 0, 0, 0, 0))
+      const dobWithoutTime = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0))
       dateOfBirth.onChange(dobWithoutTime.toISOString().slice(0, 10))
+    }
+    const formatDateOfBirth = date => {
+      return date.toISOString().slice(0, 10)
     }
 
     // timezone
@@ -91,6 +94,7 @@ class UserForm extends Component {
             label="Date of Birth"
             maxDate={maxDate}
             value={dob}
+            inputFormat={formatDateOfBirth}
             onChange={handleDateOfBirthChange}
             error={errors.dateOfBirth}
             />

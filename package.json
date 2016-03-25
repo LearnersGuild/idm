@@ -84,7 +84,7 @@
     "react-redux": "^4.0.5",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
-    "react-toolbox": "^0.14.2",
+    "react-toolbox": "^0.15.0",
     "redux": "^3.0.5",
     "redux-auth-wrapper": "^0.3.0",
     "redux-form": "^4.2.0",
