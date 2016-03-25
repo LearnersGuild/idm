@@ -62,25 +62,25 @@ module.exports = {
         'sass-resources',
       ],
       include: [
-        path.join(root, 'common', 'containers', 'Root.scss'),
-        path.join(root, 'node_modules', 'graphiql', 'graphiql.css')
+        path.resolve(root, 'common', 'containers', 'Root.scss'),
+        path.resolve(root, 'node_modules', 'graphiql', 'graphiql.css')
       ],
     }, {
       // component styles that SHOULD be converted into component-specific modules
       test: /\.s?css$/,
       loaders: [
         'style',
-        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2',
+        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=3',
         'sass?sourceMap',
         'sass-resources',
         'toolbox',
       ],
       include: [
-        path.join(root, 'node_modules', 'react-toolbox'),
-        path.join(root, 'common'),
+        path.resolve(root, 'node_modules', 'react-toolbox'),
+        path.resolve(root, 'common'),
       ],
       exclude: [
-        path.join(root, 'common', 'containers', 'Root.scss'),
+        path.resolve(root, 'common', 'containers', 'Root.scss'),
       ]
     }, {
       test: /\.json$/,

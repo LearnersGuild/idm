@@ -20,6 +20,7 @@ module.exports = {
       'react-redux',
       'react-router',
       'react-router-redux',
+      'react-toolbox',
       'redux',
       'redux-auth-wrapper',
       'redux-form',
@@ -83,8 +84,8 @@ module.exports = {
         '!sass-resources'
       ),
       include: [
-        path.join(root, 'common', 'containers', 'Root.scss'),
-        path.join(root, 'node_modules', 'graphiql', 'graphiql.css')
+        path.resolve(root, 'common', 'containers', 'Root.scss'),
+        path.resolve(root, 'node_modules', 'graphiql', 'graphiql.css')
       ],
     }, {
       // component styles that SHOULD be converted into component-specific modules
@@ -97,11 +98,11 @@ module.exports = {
         '!toolbox'
       ),
       include: [
-        path.join(root, 'node_modules', 'react-toolbox'),
-        path.join(root, 'common'),
+        path.resolve(root, 'node_modules', 'react-toolbox'),
+        path.resolve(root, 'common'),
       ],
       exclude: [
-        path.join(root, 'common', 'containers', 'Root.scss'),
+        path.resolve(root, 'common', 'containers', 'Root.scss'),
       ],
     }, {
       test: /\.json$/,

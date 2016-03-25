@@ -10,7 +10,7 @@ global.__SERVER__ = true
 global.__DEVTOOLS__ = global.__CLIENT__ && process.env.NODE_ENV === 'development'
 
 if (process.env.NODE_ENV === 'development') {
-  if (require('piping')({hook: true})) {
+  if (require('piping')()) {
     // application logic here
     require('dotenv').load()
     configureCSSModules()

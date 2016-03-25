@@ -5,6 +5,7 @@ import genericNames from 'generic-names'
 export default function configureCSSModules() {
   const hook = require('css-modules-require-hook')
   const sass = require('node-sass')
+  const resourcesScss = fs.readFileSync(path.join(__dirname, '..', 'config', 'sass-resources.scss'))
   hook({
     extensions: ['.css', '.scss'],
     generateScopedName: (name, filepath) => {
@@ -20,7 +21,6 @@ export default function configureCSSModules() {
     },
     preprocessCss: (css, file) => {
       const includePaths = [path.join(__dirname, '..'), path.dirname(file)]
-      const resourcesScss = fs.readFileSync(path.join(__dirname, '..', 'config', 'sass-resources.scss'))
       const result = sass.renderSync({
         data: resourcesScss + css,
         includePaths,
