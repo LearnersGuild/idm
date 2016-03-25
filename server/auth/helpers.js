@@ -7,8 +7,8 @@ export const defaultSuccessRedirect = '/'
 export const jwtIssuer = 'learnersguild.org'
 
 export function mergeUserInfo(user, userInfo) {
-  // don't overwrite primary email address
-  return merge(user, userInfo, {email: user.email})
+  // don't overwrite primary email address or inviteCode
+  return merge(user, userInfo, {email: user.email, inviteCode: user.inviteCode})
 }
 
 export function createOrUpdateUser(user, userInfo) {

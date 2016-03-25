@@ -4,14 +4,27 @@ import {Button} from 'react-toolbox/lib/button'
 
 import styles from './SignInUp.scss'
 
+function getButtonURL(baseURL, redirect, inviteCode) {
+  const queryArgs = {redirect, inviteCode}
+  const queryStr = Object.keys(queryArgs).reduce((args, key) => {
+    const val = queryArgs[key]
+    if (val) {
+      args.push(`${key}=${encodeURIComponent(val)}`)
+    }
+    return args
+  }, []).join('&')
+  return `${baseURL}?${queryStr}`
+}
+
 export default function signInButton(props) {
   const {
-    buttonLabel,
-    redirect,
+    label,
     authURL,
+    redirect,
+    inviteCode,
   } = props
   const baseURL = authURL ? authURL : '/auth/github'
-  const signInGitHubHref = redirect ? `${baseURL}?redirect=${redirect}` : baseURL
+  const signInGitHubHref = getButtonURL(baseURL, redirect, inviteCode)
   return (
     <Button
       href={signInGitHubHref}
@@ -20,13 +33,14 @@ export default function signInButton(props) {
       primary
       style={styles.button}
       >
-      <span className="socicon socicon-github button-icon"></span> {`${buttonLabel || 'Sign-in'} Using GitHub`}
+      <span className="socicon socicon-github button-icon"></span> {`${label || 'Sign-in'} Using GitHub`}
     </Button>
   )
 }
 
 signInButton.propTypes = {
-  buttonLabel: PropTypes.string,
+  label: PropTypes.string,
   authURL: PropTypes.string,
   redirect: PropTypes.string,
+  inviteCode: PropTypes.string,
 }

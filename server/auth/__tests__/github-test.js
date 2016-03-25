@@ -7,6 +7,7 @@ test('githubProfileToUserInfo extracts correct information', t => {
     email: 'me@example.com',
     emails: ['me@example.com'],
     handle: 'me',
+    inviteCode: 'abcd1234',
     authProviders: {
       githubOAuth2: {
         accessToken: 'abcd1234',
@@ -18,7 +19,7 @@ test('githubProfileToUserInfo extracts correct information', t => {
     },
     roles: [],
   }
-  const userInfo = githubProfileToUserInfo('abcd1234', 'wxyz9876', {displayName: 'Me', username: 'me'}, 'me@example.com', ['me@example.com'])
+  const userInfo = githubProfileToUserInfo('abcd1234', 'wxyz9876', {displayName: 'Me', username: 'me'}, 'me@example.com', ['me@example.com'], 'abcd1234')
   t.plan(1)
   t.same(userInfo, expected)
 })
