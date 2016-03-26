@@ -20,7 +20,6 @@ module.exports = {
       'react-redux',
       'react-router',
       'react-router-redux',
-      'react-toolbox',
       'redux',
       'redux-auth-wrapper',
       'redux-form',
