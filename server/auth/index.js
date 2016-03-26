@@ -1,6 +1,8 @@
 import passport from 'passport'
 
-import {getUserById, addUserToRequestFromJWT, extendJWTExpiration, cookieOptsJWT} from './helpers'
+import {cookieOptsJWT} from '@learnersguild/idm-jwt-auth/lib/utils'
+import {addUserToRequestFromJWT, extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
+
 import {configureAuthWithGitHub} from './github'
 
 export default function configureAuth(app) {

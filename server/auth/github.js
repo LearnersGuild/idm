@@ -5,12 +5,13 @@ import {Strategy as GitHubStrategy} from 'passport-github'
 
 import {encrypt, decrypt} from '../symmetricCryptoAES'
 
+import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
+
 import {
   createOrUpdateUser,
   getUsersForEmails,
   addRolesDeducibleFromEmails,
   defaultSuccessRedirect,
-  slideJWTSession,
 } from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
@@ -116,7 +117,7 @@ export function configureAuthWithGitHub(app) {
     (req, res) => {
       const appState = JSON.parse(decrypt(req.query.state))
       const redirect = appState.redirect || defaultSuccessRedirect
-      slideJWTSession(req, res)
+      extendJWTExpiration(req, res)
       res.redirect(redirect)
     }
   )
