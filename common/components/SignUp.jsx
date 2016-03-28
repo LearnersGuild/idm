@@ -4,7 +4,7 @@ import {Card, CardText} from 'react-toolbox/lib/card'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 import AuthButton from './AuthButton'
-import UserForm from './UserForm'
+import UserForm from '../containers/UserForm'
 
 import styles from './SignInUp.scss'
 

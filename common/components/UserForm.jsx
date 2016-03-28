@@ -1,8 +1,5 @@
-/* global Intl */
-/* eslint new-cap: [2, {"capIsNewExceptions": ["DateTimeFormat"]}] */
 /* eslint-disable react/jsx-handler-names */
 import React, {Component, PropTypes} from 'react'
-import {reduxForm} from 'redux-form'
 
 import {Button} from 'react-toolbox/lib/button'
 import DatePicker from 'react-toolbox/lib/date_picker'
@@ -15,6 +12,50 @@ import {formatPhoneNumber} from '../util'
 import styles from './UserForm.scss'
 
 class UserForm extends Component {
+  constructor(props) {
+    super(props)
+    this.handlePhoneChange = this.handlePhoneChange.bind(this)
+    this.handleDateOfBirthChange = this.handleDateOfBirthChange.bind(this)
+    this.handleRefreshTimezoneFromBrowser = this.handleRefreshTimezoneFromBrowser.bind(this)
+  }
+
+  handlePhoneChange(newPhone) {
+    const {
+      fields: {phone}
+    } = this.props
+
+    const onlyDigits = newPhone.replace(/\D/g, '')
+    phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
+  }
+
+  handleDateOfBirthChange(date) {
+    const {
+      fields: {dateOfBirth}
+    } = this.props
+
+    // ensure that the date is stored as UTC
+    const dobWithoutTime = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0))
+    dateOfBirth.onChange(dobWithoutTime.toISOString().slice(0, 10))
+  }
+
+  handleRefreshTimezoneFromBrowser() {
+    const {
+      fields: {timezone}
+    } = this.props
+
+    timezone.onChange(this.getTimezone())
+  }
+
+  formatDateOfBirth(date) {
+    return date.toISOString().slice(0, 10)
+  }
+
+  getTimezone() {
+    /* global Intl */
+    /* eslint new-cap: [2, {"capIsNewExceptions": ["DateTimeFormat"]}] */
+    return Intl.DateTimeFormat().resolved.timeZone
+  }
+
   render() {
     const {
       fields: {id, email, handle, name, phone, dateOfBirth, timezone},
@@ -25,35 +66,13 @@ class UserForm extends Component {
       auth: {isBusy, currentUser},
     } = this.props
 
-    // email
     const emails = currentUser ? currentUser.emails.map(email => ({value: email, label: email})) : []
-
-    // phone
     const phoneNum = formatPhoneNumber(phone.value)
-    const handlePhoneChange = newPhone => {
-      const onlyDigits = newPhone.replace(/\D/g, '')
-      phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
-    }
-
-    // dateOfBirth
     const now = new Date()
     const maxDate = new Date(now)
-    maxDate.setYear(now.getFullYear() - 21)
+    maxDate.setYear(now.getFullYear() - 21)   // learners must be 21 years old
     const dob = dateOfBirth.value ? new Date(dateOfBirth.value) : undefined
-    const handleDateOfBirthChange = date => {
-      // ensure that the date is stored as UTC
-      const dobWithoutTime = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0))
-      dateOfBirth.onChange(dobWithoutTime.toISOString().slice(0, 10))
-    }
-    const formatDateOfBirth = date => {
-      return date.toISOString().slice(0, 10)
-    }
-
-    // timezone
-    const handleRefreshTimezoneFromBrowser = () => {
-      timezone.onChange(Intl.DateTimeFormat().resolved.timeZone)
-    }
-    const tz = timezone.value || Intl.DateTimeFormat().resolved.timeZone
+    const tz = timezone.value || this.getTimezone()
 
     return (
       <form onSubmit={handleSubmit}>
@@ -86,7 +105,7 @@ class UserForm extends Component {
           type="tel"
           label="Phone"
           value={phoneNum}
-          onChange={handlePhoneChange}
+          onChange={this.handlePhoneChange}
           error={errors.phone}
           />
         <div className={styles.dateOfBirth}>
@@ -94,8 +113,8 @@ class UserForm extends Component {
             label="Date of Birth"
             maxDate={maxDate}
             value={dob}
-            inputFormat={formatDateOfBirth}
-            onChange={handleDateOfBirthChange}
+            inputFormat={this.formatDateOfBirth}
+            onChange={this.handleDateOfBirthChange}
             error={errors.dateOfBirth}
             />
           <FontIcon value="today" className={styles.dateOfBirthIcon}/>
@@ -110,8 +129,9 @@ class UserForm extends Component {
             value={tz}
             />
           <Button
+            type="button"
             icon="refresh"
-            onClick={handleRefreshTimezoneFromBrowser}
+            onClick={this.handleRefreshTimezoneFromBrowser}
             />
         </div>
         <Button
@@ -138,26 +158,4 @@ UserForm.propTypes = {
   }),
 }
 
-function validate({name, phone, dateOfBirth}) {
-  const errors = {}
-  if (!name || !name.match(/\w{2,}\ \w{2,}/)) {
-    errors.name = 'Include both family and given name'
-  }
-  if (!phone || phone < 100000000 || phone > 9999999999) {
-    errors.phone = '3-digit area code and 7-digit phone number'
-  }
-  if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
-    errors.dateOfBirth = 'Your birth date'
-  }
-  return errors
-}
-
-// TODO: separate out the reduxForm logic into a container component
-export default reduxForm({
-  form: 'signUp',
-  fields: ['id', 'email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
-  validate,
-}, state => ({
-  auth: state.auth,
-  initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
-}))(UserForm)
+export default UserForm
