@@ -2,15 +2,9 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 
 import getInviteCode from '../actions/getInviteCode'
-import updateUser from '../actions/updateUser'
 import SignUp from '../components/SignUp'
 
 class SignUpContainer extends Component {
-  constructor(props) {
-    super(props)
-    this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
   componentDidMount() {
     this.constructor.fetchData(this.props.dispatch, this.props)
   }
@@ -22,15 +16,11 @@ class SignUpContainer extends Component {
     }
   }
 
-  handleSubmit(userData) {
-    this.props.dispatch(updateUser(userData, '/'))
-  }
-
   render() {
     const {auth, inviteCodes, params: {code}} = this.props
 
     return (
-      <SignUp onSubmit={this.handleSubmit} auth={auth} inviteCodes={inviteCodes} code={code}/>
+      <SignUp auth={auth} inviteCodes={inviteCodes} code={code}/>
     )
   }
 }

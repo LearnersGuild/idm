@@ -1,5 +1,6 @@
 import {reduxForm} from 'redux-form'
 
+import updateUser from '../actions/updateUser'
 import UserFormComponent from '../components/UserForm'
 
 function validate({name, phone, dateOfBirth}) {
@@ -16,6 +17,12 @@ function validate({name, phone, dateOfBirth}) {
   return errors
 }
 
+function saveUser(dispatch) {
+  return userInfo => {
+    dispatch(updateUser(userInfo, '/'))
+  }
+}
+
 export default reduxForm({
   form: 'signUp',
   fields: ['id', 'email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
@@ -23,4 +30,6 @@ export default reduxForm({
 }, state => ({
   auth: state.auth,
   initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
+}), dispatch => ({
+  onSubmit: saveUser(dispatch),
 }))(UserFormComponent)

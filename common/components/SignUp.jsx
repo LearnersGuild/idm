@@ -14,7 +14,6 @@ class SignUp extends Component {
       auth: {currentUser},
       code,
       inviteCodes,
-      onSubmit,
     } = this.props
 
     let cardContent = (
@@ -31,7 +30,7 @@ class SignUp extends Component {
               <CardText style={{textAlign: 'left'}}>
                 Complete the sign-up process by providing the information below.
               </CardText>
-              <UserForm buttonLabel="Sign Up" onSubmit={onSubmit}/>
+              <UserForm buttonLabel="Sign Up"/>
             </div>
           )
         } else {
@@ -73,7 +72,6 @@ SignUp.propTypes = {
     codes: PropTypes.object.isRequired,
   }).isRequired,
   code: PropTypes.string.isRequired,
-  onSubmit: PropTypes.func.isRequired,
 }
 
 export default SignUp

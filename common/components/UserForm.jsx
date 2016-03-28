@@ -24,8 +24,6 @@ class UserForm extends Component {
       fields: {phone}
     } = this.props
 
-    console.log('HERE!!')
-
     const onlyDigits = newPhone.replace(/\D/g, '')
     phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
   }
