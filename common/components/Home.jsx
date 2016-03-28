@@ -15,6 +15,11 @@ export default class Home extends Component {
           />
         <List selectable ripple className={styles.cardContent}>
           <ListItem
+            caption="Edit Profile"
+            leftIcon="account_box"
+            onClick={this.props.onEditProfile}
+            />
+          <ListItem
             caption="Explore API"
             leftIcon="flash_on"
             onClick={this.props.onGraphiQL}
@@ -31,6 +36,7 @@ export default class Home extends Component {
 }
 
 Home.propTypes = {
-  onSignOut: PropTypes.func.isRequired,
+  onEditProfile: PropTypes.func.isRequired,
   onGraphiQL: PropTypes.func.isRequired,
+  onSignOut: PropTypes.func.isRequired,
 }

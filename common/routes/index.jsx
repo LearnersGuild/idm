@@ -12,6 +12,7 @@ import SignUp from '../containers/SignUp'
 import SignIn from '../components/SignIn'
 
 import Home from '../containers/Home'
+import Profile from '../components/Profile'
 import GraphiQL from '../containers/GraphiQL'
 
 const userIsAuthenticated = UserAuthWrapper({
@@ -29,6 +30,7 @@ const routes = (
     </Route>
     <Route component={BlankLayout}>
       <IndexRoute component={userIsAuthenticated(Home)}/>
+      <Route path="profile" component={userIsAuthenticated(Profile)}/>
       <Route path="graphiql" component={userIsAuthenticated(GraphiQL)}/>
     </Route>
   </Route>

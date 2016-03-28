@@ -8,8 +8,17 @@ import HomeComponent from '../components/Home'
 export class Home extends Component {
   constructor(props) {
     super(props)
-    this.handleSignOut = this.handleSignOut.bind(this)
+    this.handleEditProfile = this.handleEditProfile.bind(this)
     this.handleGraphiQL = this.handleGraphiQL.bind(this)
+    this.handleSignOut = this.handleSignOut.bind(this)
+  }
+
+  handleEditProfile() {
+    this.props.dispatch(push('/profile'))
+  }
+
+  handleGraphiQL() {
+    this.props.dispatch(push('/graphiql'))
   }
 
   handleSignOut() {
@@ -19,13 +28,9 @@ export class Home extends Component {
     }
   }
 
-  handleGraphiQL() {
-    this.props.dispatch(push('/graphiql'))
-  }
-
   render() {
     return (
-      <HomeComponent onSignOut={this.handleSignOut} onGraphiQL={this.handleGraphiQL}/>
+      <HomeComponent onEditProfile={this.handleEditProfile} onGraphiQL={this.handleGraphiQL} onSignOut={this.handleSignOut}/>
     )
   }
 }
