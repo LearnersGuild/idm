@@ -2,8 +2,6 @@ import React, {PropTypes} from 'react'
 
 import {Button} from 'react-toolbox/lib/button'
 
-import styles from './SignInUp.scss'
-
 function getButtonURL(baseURL, redirect, inviteCode) {
   const queryArgs = {redirect, inviteCode}
   const queryStr = Object.keys(queryArgs).reduce((args, key) => {
@@ -31,7 +29,6 @@ export default function signInButton(props) {
       linkButton
       raised
       primary
-      style={styles.button}
       >
       <span className="socicon socicon-github button-icon"></span> {`${label || 'Sign-in'} Using GitHub`}
     </Button>

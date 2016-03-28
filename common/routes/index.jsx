@@ -11,8 +11,7 @@ import BlankLayout from '../containers/BlankLayout'
 import SignUp from '../containers/SignUp'
 import SignIn from '../components/SignIn'
 
-import FramedLayout from '../containers/FramedLayout'
-import Home from '../components/Home'
+import Home from '../containers/Home'
 import GraphiQL from '../containers/GraphiQL'
 
 const userIsAuthenticated = UserAuthWrapper({
@@ -28,7 +27,7 @@ const routes = (
       <Route path="sign-up/:code" component={SignUp}/>
       <Route path="sign-in" component={SignIn}/>
     </Route>
-    <Route component={FramedLayout}>
+    <Route component={BlankLayout}>
       <IndexRoute component={userIsAuthenticated(Home)}/>
       <Route path="graphiql" component={userIsAuthenticated(GraphiQL)}/>
     </Route>
