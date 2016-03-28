@@ -24,6 +24,8 @@ class UserForm extends Component {
       fields: {phone}
     } = this.props
 
+    console.log('HERE!!')
+
     const onlyDigits = newPhone.replace(/\D/g, '')
     phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
   }
@@ -104,6 +106,7 @@ class UserForm extends Component {
           icon="phone"
           type="tel"
           label="Phone"
+          name={phone.name}
           value={phoneNum}
           onChange={this.handlePhoneChange}
           error={errors.phone}
@@ -112,6 +115,7 @@ class UserForm extends Component {
           <DatePicker
             label="Date of Birth"
             maxDate={maxDate}
+            name={dateOfBirth.name}
             value={dob}
             inputFormat={this.formatDateOfBirth}
             onChange={this.handleDateOfBirthChange}
