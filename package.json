@@ -15,7 +15,7 @@
     "build": "mkdir -p dist && webpack --config config/webpack-production-config.js",
     "build:profile:prod": "mkdir -p dist && webpack --profile --json --config config/webpack-production-config.js > tmp/webpack-production-stats.json",
     "build:profile:dev": "mkdir -p dist && webpack --profile --json --config config/webpack-development-config.js > tmp/webpack-development-stats.json",
-    "icons:fetch": "mkdir -p dist && curl -s https://icons.learnersguild.org/tags > dist/icons-metadata.json",
+    "icons:fetch": "mkdir -p dist && curl -s https://brand.learnersguild.org/icontags > dist/icons-metadata.json",
     "db:create": "./node_modules/.bin/babel-node ./db/create.js",
     "db:drop": "./node_modules/.bin/babel-node ./db/drop.js",
     "db:migrate:configure": "node ./db/config.js > ./db/database.json",
