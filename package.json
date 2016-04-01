@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/LearnersGuild/idm#readme",
   "dependencies": {
-    "@learnersguild/idm-jwt-auth": "^0.1.3",
+    "@learnersguild/idm-jwt-auth": "^0.2.0",
     "ava": "^0.13.0",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.0",
