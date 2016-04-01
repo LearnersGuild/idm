@@ -54,6 +54,10 @@ mutation ($user: InputUser!) {
         dispatch(updateUserSuccess(result.data.updateUser))
         if (successPath) {
           dispatch(push(successPath))
+          /* global window */
+          if (typeof window !== 'undefined' && window.parent) {
+            window.parent.postMessage('updateUser', '*')
+          }
         }
       })
       .catch(error => {
