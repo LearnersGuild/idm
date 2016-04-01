@@ -12,7 +12,7 @@ export default function signIn(props) {
   return (
     <Card className={styles.card}>
       <div className={styles.cardContent}>
-        <img className={styles.lgIcon} src="https://icons.learnersguild.org/apple-touch-icon-60x60.png"/>
+        <img className={styles.lgLogo} src="https://brand.learnersguild.org/assets/learners-guild-logo-black-250x149.png"/>
         <AuthButton label="Sign-in" redirect={redirect}/>
       </div>
     </Card>

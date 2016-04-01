@@ -10,7 +10,7 @@ export default class Home extends Component {
     return (
       <Card className={styles.card}>
         <CardTitle
-          avatar="https://icons.learnersguild.org/apple-touch-icon-60x60.png"
+          avatar="https://brand.learnersguild.org/apple-touch-icon-60x60.png"
           title="Identity Management"
           />
         <List selectable ripple className={styles.cardContent}>
