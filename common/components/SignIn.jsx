@@ -9,11 +9,12 @@ import styles from './SignInUp.scss'
 export default function signIn(props) {
   const {location} = props
   const redirect = (location && location.query) ? location.query.redirect : null
+  const responseType = (location && location.query) ? location.query.responseType : null
   return (
     <Card className={styles.card}>
       <div className={styles.cardContent}>
         <img className={styles.lgLogo} src="https://brand.learnersguild.org/assets/learners-guild-logo-black-250x149.png"/>
-        <AuthButton label="Sign-in" redirect={redirect}/>
+        <AuthButton label="Sign-in" redirect={redirect} responseType={responseType}/>
       </div>
     </Card>
   )

@@ -1,3 +1,4 @@
+import url from 'url'
 import raven from 'raven'
 import fetch from 'isomorphic-fetch'
 import passport from 'passport'
@@ -116,8 +117,17 @@ export function configureAuthWithGitHub(app) {
     },
     (req, res) => {
       const appState = JSON.parse(decrypt(req.query.state))
-      const redirect = appState.redirect || defaultSuccessRedirect
+      let redirect = appState.redirect || defaultSuccessRedirect
       extendJWTExpiration(req, res)
+      // sometimes, we want to tack the JWT onto the end of the redirect URL
+      // for cases when cookie-based authentication won't work (e.g., Cordova
+      // apps like Rocket.Chat)
+      if (appState.responseType === 'token') {
+        const urlParts = url.parse(redirect)
+        urlParts.query = urlParts.query || {}
+        urlParts.query.lgJWT = req.lgJWT
+        redirect = url.format(urlParts)
+      }
       res.redirect(redirect)
     }
   )

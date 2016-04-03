@@ -2,8 +2,8 @@ import React, {PropTypes} from 'react'
 
 import {Button} from 'react-toolbox/lib/button'
 
-function getButtonURL(baseURL, redirect, inviteCode) {
-  const queryArgs = {redirect, inviteCode}
+function getButtonURL(baseURL, redirect, inviteCode, responseType) {
+  const queryArgs = {redirect, inviteCode, responseType}
   const queryStr = Object.keys(queryArgs).reduce((args, key) => {
     const val = queryArgs[key]
     if (val) {
@@ -20,9 +20,10 @@ export default function signInButton(props) {
     authURL,
     redirect,
     inviteCode,
+    responseType,
   } = props
   const baseURL = authURL ? authURL : '/auth/github'
-  const signInGitHubHref = getButtonURL(baseURL, redirect, inviteCode)
+  const signInGitHubHref = getButtonURL(baseURL, redirect, inviteCode, responseType)
   return (
     <Button
       href={signInGitHubHref}
@@ -39,5 +40,6 @@ signInButton.propTypes = {
   label: PropTypes.string,
   authURL: PropTypes.string,
   redirect: PropTypes.string,
+  responseType: PropTypes.string,
   inviteCode: PropTypes.string,
 }
