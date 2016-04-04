@@ -1,10 +1,16 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
+import {push} from 'react-router-redux'
 
 import getInviteCode from '../actions/getInviteCode'
 import SignUp from '../components/SignUp'
 
 class SignUpContainer extends Component {
+  constructor(props) {
+    super(props)
+    this.handleSubmitCode = this.handleSubmitCode.bind(this)
+  }
+
   componentDidMount() {
     this.constructor.fetchData(this.props.dispatch, this.props)
   }
@@ -16,11 +22,16 @@ class SignUpContainer extends Component {
     }
   }
 
+  handleSubmitCode(code) {
+    this.props.dispatch(getInviteCode(code))
+    this.props.dispatch(push(`/sign-up/${code}`))
+  }
+
   render() {
     const {auth, inviteCodes, params: {code}} = this.props
 
     return (
-      <SignUp auth={auth} inviteCodes={inviteCodes} code={code}/>
+      <SignUp auth={auth} inviteCodes={inviteCodes} code={code} onSubmitCode={this.handleSubmitCode}/>
     )
   }
 }
