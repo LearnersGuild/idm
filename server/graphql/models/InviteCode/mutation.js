@@ -1,7 +1,7 @@
 import raven from 'raven'
 
 import {GraphQLNonNull, GraphQLString} from 'graphql'
-import {GraphQLInputObjectType} from 'graphql/type'
+import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
 import {InviteCode} from './schema'
@@ -16,6 +16,7 @@ const InputInviteCode = new GraphQLInputObjectType({
   fields: () => ({
     code: {type: new GraphQLNonNull(GraphQLString), description: 'The invite code'},
     description: {type: new GraphQLNonNull(GraphQLString), description: 'The description of for whom the code was created'},
+    roles: {type: new GraphQLList(GraphQLString), description: 'The roles to assign to users who sign-up with this invite code'},
   })
 })
 

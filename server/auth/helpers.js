@@ -35,14 +35,6 @@ export function getUserById(id) {
     .run()
 }
 
-export function addRolesDeducibleFromEmails(userInfo) {
-  const rolesToAdd = userInfo.emails.reduce((rolesSoFar, email) => {
-    if (email.match(/learnersguild\.org/)) {
-      rolesSoFar.push('backoffice')
-    }
-    return rolesSoFar
-  }, [])
-  userInfo.roles = userInfo.roles || []
-  userInfo.roles = userInfo.roles.concat(rolesToAdd)
-  return userInfo
+export function getInviteCodesByCode(code) {
+  return r.table('inviteCodes').getAll(code, {index: 'code'}).limit(1).run()
 }

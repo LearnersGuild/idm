@@ -11,26 +11,26 @@ import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 import {
   createOrUpdateUser,
   getUsersForEmails,
-  addRolesDeducibleFromEmails,
+  getInviteCodesByCode,
   defaultSuccessRedirect,
 } from './helpers'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 
 export function githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode) {
-  return addRolesDeducibleFromEmails({
+  const inviteCodeData = inviteCode ? {inviteCode: inviteCode.code, roles: inviteCode.roles || []} : {}
+  return Object.assign({}, {
     name: profile.displayName,
     email: primaryEmail,
     handle: profile.username,
     emails,
-    inviteCode,
     authProviders: {
       githubOAuth2: {accessToken, refreshToken},
     },
     authProviderProfiles: {
       githubOAuth2: profile,
     },
-  })
+  }, inviteCodeData)
 }
 
 function getGitHubEmails(accessToken) {
@@ -59,11 +59,12 @@ async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb)
 
 async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, profile, cb) {
   try {
-    const {inviteCode} = JSON.parse(decrypt(req.query.state))
+    const {inviteCode: code} = JSON.parse(decrypt(req.query.state))
     const ghEmails = await getGitHubEmails(accessToken)
     const primaryEmail = ghEmails.filter(email => email.primary)[0].email
     const emails = ghEmails.map(email => email.email)
     let user = (await getUsersForEmails(emails))[0]
+    const inviteCode = (await getInviteCodesByCode(code))[0]
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode)
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
