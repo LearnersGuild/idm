@@ -38,7 +38,7 @@ export function getUserById(id) {
 export function addRolesDeducibleFromEmails(userInfo) {
   const rolesToAdd = userInfo.emails.reduce((rolesSoFar, email) => {
     if (email.match(/learnersguild\.org/)) {
-      rolesSoFar.push('staff')
+      rolesSoFar.push('backoffice')
     }
     return rolesSoFar
   }, [])

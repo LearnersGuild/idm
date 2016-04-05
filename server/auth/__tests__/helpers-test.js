@@ -31,7 +31,7 @@ test('addRolesDeducibleFromEmails adds staff role for users with LG email addres
   }
 
   t.plan(1)
-  t.same(addRolesDeducibleFromEmails(userInfo).roles, ['staff'])
+  t.same(addRolesDeducibleFromEmails(userInfo).roles, ['backoffice'])
 })
 
 test('addRolesDeducibleFromEmails does not add staff role for non-LG users', t => {
