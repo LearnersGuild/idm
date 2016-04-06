@@ -3,6 +3,7 @@
 
 process.env.PORT = process.env.PORT || '8080'
 
+import http from 'http'
 import path from 'path'
 import Express from 'express'
 import serveStatic from 'serve-static'
@@ -13,6 +14,7 @@ import raven from 'raven'
 import configureDevEnvironment from './configureDevEnvironment'
 import configureAuth from './auth'
 import configureGraphQL from './configureGraphQL'
+import configureSocketCluster from './configureSocketCluster'
 import handleRender from './render'
 
 export function start() {
@@ -23,6 +25,7 @@ export function start() {
   const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
 
   const app = new Express()
+  const httpServer = http.createServer(app)
 
   // catch-all error handler
   app.use((err, req, res, next) => {
@@ -50,6 +53,9 @@ export function start() {
   app.use(serveStatic(path.join(__dirname, '../dist')))
   app.use(serveStatic(path.join(__dirname, '../public')))
 
+  // SocketCluster
+  configureSocketCluster(httpServer)
+
   // Configure authentication via Auth0.
   configureAuth(app)
 
@@ -59,7 +65,7 @@ export function start() {
   // Default React application
   app.use(handleRender)
 
-  return app.listen(serverPort, error => {
+  return httpServer.listen(serverPort, error => {
     if (error) {
       console.error(error)
     } else {

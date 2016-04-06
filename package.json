@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/LearnersGuild/idm#readme",
   "dependencies": {
-    "@learnersguild/idm-jwt-auth": "^0.2.1",
+    "@learnersguild/idm-jwt-auth": "^0.2.2",
     "ava": "^0.13.0",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.0",
@@ -98,6 +98,7 @@
     "sass-loader": "^3.1.2",
     "sass-resources-loader": "^1.0.2",
     "serve-static": "^1.10.0",
+    "socketcluster-server": "^4.1.10",
     "style-loader": "^0.13.0",
     "toolbox-loader": "0.0.3",
     "url-loader": "^0.5.7",
