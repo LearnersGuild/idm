@@ -1,9 +1,10 @@
 import raven from 'raven'
 
-import {GraphQLNonNull, GraphQLID} from 'graphql'
+import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
+import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {GraphQLEmailType} from '../types'
+import {GraphQLDateType, GraphQLEmailType} from '../types'
 import {User} from './schema'
 
 import r from '../../../../db/connect'
@@ -17,11 +18,12 @@ export default {
       id: {type: new GraphQLNonNull(GraphQLID)}
     },
     async resolve(source, args, {rootValue: {currentUser}}) {
-      const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-      if (!currentUser || (args.id !== currentUser.id && !currentUserIsBackOffice)) {
-        throw new GraphQLError('You are not authorized to do that.')
-      }
       try {
+        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
+        if (!currentUser || (args.id !== currentUser.id && !currentUserIsBackOffice)) {
+          throw new GraphQLError('You are not authorized to do that.')
+        }
+
         const result = await r.table('users').get(args.id).run()
         if (result) {
           return result
@@ -52,4 +54,24 @@ export default {
       }
     }
   },
+  getUsersCreatedSince: {
+    type: new GraphQLList(User),
+    args: {
+      since: {type: new GraphQLNonNull(GraphQLDateType)},
+      secretKey: {type: new GraphQLNonNull(GraphQLString), description: 'the secret key to authenticate this query'},
+    },
+    async resolve(source, {since, secretKey}, {rootValue: {currentUser}}) {
+      try {
+        // this endpoint is meant for server-to-server communication
+        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
+        if (secretKey !== process.env.SOCKET_SECRET_KEY && !currentUserIsBackOffice) {
+          throw new GraphQLError('You are not authorized to do that.')
+        }
+        return await r.table('users').between(since, r.maxval, {index: 'createdAt'}).run()
+      } catch (err) {
+        sentry.captureException(err)
+        throw err
+      }
+    }
+  }
 }
