@@ -2,13 +2,10 @@
 
 Here's how we'd like you to contribute.
 
-Fork, then clone the repo:
+Clone the repo, then make a branch:
 
-    $ git clone git@github.com:your-github-username/idm.git
-
-Create your `.env` file for your environment, e.g.:
-
-    $ echo -e "PORT=8080\nNODE_ENV=development"
+    $ git clone git@github.com:LearnersGuild/idm.git
+    $ git co -b <your branch name>
 
 Make sure the tests pass:
 
@@ -28,4 +25,4 @@ Please follow our [best practices][best-practices] when working.
 
 
 [pr]: https://github.com/LearnersGuild/idm/compare/
-[best-practices]: https://learnersguild.github.io/product-development/best-practices/index.html
+[best-practices]: https://software.learnersguild.org/best-practices/index.html

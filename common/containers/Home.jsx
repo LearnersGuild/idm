@@ -20,7 +20,8 @@ export class Home extends Component {
 
   handleGraphiQL() {
     if (__CLIENT__) {
-      window.location.href = __DEVELOPMENT__ ? 'http://localhost:8085' : 'https://graphiql.learnersguild.org'
+      const graphiqlAppName = 'graphiql.learnersguild'
+      window.location.href = __DEVELOPMENT__ ? `http://${graphiqlAppName}.dev` : `https://${graphiqlAppName}.org`
     }
   }
 

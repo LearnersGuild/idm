@@ -7,7 +7,7 @@ export default function configureGraphQL(app) {
   const corsOptions = {
     origin: [
       /\.learnersguild.org/,
-      /localhost/,
+      /\.learnersguild.dev/,
     ],
     exposedHeaders: ['LearnersGuild-JWT'],
   }

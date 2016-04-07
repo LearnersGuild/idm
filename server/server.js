@@ -22,7 +22,7 @@ export function start() {
   raven.patchGlobal(process.env.SENTRY_SERVER_DSN)
 
   const serverPort = parseInt(process.env.PORT, 10)
-  const baseUrl = process.env.APP_BASEURL || `http://localhost:${serverPort}`
+  const baseUrl = process.env.APP_BASEURL
 
   const app = new Express()
   const httpServer = http.createServer(app)
