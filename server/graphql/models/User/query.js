@@ -4,7 +4,8 @@ import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {GraphQLDateType, GraphQLEmailType} from '../types'
+import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
+
 import {User} from './schema'
 
 import r from '../../../../db/connect'
@@ -38,7 +39,7 @@ export default {
   getUserByEmail: {
     type: User,
     args: {
-      email: {type: new GraphQLNonNull(GraphQLEmailType)}
+      email: {type: new GraphQLNonNull(GraphQLEmail)}
     },
     async resolve(source, args/* , {rootValue: {currentUser}} */) {
       try {
@@ -57,7 +58,7 @@ export default {
   getUsersCreatedSince: {
     type: new GraphQLList(User),
     args: {
-      since: {type: new GraphQLNonNull(GraphQLDateType)},
+      since: {type: new GraphQLNonNull(GraphQLDateTime)},
       secretKey: {type: new GraphQLNonNull(GraphQLString), description: 'the secret key to authenticate this query'},
     },
     async resolve(source, {since, secretKey}, {rootValue: {currentUser}}) {
@@ -67,7 +68,8 @@ export default {
         if (secretKey !== process.env.SOCKET_SECRET_KEY && !currentUserIsBackOffice) {
           throw new GraphQLError('You are not authorized to do that.')
         }
-        return await r.table('users').between(since, r.maxval, {index: 'createdAt'}).run()
+        const sinceDate = Date.parse(since)
+        return await r.table('users').between(sinceDate, r.maxval, {index: 'createdAt'}).run()
       } catch (err) {
         sentry.captureException(err)
         throw err

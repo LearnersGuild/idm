@@ -4,8 +4,10 @@ import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
+import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
+
 import {User} from './schema'
-import {GraphQLEmailType, GraphQLDateType, GraphQLPhoneNumberType} from '../types'
+import {GraphQLPhoneNumber} from '../types'
 
 import r from '../../../../db/connect'
 
@@ -16,11 +18,11 @@ const InputUser = new GraphQLInputObjectType({
   description: 'The user account',
   fields: () => ({
     id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
-    email: {type: new GraphQLNonNull(GraphQLEmailType), description: 'The user email'},
+    email: {type: new GraphQLNonNull(GraphQLEmail), description: 'The user email'},
     handle: {type: new GraphQLNonNull(GraphQLString), description: 'The user handle'},
     name: {type: new GraphQLNonNull(GraphQLString), description: 'The user name'},
-    phone: {type: GraphQLPhoneNumberType, description: 'The user phone number'},
-    dateOfBirth: {type: GraphQLDateType, description: "The user's date of birth"},
+    phone: {type: GraphQLPhoneNumber, description: 'The user phone number'},
+    dateOfBirth: {type: GraphQLDateTime, description: "The user's date of birth"},
     timezone: {type: GraphQLString, description: 'The user phone number'},
   })
 })

@@ -1,6 +1,9 @@
 import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
 import {GraphQLObjectType, GraphQLList} from 'graphql/type'
-import {GraphQLEmailType, GraphQLDateType, GraphQLPhoneNumberType} from '../types'
+
+import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
+
+import {GraphQLPhoneNumber} from '../types'
 
 const AuthProvider = new GraphQLObjectType({
   name: 'AuthProvider',
@@ -25,16 +28,16 @@ export const User = new GraphQLObjectType({
   description: 'The user account',
   fields: () => ({
     id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
-    email: {type: new GraphQLNonNull(GraphQLEmailType), description: 'The user email'},
-    emails: {type: new GraphQLNonNull(new GraphQLList(GraphQLEmailType)), description: 'The user emails'},
+    email: {type: new GraphQLNonNull(GraphQLEmail), description: 'The user email'},
+    emails: {type: new GraphQLNonNull(new GraphQLList(GraphQLEmail)), description: 'The user emails'},
     handle: {type: new GraphQLNonNull(GraphQLString), description: 'The user handle'},
     name: {type: new GraphQLNonNull(GraphQLString), description: 'The user name'},
-    phone: {type: GraphQLPhoneNumberType, description: 'The user phone number'},
-    dateOfBirth: {type: GraphQLDateType, description: "The user's date of birth"},
+    phone: {type: GraphQLPhoneNumber, description: 'The user phone number'},
+    dateOfBirth: {type: GraphQLDateTime, description: "The user's date of birth"},
     timezone: {type: GraphQLString, description: 'The user phone number'},
     roles: {type: new GraphQLList(GraphQLString), description: 'The user roles'},
     authProviders: {type: AuthProviders, description: 'The user auth providers'},
-    createdAt: {type: new GraphQLNonNull(GraphQLDateType), description: 'When this record was created'},
-    updatedAt: {type: new GraphQLNonNull(GraphQLDateType), description: 'When this record was last updated'},
+    createdAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was created'},
+    updatedAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was last updated'},
   })
 })
