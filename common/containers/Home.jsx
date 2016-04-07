@@ -1,3 +1,4 @@
+/* global __CLIENT__ __DEVELOPMENT__ */
 /* eslint-disable no-undef */
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
@@ -18,11 +19,12 @@ export class Home extends Component {
   }
 
   handleGraphiQL() {
-    this.props.dispatch(push('/graphiql'))
+    if (__CLIENT__) {
+      window.location.href = __DEVELOPMENT__ ? 'http://localhost:8085' : 'https://graphiql.learnersguild.org'
+    }
   }
 
   handleSignOut() {
-    /* global __CLIENT__ */
     if (__CLIENT__) {
       window.location.href = '/auth/sign-out'
     }

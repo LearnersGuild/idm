@@ -57,6 +57,7 @@ module.exports = {
       },
       '__CLIENT__': true,
       '__SERVER__': false,
+      '__DEVELOPMENT__': false,
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
