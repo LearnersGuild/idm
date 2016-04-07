@@ -8,9 +8,9 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 1. Clone the repository.
 
-2. Setup [pow][pow]. Then figure out which port you intend to use and create the pow config file:
+2. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
 
-        $ echo 9001 > ~/.pow/idm.learnersguild
+        $ echo 9001 > ~/.mehserve/idm.learnersguild
 
 3. Set your `NODE_ENV` environment variable:
 
@@ -60,4 +60,4 @@ See the [LICENSE](./LICENSE) file.
 
 [github-register-application]: https://github.com/settings/applications/new
 [install-rethinkdb]: https://www.rethinkdb.com/docs/install/
-[pow]: http://pow.cx
+[mehserve]: https://github.com/timecounts/mehserve
