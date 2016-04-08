@@ -10,14 +10,8 @@ global.__SERVER__ = true
 global.__DEVELOPMENT__ = process.env.NODE_ENV === 'development'
 global.__DEVTOOLS__ = global.__CLIENT__ && __DEVELOPMENT__
 
-if (process.env.NODE_ENV === 'development') {
-  if (require('piping')()) {
-    // application logic here
-    require('dotenv').load()
-    configureCSSModules()
-    require('./server').start()
-  }
-} else {
-  configureCSSModules()
-  require('./server').start()
+if (__DEVELOPMENT__) {
+  require('dotenv').load()
 }
+configureCSSModules()
+require('./server').start()

@@ -1,7 +1,5 @@
 /* eslint-disable no-console, no-undef, no-unused-vars */
-/* eslint new-cap: [2, {"capIsNewExceptions": ["HTTPS"]}] */
-
-process.env.PORT = process.env.PORT || '8080'
+process.env.PORT = process.env.PORT || '9001'
 
 import http from 'http'
 import path from 'path'
@@ -12,10 +10,7 @@ import cookieParser from 'cookie-parser'
 import raven from 'raven'
 
 import configureDevEnvironment from './configureDevEnvironment'
-import configureAuth from './auth'
-import configureGraphQL from './configureGraphQL'
 import configureSocketCluster from './configureSocketCluster'
-import handleRender from './render'
 
 export function start() {
   // error handling
@@ -46,6 +41,7 @@ export function start() {
 
   // Ensure secure connection in production.
   if (process.env.NODE_ENV === 'production') {
+    /* eslint new-cap: [2, {"capIsNewExceptions": ["HTTPS"]}] */
     app.use(enforceSecure.HTTPS({trustProtoHeader: true}))
   }
 
@@ -53,17 +49,23 @@ export function start() {
   app.use(serveStatic(path.join(__dirname, '../dist')))
   app.use(serveStatic(path.join(__dirname, '../public')))
 
-  // SocketCluster
-  configureSocketCluster(httpServer)
+  // auth routes
+  app.use((req, res, next) => {
+    require('./auth')(req, res, next)
+  })
 
-  // Configure authentication via Auth0.
-  configureAuth(app)
-
-  // GraphQL middleware
-  configureGraphQL(app)
+  // GraphQL routes
+  app.use((req, res, next) => {
+    require('./graphql')(req, res, next)
+  })
 
   // Default React application
-  app.use(handleRender)
+  app.get('*', (req, res, next) => {
+    require('./render').default(req, res, next)
+  })
+
+  // SocketCluster
+  configureSocketCluster(httpServer)
 
   return httpServer.listen(serverPort, error => {
     if (error) {

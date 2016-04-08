@@ -1,25 +1,39 @@
-let webpack
-let webpackDevMiddleware
-let webpackHotMiddleware
-let webpackConfig
-let compiler
-
-if (process.env.NODE_ENV === 'development') {
-  // Must be require'd rather than imported since it's only a devDependency and
-  // won't exist in production, and all import statements must be static.
-  webpack = require('webpack')
-  webpackDevMiddleware = require('webpack-dev-middleware')
-  webpackHotMiddleware = require('webpack-hot-middleware')
-  webpackConfig = require('../config/webpack-development-config')
-  compiler = webpack(webpackConfig)
-}
-
 export default function configureAppForDevelopment(app) {
   if (process.env.NODE_ENV === 'development') {
+    const chokidar = require('chokidar')
+    const webpack = require('webpack')
+    const webpackDevMiddleware = require('webpack-dev-middleware')
+    const webpackHotMiddleware = require('webpack-hot-middleware')
+    const webpackConfig = require('../config/webpack-development-config')
+    const compiler = webpack(webpackConfig)
+
     app.use(webpackDevMiddleware(compiler, {
       noInfo: true,
       publicPath: webpackConfig.output.publicPath
     }))
     app.use(webpackHotMiddleware(compiler))
+
+    // "hot-reload" (flush require cache) server code when it changes
+    const watcher = chokidar.watch('.')
+    watcher.on('ready', () => {
+      watcher.on('all', (operation, path) => {
+        console.log(`(${operation}) ${path} -- clearing /server/ module cache from server`)
+        Object.keys(require.cache).forEach(id => {
+          if (/[\/\\]server[\/\\]/.test(id)) {
+            delete require.cache[id]
+          }
+        })
+      })
+    })
+
+    // "hot-reload" (flush require cache) if webpack rebuilds
+    compiler.plugin('done', () => {
+      console.log(`webpack compilation finished -- clearing /client/ and /common/ module cache from server`)
+      Object.keys(require.cache).forEach(id => {
+        if (/[\/\\](client|common)[\/\\]/.test(id)) {
+          delete require.cache[id]
+        }
+      })
+    })
   }
 }
