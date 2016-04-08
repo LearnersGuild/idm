@@ -75,7 +75,7 @@ module.exports = {
       loader: 'babel',
       exclude: /node_modules/,
     }, {
-      // global styles that SHOULDN'T be converted into component-specific modules
+      // global styles (don't convert into component-specific modules)
       test: /\.s?css$/,
       loader: ExtractTextPlugin.extract(
         'style',
@@ -88,13 +88,27 @@ module.exports = {
         path.resolve(root, 'node_modules', 'graphiql', 'graphiql.css')
       ],
     }, {
-      // component styles that SHOULD be converted into component-specific modules
+      // app styles
       test: /\.s?css$/,
       loader: ExtractTextPlugin.extract(
         'style',
-        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=3' +
+        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
         '!sass?sourceMap' +
-        '!sass-resources' +
+        '!sass-resources'
+      ),
+      include: [
+        path.resolve(root, 'common'),
+      ],
+      exclude: [
+        path.resolve(root, 'common', 'containers', 'Root.scss'),
+      ],
+    }, {
+      // react-toolbox
+      test: /\.s?css$/,
+      loader: ExtractTextPlugin.extract(
+        'style',
+        'css?modules&importLoaders=2' +
+        '!sass' +
         '!toolbox'
       ),
       include: [
