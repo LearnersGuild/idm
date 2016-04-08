@@ -1,4 +1,3 @@
-import fs from 'fs'
 import path from 'path'
 
 export default function configureAppForDevelopment(app) {
@@ -18,7 +17,7 @@ export default function configureAppForDevelopment(app) {
 
     // "hot-reload" (flush require cache) server code when it changes
     const cwd = path.resolve(__dirname, '..')
-    const watcher = chokidar.watch(['db', 'server',], {cwd})
+    const watcher = chokidar.watch(['db', 'server'], {cwd})
     watcher.on('ready', () => {
       watcher.on('all', (operation, path) => {
         console.log(`(${operation}) ${path} -- clearing /server/ module cache from server`)
