@@ -16,8 +16,6 @@ function publishNewUsers(scServer) {
 
 function authenticateSubscribe(req, next) {
   const socket = req.socket
-  console.log('authToken:', socket.authToken, 'authState:', socket.authState)
-
   if (socket.authState === socket.AUTHENTICATED) {
     next()
   } else {
