@@ -4,7 +4,8 @@ import {Provider} from 'react-redux'
 
 import ToolboxApp from 'react-toolbox/lib/app'
 
-import './Root.scss'
+import 'react-toolbox/lib/commons.scss' // reset
+import './Root.css'
 
 export class Root extends Component {
   render() {

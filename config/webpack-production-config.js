@@ -75,49 +75,49 @@ module.exports = {
       loader: 'babel',
       exclude: /node_modules/,
     }, {
-      // global styles (don't convert into component-specific modules)
-      test: /\.s?css$/,
+      // global styles
+      test: /Root\.css$/,
       loader: ExtractTextPlugin.extract(
         'style',
-        'css?sourceMap&importLoaders=2' +
-        '!sass?sourceMap' +
-        '!sass-resources'
+        'css?sourceMap'
       ),
-      include: [
-        path.resolve(root, 'common', 'containers', 'Root.scss'),
-        path.resolve(root, 'node_modules', 'graphiql', 'graphiql.css')
-      ],
-    }, {
-      // app styles
-      test: /\.s?css$/,
-      loader: ExtractTextPlugin.extract(
-        'style',
-        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
-        '!sass?sourceMap' +
-        '!sass-resources'
-      ),
-      include: [
-        path.resolve(root, 'common'),
-      ],
-      exclude: [
-        path.resolve(root, 'common', 'containers', 'Root.scss'),
-      ],
     }, {
       // react-toolbox
-      test: /\.s?css$/,
+      test: /\.scss$/,
       loader: ExtractTextPlugin.extract(
         'style',
-        'css?modules&importLoaders=2' +
+        'css?modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
         '!sass' +
         '!toolbox'
       ),
       include: [
         path.resolve(root, 'node_modules', 'react-toolbox'),
+      ],
+    }, {
+      // app sass styles
+      test: /\.scss$/,
+      loader: ExtractTextPlugin.extract(
+        'style',
+        'css?modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
+        '!sass?sourceMap' +
+        '!sass-resources'
+      ),
+      include: [
+        path.resolve(root, 'common'),
+      ],
+    }, {
+      // app css styles
+      test: /\.css$/,
+      loader: ExtractTextPlugin.extract(
+        'style',
+        'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2'
+      ),
+      include: [
         path.resolve(root, 'common'),
       ],
       exclude: [
-        path.resolve(root, 'common', 'containers', 'Root.scss'),
-      ],
+        path.resolve(root, 'common', 'containers', 'Root.css'),
+      ]
     }, {
       test: /\.json$/,
       loader: 'json-loader'

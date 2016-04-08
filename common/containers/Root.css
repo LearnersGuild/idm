@@ -1,0 +1,19 @@
+/* Fonts. */
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,500); /* needed for react-toolbox */
+@import url(https://fonts.googleapis.com/icon?family=Material+Icons); /* needed for react-toolbox */
+@import url(https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css); /* brand icons */
+
+/* Global CSS. */
+html {
+  font-size: 62.5%;
+}
+html, body {
+  height: 100%;
+  overflow-y: scroll; /* has to be scroll, not auto */
+  -webkit-overflow-scrolling: touch;
+}
+
+.button-icon {
+  padding-top: 0.1rem;
+  margin-right: 0.75rem;
+}
