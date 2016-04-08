@@ -2,7 +2,7 @@ import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import cors from 'cors'
 
-import rootSchema from './graphql/rootSchema'
+import rootSchema from './rootSchema'
 
 /* eslint new-cap: [2, {"capIsNewExceptions": ["Router"]}] */
 const app = express.Router()
