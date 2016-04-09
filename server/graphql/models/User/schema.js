@@ -36,6 +36,7 @@ export const User = new GraphQLObjectType({
     dateOfBirth: {type: GraphQLDateTime, description: "The user's date of birth"},
     timezone: {type: GraphQLString, description: 'The user phone number'},
     roles: {type: new GraphQLList(GraphQLString), description: 'The user roles'},
+    inviteCode: {type: GraphQLString, description: 'The invite code the user used to sign up'},
     authProviders: {type: AuthProviders, description: 'The user auth providers'},
     createdAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was created'},
     updatedAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was last updated'},

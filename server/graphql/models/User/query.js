@@ -59,13 +59,12 @@ export default {
     type: new GraphQLList(User),
     args: {
       since: {type: new GraphQLNonNull(GraphQLDateTime)},
-      secretKey: {type: new GraphQLNonNull(GraphQLString), description: 'the secret key to authenticate this query'},
     },
     async resolve(source, {since, secretKey}, {rootValue: {currentUser}}) {
       try {
         // this endpoint is meant for server-to-server communication
         const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-        if (secretKey !== process.env.SOCKET_SECRET_KEY && !currentUserIsBackOffice) {
+        if (!currentUserIsBackOffice) {
           throw new GraphQLError('You are not authorized to do that.')
         }
         const sinceDate = Date.parse(since)
