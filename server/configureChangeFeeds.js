@@ -25,9 +25,5 @@ function pushNewPlayersToGame() {
 }
 
 export default function configureChangeFeeds() {
-  try {
-    pushNewPlayersToGame()
-  } catch (err) {
-    console.error(err.stack)
-  }
+  pushNewPlayersToGame()
 }
