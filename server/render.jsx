@@ -9,9 +9,6 @@ import thunk from 'redux-thunk'
 
 import {RouterContext, match} from 'react-router'
 
-import Root from '../common/containers/Root'
-import routes from '../common/routes'
-import rootReducer from '../common/reducers'
 import iconsMetadata from '../dist/icons-metadata'
 
 const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
@@ -102,6 +99,14 @@ function handleError(error, res) {
 
 export default function handleRender(req, res) {
   try {
+    // we require() these rather than importing them because (in development)
+    // we may have flushed the require cache (when files change), but if we
+    // import them at the top, this module will still be holding references to
+    // the previously-imported versions
+    const Root = require('../common/containers/Root').default
+    const routes = require('../common/routes')
+    const rootReducer = require('../common/reducers')
+
     const initialState = getInitialState(req)
     const store = createStore(rootReducer, initialState, compose(
       applyMiddleware(thunk),

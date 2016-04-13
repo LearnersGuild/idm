@@ -23,7 +23,7 @@ const InputUser = new GraphQLInputObjectType({
     name: {type: new GraphQLNonNull(GraphQLString), description: 'The user name'},
     phone: {type: GraphQLPhoneNumber, description: 'The user phone number'},
     dateOfBirth: {type: GraphQLDateTime, description: "The user's date of birth"},
-    timezone: {type: GraphQLString, description: 'The user phone number'},
+    timezone: {type: GraphQLString, description: 'The user timezone'},
   })
 })
 
