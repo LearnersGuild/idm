@@ -4,7 +4,7 @@ import {GraphQLNonNull, GraphQLID} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
+import {GraphQLEmail} from 'graphql-custom-types'
 
 import {User} from './schema'
 
@@ -20,8 +20,7 @@ export default {
     },
     async resolve(source, args, {rootValue: {currentUser}}) {
       try {
-        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-        if (!currentUser || (args.id !== currentUser.id && !currentUserIsBackOffice)) {
+        if (!currentUser) {
           throw new GraphQLError('You are not authorized to do that.')
         }
 
@@ -41,8 +40,12 @@ export default {
     args: {
       email: {type: new GraphQLNonNull(GraphQLEmail)}
     },
-    async resolve(source, args/* , {rootValue: {currentUser}} */) {
+    async resolve(source, args, {rootValue: {currentUser}}) {
       try {
+        if (!currentUser) {
+          throw new GraphQLError('You are not authorized to do that.')
+        }
+
         const users = await r.table('users').getAll(args.email, {index: 'email'}).limit(1).run()
         const result = users[0]
         if (result) {
@@ -55,20 +58,18 @@ export default {
       }
     }
   },
-  getUsersCreatedSince: {
+  getUsersByIds: {
     type: new GraphQLList(User),
     args: {
-      since: {type: new GraphQLNonNull(GraphQLDateTime)},
+      ids: {type: new GraphQLList(GraphQLID)},
     },
-    async resolve(source, {since, secretKey}, {rootValue: {currentUser}}) {
+    async resolve(source, {ids}, {rootValue: {currentUser}}) {
       try {
-        // this endpoint is meant for server-to-server communication
-        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-        if (!currentUserIsBackOffice) {
+        if (!currentUser) {
           throw new GraphQLError('You are not authorized to do that.')
         }
-        const sinceDate = Date.parse(since)
-        return await r.table('users').between(sinceDate, r.maxval, {index: 'createdAt'}).run()
+
+        return await r.table('users').getAll(...ids).run()
       } catch (err) {
         sentry.captureException(err)
         throw err
