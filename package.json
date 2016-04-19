@@ -111,9 +111,12 @@
   "devDependencies": {
     "ava": "^0.11.0",
     "babel-plugin-react-transform": "^2.0.0-beta1",
+    "bluebird": "^3.3.5",
     "eslint": "^2.2.0",
     "eslint-config-xo-react": "^0.3.0",
     "eslint-plugin-react": "^3.16.1",
+    "factory-girl": "^3.0.1",
+    "faker": "^3.1.0",
     "jsdom": "^8.0.2",
     "react-addons-test-utils": "^0.14.3",
     "react-transform-hmr": "^1.0.1",
