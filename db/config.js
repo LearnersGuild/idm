@@ -7,23 +7,22 @@ if (process.env.NODE_ENV === 'development') {
 
 var run = !module.parent
 
-var _dbConfig
-function config() {
-  if (!_dbConfig) {
-    var parsedUrl = url.parse(process.env.RETHINKDB_URL)
-    _dbConfig = {
-      host: parsedUrl.hostname,
-      port: parseInt(parsedUrl.port, 10),
-      db: parsedUrl.pathname ? parsedUrl.pathname.slice(1) : undefined,
-      authKey: parsedUrl.auth ? parsedUrl.auth.split(':')[1] : undefined,
-    }
-    if (process.env.RETHINKDB_CERT) {
-      _dbConfig.ssl = {
-        ca: process.env.RETHINKDB_CERT
-      }
+function configure(dbUrl = process.env.RETHINKDB_URL, dbCert = process.env.RETHINKDB_CERT) {
+  var dbConfig
+  var parsedUrl = url.parse(dbUrl)
+  dbConfig = {
+    host: parsedUrl.hostname,
+    port: parseInt(parsedUrl.port, 10),
+    db: parsedUrl.pathname ? parsedUrl.pathname.slice(1) : undefined,
+    authKey: parsedUrl.auth ? parsedUrl.auth.split(':')[1] : undefined,
+  }
+  if (dbCert) {
+    dbConfig.ssl = {
+      ca: dbCert
     }
   }
-  return _dbConfig
+
+  return dbConfig
 }
 
 var createOptions = {
@@ -31,8 +30,8 @@ var createOptions = {
 }
 
 if (run) {
-  console.log(JSON.stringify(config()))
+  console.log(JSON.stringify(configure()))
 }
 
-module.exports = config
+module.exports = configure
 module.exports.createOptions = createOptions
