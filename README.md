@@ -44,11 +44,15 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
         $ npm run db:create
         $ npm run db:migrate -- up
 
-9. Run the server:
+9. (OPTIONAL) Generate some test data. Most likely needed for co-developing the [game][game] service:
+
+        $ npm run dev:testdata
+
+10. Run the server:
 
         $ npm start
 
-10. Visit the server in your browser:
+11. Visit the server in your browser:
 
         $ open http://idm.learnersguild.dev
 
@@ -58,6 +62,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 See the [LICENSE](./LICENSE) file.
 
 
+[game]: https://github.com/LearnersGuild/game
 [github-register-application]: https://github.com/settings/applications/new
 [install-rethinkdb]: https://www.rethinkdb.com/docs/install/
 [mehserve]: https://github.com/timecounts/mehserve
