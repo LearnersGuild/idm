@@ -36,7 +36,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
         GITHUB_CLIENT_SECRET=<from above>
         RETHINKDB_URL=rethinkdb://localhost:28015/idm_development
         JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem with \n for newlines>"
-        JWT_PUBLIC_KEY="<quoted string date from /tmp/public-key.pem with \n for newlines>"
+        JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem with \n for newlines>"
 
 8. Run the setup tasks:
 
