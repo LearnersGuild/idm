@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 var run = !module.parent
 
 function configure(dbUrl, dbCert) {
-  dbUrl  = dbUrl  || process.env.RETHINKDB_URL
+  dbUrl = dbUrl || process.env.RETHINKDB_URL
   dbCert = dbCert || process.env.RETHINKDB_CERT
   var dbConfig
   var parsedUrl = url.parse(dbUrl)
