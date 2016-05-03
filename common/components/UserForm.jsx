@@ -56,6 +56,10 @@ class UserForm extends Component {
     return Intl.DateTimeFormat().resolved.timeZone
   }
 
+  hasErrors() {
+    return Object.keys(this.props.errors).length > 0
+  }
+
   render() {
     const {
       fields: {id, email, handle, name, phone, dateOfBirth, timezone},
@@ -140,7 +144,7 @@ class UserForm extends Component {
           label={buttonLabel || 'Save'}
           primary
           raised
-          disabled={submitting || isBusy}
+          disabled={submitting || isBusy || this.hasErrors()}
           type="submit"
           />
       </form>
