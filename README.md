@@ -59,7 +59,6 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
         $ cat ~/.npmrc
         //registry.npmjs.org/:_authToken=<YOUR NPM AUTH TOKEN>
-        $ 
 
 13.  Set `NPM_AUTH_TOKEN` in your shell.
 
