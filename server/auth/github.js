@@ -20,7 +20,7 @@ const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
 export function githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode) {
   const inviteCodeData = inviteCode ? {inviteCode: inviteCode.code, roles: inviteCode.roles || []} : {}
   return Object.assign({}, {
-    name: profile.displayName,
+    name: profile.displayName || profile.username,
     email: primaryEmail,
     handle: profile.username,
     emails,
