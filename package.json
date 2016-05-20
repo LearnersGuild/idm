@@ -148,7 +148,8 @@
         2,
         "single",
         "avoid-escape"
-      ]
+      ],
+      "xo/filename-case": 0
     },
     "esnext": true,
     "space": true,
