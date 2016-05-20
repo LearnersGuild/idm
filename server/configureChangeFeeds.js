@@ -10,20 +10,20 @@ function getQueue(queueName) {
   return getBullQueue(queueName, redisConfig.port, redisConfig.hostname, redisOpts)
 }
 
-function pushNewPlayersToGame() {
-  const newPlayerQueue = getQueue('newPlayer')
+function pushRelevantNewUsersToGame() {
+  const newGameUserQueue = getQueue('newGameUser')
 
-  r.table('users').getAll('player', {index: 'roles'}).changes().filter(r.row('old_val').eq(null))
+  r.table('users').getAll('moderator', 'player', {index: 'roles'}).changes().filter(r.row('old_val').eq(null))
     .then(cursor => {
       cursor.each((err, {new_val: user}) => {
         if (!err) {
-          console.log('pushing new player to game:', user)
-          newPlayerQueue.add(user)
+          console.log('pushing new game participant to game:', user)
+          newGameUserQueue.add(user)
         }
       })
     })
 }
 
 export default function configureChangeFeeds() {
-  pushNewPlayersToGame()
+  pushRelevantNewUsersToGame()
 }
