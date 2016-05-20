@@ -13,7 +13,13 @@ function getQueue(queueName) {
 function pushRelevantNewUsersToGame() {
   const newGameUserQueue = getQueue('newGameUser')
 
-  r.table('users').getAll('moderator', 'player', {index: 'roles'}).changes().filter(r.row('old_val').eq(null))
+  // this is not ideal, because if a user has both the 'moderator' and the
+  // 'player' role, we'll add that user to the queue twice, so on the other
+  // end of the queue, some de-duplication needs to happen
+  r.table('users')
+    .getAll('moderator', 'player', {index: 'roles'})
+    .changes()
+    .filter(r.row('old_val').eq(null))
     .then(cursor => {
       cursor.each((err, {new_val: user}) => {
         if (!err) {
