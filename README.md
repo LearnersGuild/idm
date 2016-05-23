@@ -18,9 +18,11 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 4. [Install RethinkDB][install-rethinkdb].
 
-5. Install [Redis][redis]
-
         # With Homebrew on a mac:
+
+        $ brew install rethinkdb
+
+5. Install [Redis][redis].
 
         $ brew install redis
 
