@@ -26,7 +26,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
         $ brew install redis
 
-6. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by register a new [GitHub OAuth application][github-register-application] for _your_ development environment:
+6. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
     - Application name: Learners Guild IDM (dev)
     - Homepage URL: http://idm.learnersguild.dev
     - Authorization callback URL: http://idm.learnersguild.dev/auth/github/callback
