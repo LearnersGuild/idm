@@ -4,8 +4,6 @@ import {GraphQLNonNull, GraphQLID} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {GraphQLEmail} from 'graphql-custom-types'
-
 import {User} from './schema'
 
 import r from '../../../../db/connect'
@@ -25,29 +23,6 @@ export default {
         }
 
         const result = await r.table('users').get(args.id).run()
-        if (result) {
-          return result
-        }
-        throw new GraphQLError('No such user')
-      } catch (err) {
-        sentry.captureException(err)
-        throw err
-      }
-    }
-  },
-  getUserByEmail: {
-    type: User,
-    args: {
-      email: {type: new GraphQLNonNull(GraphQLEmail)}
-    },
-    async resolve(source, args, {rootValue: {currentUser}}) {
-      try {
-        if (!currentUser) {
-          throw new GraphQLError('You are not authorized to do that.')
-        }
-
-        const users = await r.table('users').getAll(args.email, {index: 'email'}).limit(1).run()
-        const result = users[0]
         if (result) {
           return result
         }
