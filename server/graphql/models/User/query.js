@@ -1,6 +1,6 @@
 import raven from 'raven'
 
-import {GraphQLNonNull, GraphQLID} from 'graphql'
+import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
@@ -27,6 +27,24 @@ export default {
           return result
         }
         throw new GraphQLError('No such user')
+      } catch (err) {
+        sentry.captureException(err)
+        throw err
+      }
+    }
+  },
+  getUsersByHandles: {
+    type: new GraphQLList(User),
+    args: {
+      handles: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
+    },
+    async resolve(source, {handles}, {rootValue: {currentUser}}) {
+      try {
+        if (!currentUser) {
+          throw new GraphQLError('You are not authorized to do that.')
+        }
+
+        return await r.table('users').getAll(...handles, {index: 'handle'}).run()
       } catch (err) {
         sentry.captureException(err)
         throw err
