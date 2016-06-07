@@ -5,8 +5,8 @@ import {Card, CardText} from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-import AuthButton from './AuthButton'
 import UserForm from '../containers/UserForm'
+import AuthButton from './AuthButton'
 
 import styles from './SignInUp.scss'
 
@@ -70,7 +70,7 @@ class SignUp extends Component {
         <CardText>
           We'll need your <a target="_blank" href="https://github.com">GitHub</a> account information, so the first step is to authenticate using GitHub. If you haven't yet created a GitHub account, you should <a target="_blank" href="https://github.com/join">do that now</a>.
         </CardText>
-        <AuthButton label="Authenticate" authURL={`/auth/github/sign-up`} redirect={`/sign-up/${code}`} inviteCode={code}/>
+        <AuthButton label="Authenticate" authURL={'/auth/github/sign-up'} redirect={`/sign-up/${code}`} inviteCode={code}/>
       </div>
     )
   }
