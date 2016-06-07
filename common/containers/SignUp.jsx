@@ -28,10 +28,10 @@ class SignUpContainer extends Component {
   }
 
   render() {
-    const {auth, inviteCodes, params: {code}} = this.props
+    const {params: {code}} = this.props
 
     return (
-      <SignUp auth={auth} inviteCodes={inviteCodes} code={code} onSubmitCode={this.handleSubmitCode}/>
+      <SignUp code={code} onSubmitCode={this.handleSubmitCode} {...this.props}/>
     )
   }
 }
