@@ -6,6 +6,7 @@ import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 import UserForm from '../containers/UserForm'
+import {buildURL} from '../util'
 import AuthButton from './AuthButton'
 
 import styles from './SignInUp.scss'
@@ -64,13 +65,15 @@ class SignUp extends Component {
   }
 
   renderAuth(code) {
+    const {location: {query: {redirect, responseType}}} = this.props
+    const redirectPath = buildURL(`/sign-up/${code}`, {redirect, responseType})
     return (
       <div>
         <h5 className={styles.welcome}>Welcome!</h5>
         <CardText>
           We'll need your <a target="_blank" href="https://github.com">GitHub</a> account information, so the first step is to authenticate using GitHub. If you haven't yet created a GitHub account, you should <a target="_blank" href="https://github.com/join">do that now</a>.
         </CardText>
-        <AuthButton label="Authenticate" authURL={'/auth/github/sign-up'} redirect={`/sign-up/${code}`} inviteCode={code}/>
+        <AuthButton label="Authenticate" authURL={'/auth/github/sign-up'} redirect={redirectPath} inviteCode={code}/>
       </div>
     )
   }
@@ -135,6 +138,9 @@ SignUp.propTypes = {
   }).isRequired,
   onSubmitCode: PropTypes.func.isRequired,
   code: PropTypes.string,
+  location: PropTypes.shape({
+    query: PropTypes.object.isRequired,
+  }),
 }
 
 export default SignUp
