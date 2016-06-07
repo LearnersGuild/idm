@@ -17,6 +17,7 @@ const defaultProps = {
   },
   code: 'invitecode',
   onSubmit: () => null,
+  location: {query: {}}
 }
 
 test('SignUp renders validation message when invite code is being loaded', t => {

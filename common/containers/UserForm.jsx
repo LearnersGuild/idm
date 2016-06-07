@@ -1,11 +1,12 @@
 import {reduxForm} from 'redux-form'
+import {push} from 'react-router-redux'
 
 import updateUser from '../actions/updateUser'
 import UserFormComponent from '../components/UserForm'
 
 function validate({name, phone, dateOfBirth}) {
   const errors = {}
-  if (!name || !name.match(/\w{2,}\ \w{2,}/)) {
+  if (!name || !name.match(/\w{2,} \w{2,}/)) {
     errors.name = 'Include both family and given name'
   }
   if (!phone || phone < 100000000 || phone > 9999999999) {
@@ -17,9 +18,26 @@ function validate({name, phone, dateOfBirth}) {
   return errors
 }
 
-function saveUser(dispatch) {
+function saveUser(dispatch, redirect) {
+  const redirectPath = redirect || '/'
+  console.log({redirectPath})
+  const afterSave = redirectPath.match(/^\//) ? (
+    () => {
+      console.log({redirectPath})
+      dispatch(push(redirectPath))
+    }
+  ) : (
+    () => {
+      console.log({redirectPath})
+      /* global __CLIENT__, window */
+      if (__CLIENT__) {
+        window.location.href = redirectPath
+      }
+    }
+  )
   return userInfo => {
-    dispatch(updateUser(userInfo, '/'))
+    dispatch(updateUser(userInfo))
+    afterSave()
   }
 }
 
@@ -30,6 +48,6 @@ export default reduxForm({
 }, state => ({
   auth: state.auth,
   initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
-}), dispatch => ({
-  onSubmit: saveUser(dispatch),
+}), (dispatch, props) => ({
+  onSubmit: saveUser(dispatch, props.redirect),
 }))(UserFormComponent)
