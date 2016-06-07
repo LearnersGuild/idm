@@ -3,6 +3,7 @@ import {push} from 'react-router-redux'
 
 import updateUser from '../actions/updateUser'
 import UserFormComponent from '../components/UserForm'
+import {buildURL} from '../util'
 
 function validate({name, phone, dateOfBirth}) {
   const errors = {}
@@ -18,20 +19,20 @@ function validate({name, phone, dateOfBirth}) {
   return errors
 }
 
-function saveUser(dispatch, redirect) {
-  const redirectPath = redirect || '/'
-  console.log({redirectPath})
-  const afterSave = redirectPath.match(/^\//) ? (
+function saveUser(stateProps, dispatchProps) {
+  const {auth: {lgJWT}} = stateProps
+  const {dispatch, redirect, responseType} = dispatchProps
+  const redirectLocation = redirect || '/'
+  const afterSave = redirectLocation.match(/^\//) ? (
     () => {
-      console.log({redirectPath})
-      dispatch(push(redirectPath))
+      dispatch(push(redirectLocation))
     }
   ) : (
     () => {
-      console.log({redirectPath})
+      const redirectURL = responseType === 'token' ? buildURL(redirectLocation, {lgJWT}) : redirectLocation
       /* global __CLIENT__, window */
       if (__CLIENT__) {
-        window.location.href = redirectPath
+        window.location.href = redirectURL
       }
     }
   )
@@ -48,6 +49,7 @@ export default reduxForm({
 }, state => ({
   auth: state.auth,
   initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
-}), (dispatch, props) => ({
-  onSubmit: saveUser(dispatch, props.redirect),
+}), (dispatch, props) => props
+, (stateProps, dispatchProps) => Object.assign({}, stateProps, dispatchProps, {
+  onSubmit: saveUser(stateProps, dispatchProps),
 }))(UserFormComponent)
