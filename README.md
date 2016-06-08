@@ -40,6 +40,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
         GITHUB_CLIENT_ID=<from above>
         GITHUB_CLIENT_SECRET=<from above>
+        IDM_BASE_URL=http://idm.learnersguild.dev
         JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem with \n for newlines>"
         JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem with \n for newlines>"
 
