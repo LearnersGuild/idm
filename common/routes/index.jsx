@@ -21,12 +21,24 @@ const userIsAuthenticated = userAuthWrapper({
   wrapperDisplayName: 'userIsAuthenticated',
 })
 
+function userHasCompletedProfile(currentUser) {
+  return (
+    currentUser &&
+    currentUser.email &&
+    currentUser.handle &&
+    currentUser.name &&
+    currentUser.phone &&
+    currentUser.dateOfBirth &&
+    currentUser.timezone
+  )
+}
+
 function redirectIfSignedIn(store) {
   /* global __CLIENT__, __SERVER__, window */
   const {auth: {currentUser, lgJWT}} = store.getState()
   return (nextState, replace) => {
     const {location: {query}} = nextState
-    if (currentUser && lgJWT) {
+    if (userHasCompletedProfile(currentUser) && lgJWT) {
       const {redirect, responseType} = query
       if (__SERVER__ && !redirect) {
         return replace('/')
