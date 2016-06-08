@@ -1,12 +1,14 @@
 import path from 'path'
 
-export default function configureAppForDevelopment(app) {
-  if (process.env.NODE_ENV === 'development') {
+const config = require('../config')
+
+export default function configureApp(app) {
+  if (config.app.hotReload) {
     const chokidar = require('chokidar')
     const webpack = require('webpack')
     const webpackDevMiddleware = require('webpack-dev-middleware')
     const webpackHotMiddleware = require('webpack-hot-middleware')
-    const webpackConfig = require('../config/webpack-development-config')
+    const webpackConfig = require('../config/webpack')
     const compiler = webpack(webpackConfig)
 
     app.use(webpackDevMiddleware(compiler, {
@@ -31,7 +33,7 @@ export default function configureAppForDevelopment(app) {
 
     // "hot-reload" (flush require cache) if webpack rebuilds
     compiler.plugin('done', () => {
-      console.log(`webpack compilation finished -- clearing /client/ and /common/ module cache from server`)
+      console.log('webpack compilation finished -- clearing /client/ and /common/ module cache from server')
       Object.keys(require.cache).forEach(id => {
         if (/[\/\\](client|common)[\/\\]/.test(id)) {
           delete require.cache[id]

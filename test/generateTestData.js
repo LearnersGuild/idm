@@ -1,11 +1,11 @@
 import faker from 'faker'
 
+import db from '../db'
 import factory from './factories'
 
 async function generate() {
   try {
-    require('dotenv').load()
-    const r = require('../db/connect')
+    const r = db.connect()
 
     const NUM_PLAYERS = 60
     const INVITE_CODES = ['test01', 'test02', 'test03']

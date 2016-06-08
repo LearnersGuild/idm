@@ -11,7 +11,7 @@ import {
 import {configureAuthWithGitHub} from './github'
 
 /* eslint new-cap: [2, {"capIsNewExceptions": ["Router"]}] */
-const app = express.Router()
+const app = new express.Router()
 
 // set up passport -- we're not using sessions, so these are likely unused
 // but passport still requires we implement them

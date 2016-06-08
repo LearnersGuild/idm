@@ -1,4 +1,4 @@
-/* global __CLIENT__ __DEVELOPMENT__ */
+/* global __CLIENT__ */
 /* eslint-disable no-undef */
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
@@ -20,8 +20,7 @@ export class Home extends Component {
 
   handleGraphiQL() {
     if (__CLIENT__) {
-      const graphiqlAppName = 'graphiql.learnersguild'
-      window.location.href = __DEVELOPMENT__ ? `http://${graphiqlAppName}.dev` : `https://${graphiqlAppName}.org`
+      window.location.href = process.env.GRAPHIQL_BASE_URL
     }
   }
 

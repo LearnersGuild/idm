@@ -2,10 +2,13 @@
 import url from 'url'
 import getBullQueue from 'bull'
 
-import r from '../db/connect'
+import config from '../config'
+import db from '../db'
+
+const r = db.connect()
 
 function getQueue(queueName) {
-  const redisConfig = url.parse(process.env.REDIS_URL)
+  const redisConfig = url.parse(config.server.redis.url)
   const redisOpts = redisConfig.auth ? {auth_pass: redisConfig.auth.split(':')[1]} : undefined
   return getBullQueue(queueName, redisConfig.port, redisConfig.hostname, redisOpts)
 }

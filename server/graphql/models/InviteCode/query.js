@@ -3,11 +3,14 @@ import raven from 'raven'
 import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLError} from 'graphql/error'
 
+import config from '../../../../config'
+import db from '../../../../db'
+
 import {InviteCode} from './schema'
 
-import r from '../../../../db/connect'
+const r = db.connect()
 
-const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
+const sentry = new raven.Client(config.server.sentryDSN)
 
 export default {
   getInviteCodeByCode: {
