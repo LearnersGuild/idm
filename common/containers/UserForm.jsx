@@ -29,7 +29,7 @@ function saveUser(stateProps, dispatchProps) {
     }
   ) : (
     () => {
-      const redirectURL = responseType === 'token' ? buildURL(redirectLocation, {lgJWT}) : redirectLocation
+      const redirectURL = responseType === 'token' ? buildURL(decodeURIComponent(redirectLocation), {lgJWT}) : redirectLocation
       /* global __CLIENT__, window */
       if (__CLIENT__) {
         window.location.href = redirectURL
