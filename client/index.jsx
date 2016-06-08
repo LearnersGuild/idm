@@ -22,7 +22,7 @@ syncHistoryWithStore(browserHistory, store)
 render(
   <Root store={store}>
     <Router history={browserHistory}>
-      {routes}
+      {routes(store)}
     </Router>
   </Root>,
   document.getElementById('root')
