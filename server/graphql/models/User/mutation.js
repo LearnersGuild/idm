@@ -6,12 +6,15 @@ import {GraphQLError} from 'graphql/error'
 
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
-import {User} from './schema'
+import config from '../../../../config'
+import db from '../../../../db'
+
 import {GraphQLPhoneNumber} from '../types'
+import {User} from './schema'
 
-import r from '../../../../db/connect'
+const r = db.connect()
 
-const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
+const sentry = new raven.Client(config.server.sentryDSN)
 
 const InputUser = new GraphQLInputObjectType({
   name: 'InputUser',

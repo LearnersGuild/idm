@@ -38,13 +38,8 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 8. Create your `.env` file for your environment. Example:
 
-        PORT=9001
-        APP_BASEURL=http://idm.learnersguild.dev
-        IDM_BASE_URL=http://idm.learnersguild.dev
         GITHUB_CLIENT_ID=<from above>
         GITHUB_CLIENT_SECRET=<from above>
-        RETHINKDB_URL=rethinkdb://localhost:28015/idm_development
-        REDIS_URL=redis://localhost:6379
         JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem with \n for newlines>"
         JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem with \n for newlines>"
 

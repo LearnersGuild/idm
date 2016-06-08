@@ -4,6 +4,8 @@ import fetch from 'isomorphic-fetch'
 import passport from 'passport'
 import {Strategy as GitHubStrategy} from 'passport-github'
 
+const config = require('../../config')
+
 import {encrypt, decrypt} from '../symmetricCryptoAES'
 
 import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
@@ -15,7 +17,7 @@ import {
   defaultSuccessRedirect,
 } from './helpers'
 
-const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
+const sentry = new raven.Client(config.server.sentryDSN)
 
 export function githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode) {
   const inviteCodeData = inviteCode ? {inviteCode: inviteCode.code, roles: inviteCode.roles || []} : {}
@@ -93,17 +95,17 @@ function authWithGitHub(strategyName) {
 export function configureAuthWithGitHub(app) {
   // for sign-in
   passport.use('github', new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: `${process.env.APP_BASEURL}/auth/github/callback`,
+    clientID: config.server.github.clientID,
+    clientSecret: config.server.github.clientSecret,
+    callbackURL: config.server.github.callbackURL,
     passReqToCallback: true,
   }, verifyUserFromGitHub))
 
   // for sign-up
   passport.use('github-sign-up', new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: `${process.env.APP_BASEURL}/auth/github/callback`,
+    clientID: config.server.github.clientID,
+    clientSecret: config.server.github.clientSecret,
+    callbackURL: config.server.github.callbackURL,
     passReqToCallback: true,
   }, createOrUpdateUserFromGitHub))
 

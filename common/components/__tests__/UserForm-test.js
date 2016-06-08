@@ -87,7 +87,7 @@ test('UserForm updates fields when they are changed', t => {
   })
 
   changesToTest.forEach(key => {
-    t.ok(fieldsChanged[key])
+    t.truthy(fieldsChanged[key])
   })
 })
 
@@ -109,5 +109,5 @@ test('UserForm submits form when button is clicked', t => {
   const form = TestUtils.findRenderedDOMComponentWithTag(root, 'form')
   TestUtils.Simulate.submit(form)
 
-  t.ok(submitted)
+  t.truthy(submitted)
 })

@@ -1,11 +1,10 @@
-import jsdom from 'jsdom'
-
-// environment setup
-process.env.RETHINKDB_URL = 'rethinkdb://localhost:28015/idm_test'
+/* eslint-disable no-var */
+var jsdom = require('jsdom')
 
 // jsdom setup
-const doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
-const win = doc.defaultView
+var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
+var win = doc.defaultView
+
 global.__CLIENT__ = false
 global.document = doc
 global.window = win

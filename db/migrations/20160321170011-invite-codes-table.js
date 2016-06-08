@@ -1,10 +1,8 @@
 /* eslint-disable no-var */
-
-var config = require('../config')
-var createOptions = config.createOptions
+var config = require('../../config')
 
 exports.up = function up(r, conn) {
-  return r.tableCreate('inviteCodes', createOptions)
+  return r.tableCreate('inviteCodes', {replicas: config.server.rethinkdb.replicas})
     .run(conn)
     .then(() => {
       return r.table('inviteCodes').indexCreate('code').run(conn)

@@ -4,11 +4,14 @@ import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
+import config from '../../../../config'
+import db from '../../../../db'
+
 import {User} from './schema'
 
-import r from '../../../../db/connect'
+const r = db.connect()
 
-const sentry = new raven.Client(process.env.SENTRY_SERVER_DSN)
+const sentry = new raven.Client(config.server.sentryDSN)
 
 export default {
   getUserById: {
