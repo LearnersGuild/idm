@@ -4,10 +4,6 @@ import {Button} from 'react-toolbox/lib/button'
 
 import {buildURL} from '../util'
 
-const getButtonURL = (baseURL, redirect, inviteCode, responseType) => {
-  return buildURL(baseURL, {redirect, inviteCode, responseType})
-}
-
 export default function signInButton(props) {
   const {
     label,
@@ -17,7 +13,7 @@ export default function signInButton(props) {
     responseType,
   } = props
   const baseURL = authURL ? authURL : '/auth/github'
-  const signInGitHubHref = getButtonURL(baseURL, redirect, inviteCode, responseType)
+  const signInGitHubHref = buildURL(baseURL, {redirect, inviteCode, responseType})
   return (
     <Button
       href={signInGitHubHref}
