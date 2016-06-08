@@ -37,7 +37,7 @@ function redirectIfSignedIn(store) {
         }
         if (__CLIENT__) {
           const redirectQuery = (responseType === 'token') ? {lgJWT} : {}
-          const redirectURL = buildURL(redirect, redirectQuery)
+          const redirectURL = buildURL(decodeURIComponent(redirect), redirectQuery)
           window.location.href = redirectURL
         }
       }
