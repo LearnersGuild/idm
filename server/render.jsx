@@ -23,7 +23,7 @@ export function renderFullPage(renderedAppHtml, initialState) {
   if (config.app.minify) {
     vendorJs = '<script src="/vendor.js"></script>'
   }
-  const sentryClientDSN = config.client.sentryDSN ? `'${config.client.sentryDSN}'` : undefined
+  const sentryClientDSN = config.app.sentryDSN ? `'${config.app.sentryDSN}'` : undefined
 
   return `
     <!doctype html>
