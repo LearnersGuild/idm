@@ -70,5 +70,6 @@ export function buildURL(baseURL, queryArgs) {
     }
     return args
   }, []).join('&')
-  return `${baseURL}?${queryStr}`
+  const search = queryStr ? `?${queryStr}` : ''
+  return `${baseURL}${search}`
 }
