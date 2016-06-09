@@ -2,17 +2,7 @@ import React, {PropTypes} from 'react'
 
 import {Button} from 'react-toolbox/lib/button'
 
-function getButtonURL(baseURL, redirect, inviteCode, responseType) {
-  const queryArgs = {redirect, inviteCode, responseType}
-  const queryStr = Object.keys(queryArgs).reduce((args, key) => {
-    const val = queryArgs[key]
-    if (val) {
-      args.push(`${key}=${encodeURIComponent(val)}`)
-    }
-    return args
-  }, []).join('&')
-  return `${baseURL}?${queryStr}`
-}
+import {buildURL} from '../util'
 
 export default function signInButton(props) {
   const {
@@ -23,7 +13,7 @@ export default function signInButton(props) {
     responseType,
   } = props
   const baseURL = authURL ? authURL : '/auth/github'
-  const signInGitHubHref = getButtonURL(baseURL, redirect, inviteCode, responseType)
+  const signInGitHubHref = buildURL(baseURL, {redirect, inviteCode, responseType})
   return (
     <Button
       href={signInGitHubHref}

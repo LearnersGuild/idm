@@ -5,8 +5,8 @@ import UserFormComponent from '../components/UserForm'
 
 function validate({name, phone, dateOfBirth}) {
   const errors = {}
-  if (!name || !name.match(/\w{2,}\ \w{2,}/)) {
-    errors.name = 'Include both family and given name'
+  if (!name || !name.match(/\w{3,}/)) {
+    errors.name = 'Please use your full, legal name'
   }
   if (!phone || phone < 100000000 || phone > 9999999999) {
     errors.phone = '3-digit area code and 7-digit phone number'
@@ -17,9 +17,10 @@ function validate({name, phone, dateOfBirth}) {
   return errors
 }
 
-function saveUser(dispatch) {
+function saveUser(stateProps, dispatchProps) {
+  const {dispatch, redirect, responseType} = dispatchProps
   return userInfo => {
-    dispatch(updateUser(userInfo, '/'))
+    dispatch(updateUser(userInfo, redirect, responseType))
   }
 }
 
@@ -30,6 +31,7 @@ export default reduxForm({
 }, state => ({
   auth: state.auth,
   initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
-}), dispatch => ({
-  onSubmit: saveUser(dispatch),
+}), (dispatch, props) => props
+, (stateProps, dispatchProps) => Object.assign({}, stateProps, dispatchProps, {
+  onSubmit: saveUser(stateProps, dispatchProps),
 }))(UserFormComponent)

@@ -4,6 +4,7 @@ import {push} from 'react-router-redux'
 
 import getInviteCode from '../actions/getInviteCode'
 import SignUp from '../components/SignUp'
+import {buildURL} from '../util'
 
 class SignUpContainer extends Component {
   constructor(props) {
@@ -23,15 +24,19 @@ class SignUpContainer extends Component {
   }
 
   handleSubmitCode(code) {
+    const {
+      location: {query: {redirect, responseType}},
+    } = this.props
+    const signUpLinkWithCode = buildURL(`/sign-up/${code}`, {redirect, responseType})
     this.props.dispatch(getInviteCode(code))
-    this.props.dispatch(push(`/sign-up/${code}`))
+    this.props.dispatch(push(signUpLinkWithCode))
   }
 
   render() {
-    const {auth, inviteCodes, params: {code}} = this.props
+    const {params: {code}} = this.props
 
     return (
-      <SignUp auth={auth} inviteCodes={inviteCodes} code={code} onSubmitCode={this.handleSubmitCode}/>
+      <SignUp code={code} onSubmitCode={this.handleSubmitCode} {...this.props}/>
     )
   }
 }
@@ -47,6 +52,9 @@ SignUpContainer.propTypes = {
   }).isRequired,
   dispatch: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    query: PropTypes.object.isRequired,
+  }),
 }
 
 function mapStateToProps(state) {

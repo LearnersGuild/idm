@@ -120,7 +120,7 @@ export function configureAuthWithGitHub(app) {
     },
     (req, res) => {
       const appState = JSON.parse(decrypt(req.query.state))
-      let redirect = appState.redirect || defaultSuccessRedirect
+      let redirect = decodeURIComponent(appState.redirect) || defaultSuccessRedirect
       extendJWTExpiration(req, res)
       // sometimes, we want to tack the JWT onto the end of the redirect URL
       // for cases when cookie-based authentication won't work (e.g., Cordova

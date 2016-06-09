@@ -61,3 +61,14 @@ export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
       })
   }
 }
+
+export function buildURL(baseURL, queryArgs) {
+  const queryStr = Object.keys(queryArgs).reduce((args, key) => {
+    const val = queryArgs[key]
+    if (val) {
+      args.push(`${key}=${encodeURIComponent(val)}`)
+    }
+    return args
+  }, []).join('&')
+  return `${baseURL}?${queryStr}`
+}
