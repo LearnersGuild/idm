@@ -8,6 +8,9 @@ module.exports = {
     redis: {
       url: 'redis://localhost:6379',
     },
+    github: {
+      callbackURL: 'http://idm.learnersguild.test/auth/github/callback',
+    },
   },
 
   app: {
