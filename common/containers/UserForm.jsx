@@ -1,9 +1,7 @@
 import {reduxForm} from 'redux-form'
-import {push} from 'react-router-redux'
 
 import updateUser from '../actions/updateUser'
 import UserFormComponent from '../components/UserForm'
-import {buildURL} from '../util'
 
 function validate({name, phone, dateOfBirth}) {
   const errors = {}
@@ -20,25 +18,9 @@ function validate({name, phone, dateOfBirth}) {
 }
 
 function saveUser(stateProps, dispatchProps) {
-  const {auth: {lgJWT}} = stateProps
   const {dispatch, redirect, responseType} = dispatchProps
-  const redirectLocation = redirect || '/'
-  const afterSave = redirectLocation.match(/^\//) ? (
-    () => {
-      dispatch(push(redirectLocation))
-    }
-  ) : (
-    () => {
-      const redirectURL = responseType === 'token' ? buildURL(decodeURIComponent(redirectLocation), {lgJWT}) : redirectLocation
-      /* global __CLIENT__, window */
-      if (__CLIENT__) {
-        window.location.href = redirectURL
-      }
-    }
-  )
   return userInfo => {
-    dispatch(updateUser(userInfo))
-    afterSave()
+    dispatch(updateUser(userInfo, redirect, responseType))
   }
 }
 

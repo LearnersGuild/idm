@@ -1,6 +1,5 @@
-import {push} from 'react-router-redux'
-
 import {getGraphQLFetcher} from '../util'
+import redirect from './redirect'
 
 export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST'
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS'
@@ -18,7 +17,7 @@ function updateUserFailure(error) {
   return {type: UPDATE_USER_FAILURE, error}
 }
 
-export default function updateUser(userData, successPath) {
+export default function updateUser(userData, redirectLocation, responseType) {
   return (dispatch, getState) => {
     dispatch(updateUserRequest())
 
@@ -52,12 +51,10 @@ mutation ($user: InputUser!) {
     return getGraphQLFetcher(dispatch, auth)(mutation)
       .then(result => {
         dispatch(updateUserSuccess(result.data.updateUser))
-        if (successPath) {
-          dispatch(push(successPath))
-          /* global window */
-          if (typeof window !== 'undefined' && window.parent) {
-            window.parent.postMessage('updateUser', '*')
-          }
+        dispatch(redirect(redirectLocation, responseType))
+        /* global window */
+        if (typeof window !== 'undefined' && window.parent) {
+          window.parent.postMessage('updateUser', '*')
         }
       })
       .catch(error => {
