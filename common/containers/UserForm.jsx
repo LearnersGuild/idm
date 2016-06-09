@@ -7,8 +7,8 @@ import {buildURL} from '../util'
 
 function validate({name, phone, dateOfBirth}) {
   const errors = {}
-  if (!name || !name.match(/\w{2,} \w{2,}/)) {
-    errors.name = 'Include both family and given name'
+  if (!name || !name.match(/\w{3,}/)) {
+    errors.name = 'Please use your full, legal name'
   }
   if (!phone || phone < 100000000 || phone > 9999999999) {
     errors.phone = '3-digit area code and 7-digit phone number'

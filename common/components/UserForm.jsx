@@ -101,7 +101,7 @@ class UserForm extends Component {
         <Input
           icon="title"
           type="text"
-          label="Name"
+          label="Full Legal Name"
           {...name}
           />
         <Input
