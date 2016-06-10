@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 
+import authenticate from '../actions/authenticate'
 import getInviteCode from '../actions/getInviteCode'
 import SignUp from '../components/SignUp'
 import {buildURL} from '../util'
@@ -9,6 +10,7 @@ import {buildURL} from '../util'
 class SignUpContainer extends Component {
   constructor(props) {
     super(props)
+    this.handleAuthenticate = this.handleAuthenticate.bind(this)
     this.handleSubmitCode = this.handleSubmitCode.bind(this)
   }
 
@@ -21,6 +23,10 @@ class SignUpContainer extends Component {
     if (code) {
       dispatch(getInviteCode(code))
     }
+  }
+
+  handleAuthenticate(authURL) {
+    this.props.dispatch(authenticate(authURL))
   }
 
   handleSubmitCode(code) {
@@ -36,7 +42,11 @@ class SignUpContainer extends Component {
     const {params: {code}} = this.props
 
     return (
-      <SignUp code={code} onSubmitCode={this.handleSubmitCode} {...this.props}/>
+      <SignUp code={code}
+        onAuthenticate={this.handleAuthenticate}
+        onSubmitCode={this.handleSubmitCode}
+        {...this.props}
+        />
     )
   }
 }
@@ -57,11 +67,7 @@ SignUpContainer.propTypes = {
   }),
 }
 
-function mapStateToProps(state) {
-  return {
-    auth: state.auth,
-    inviteCodes: state.inviteCodes,
-  }
-}
-
-export default connect(mapStateToProps)(SignUpContainer)
+export default connect(state => ({
+  auth: state.auth,
+  inviteCodes: state.inviteCodes,
+}))(SignUpContainer)

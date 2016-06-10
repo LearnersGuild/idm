@@ -8,7 +8,7 @@ import App from '../containers/App'
 
 import BlankLayout from '../containers/BlankLayout'
 import SignUp from '../containers/SignUp'
-import SignIn from '../components/SignIn'
+import SignIn from '../containers/SignIn'
 
 import Home from '../containers/Home'
 import Profile from '../components/Profile'

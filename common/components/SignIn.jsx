@@ -1,31 +1,54 @@
-import React, {PropTypes} from 'react'
+import React, {Component, PropTypes} from 'react'
 import {Link} from 'react-router'
 
 import {Card} from 'react-toolbox/lib/card'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
 
 import {buildURL} from '../util'
 import AuthButton from './AuthButton'
 
 import styles from './SignInUp.scss'
 
-export default function signIn(props) {
-  const {location: {query: {redirect, responseType}}} = props
-  const signUpLink = buildURL('/sign-up', {redirect, responseType})
-  return (
-    <Card className={styles.card}>
-      <div className={styles.cardContent}>
-        <img className={styles.lgLogo} src="https://brand.learnersguild.org/assets/learners-guild-logo-black-250x149.png"/>
-        <AuthButton label="Sign-in" redirect={redirect} responseType={responseType}/>
+export default class SignIn extends Component {
+  render() {
+    const {
+      location: {query: {redirect, responseType}},
+      isBusy,
+      onAuthenticate,
+    } = this.props
+    const signUpLink = buildURL('/sign-up', {redirect, responseType})
+
+    const authActions = isBusy ? (
+      <ProgressBar className={styles.authActions} type="linear" mode="indeterminate"/>
+    ) : (
+      <div className={styles.authActions}>
+        <AuthButton
+          label="Sign-in"
+          redirect={redirect}
+          responseType={responseType}
+          onAuthenticate={onAuthenticate}
+          />
         <div className={styles.signUpLink} >
           <Link to={signUpLink}>Don't have an account? Sign-up.</Link>
         </div>
       </div>
-    </Card>
-  )
+    )
+
+    return (
+      <Card className={styles.card}>
+        <div className={styles.cardContent}>
+          <img className={styles.lgLogo} src="https://brand.learnersguild.org/assets/learners-guild-logo-black-250x149.png"/>
+        </div>
+        {authActions}
+      </Card>
+    )
+  }
 }
 
-signIn.propTypes = {
+SignIn.propTypes = {
   location: PropTypes.shape({
     query: PropTypes.object.isRequired,
   }),
+  onAuthenticate: PropTypes.func.isRequired,
+  isBusy: PropTypes.bool.isRequired,
 }

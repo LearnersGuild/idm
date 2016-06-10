@@ -66,15 +66,32 @@ class SignUp extends Component {
   }
 
   renderAuth(code) {
-    const {location: {query: {redirect, responseType}}} = this.props
+    const {
+      location: {query: {redirect, responseType}},
+      auth: {isBusy},
+      onAuthenticate,
+    } = this.props
     const redirectPath = buildURL(`/sign-up/${code}`, {redirect, responseType})
+    const authActions = isBusy ? (
+      <ProgressBar className={styles.authActions} type="linear" mode="indeterminate"/>
+    ) : (
+      <AuthButton
+        className={styles.authActions}
+        label="Authenticate"
+        authURL={'/auth/github/sign-up'}
+        redirect={redirectPath}
+        inviteCode={code}
+        onAuthenticate={onAuthenticate}
+        />
+    )
+
     return (
       <div>
         <h5 className={styles.welcome}>Welcome!</h5>
         <CardText>
           We'll need your <a target="_blank" href="https://github.com">GitHub</a> account information, so the first step is to authenticate using GitHub. If you haven't yet created a GitHub account, you should <a target="_blank" href="https://github.com/join">do that now</a>.
         </CardText>
-        <AuthButton label="Authenticate" authURL={'/auth/github/sign-up'} redirect={redirectPath} inviteCode={code}/>
+        {authActions}
       </div>
     )
   }
@@ -137,6 +154,7 @@ SignUp.propTypes = {
     isBusy: PropTypes.bool.isRequired,
     codes: PropTypes.object.isRequired,
   }).isRequired,
+  onAuthenticate: PropTypes.func.isRequired,
   onSubmitCode: PropTypes.func.isRequired,
   code: PropTypes.string,
   location: PropTypes.shape({

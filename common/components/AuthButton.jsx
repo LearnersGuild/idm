@@ -11,15 +11,20 @@ export default function AuthButton(props) {
     redirect,
     inviteCode,
     responseType,
+    onAuthenticate,
   } = props
   const baseURL = authURL ? authURL : '/auth/github'
   const signInGitHubHref = buildURL(baseURL, {redirect, inviteCode, responseType})
+  const handleClick = () => {
+    onAuthenticate(signInGitHubHref)
+  }
+
   return (
     <Button
-      href={signInGitHubHref}
       linkButton
       raised
       primary
+      onMouseUp={handleClick}
       >
       <span className="socicon socicon-github button-icon"></span> {`${label || 'Sign-in'} Using GitHub`}
     </Button>
@@ -32,4 +37,5 @@ AuthButton.propTypes = {
   redirect: PropTypes.string,
   responseType: PropTypes.string,
   inviteCode: PropTypes.string,
+  onAuthenticate: PropTypes.func.isRequired,
 }
