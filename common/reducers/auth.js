@@ -1,3 +1,4 @@
+import {AUTHENTICATE} from '../actions/authenticate'
 import {UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE} from '../actions/updateUser'
 import {UPDATE_JWT} from '../actions/updateJWT'
 
@@ -9,6 +10,10 @@ const initialState = {
 
 export function auth(state = initialState, action) {
   switch (action.type) {
+    case AUTHENTICATE:
+      return Object.assign({}, state, {
+        isBusy: true,
+      })
     case UPDATE_USER_REQUEST:
       return Object.assign({}, state, {
         isBusy: true,
