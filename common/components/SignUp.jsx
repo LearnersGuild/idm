@@ -56,7 +56,7 @@ class SignUp extends Component {
   renderUserForm() {
     const {location: {query: {redirect, responseType}}} = this.props
     return (
-      <div>
+      <div className="SignUp--UserForm">
         <CardText style={{textAlign: 'left'}}>
           Complete the sign-up process by providing the information below.
         </CardText>

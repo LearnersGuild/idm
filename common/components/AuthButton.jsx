@@ -4,7 +4,7 @@ import {Button} from 'react-toolbox/lib/button'
 
 import {buildURL} from '../util'
 
-export default function signInButton(props) {
+export default function AuthButton(props) {
   const {
     label,
     authURL,
@@ -26,7 +26,7 @@ export default function signInButton(props) {
   )
 }
 
-signInButton.propTypes = {
+AuthButton.propTypes = {
   label: PropTypes.string,
   authURL: PropTypes.string,
   redirect: PropTypes.string,

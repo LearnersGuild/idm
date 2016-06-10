@@ -1,8 +1,5 @@
 /* eslint-disable prefer-template */
-
-/**
- * Auto-merged environment-specific configuration.
- */
+/** Auto-merged environment-specific configuration. */
 
 module.exports = {
   server: {

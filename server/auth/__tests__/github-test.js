@@ -27,5 +27,5 @@ test('githubProfileToUserInfo extracts correct information', t => {
   }
   const userInfo = githubProfileToUserInfo('abcd1234', 'wxyz9876', {displayName: 'Me', username: 'me'}, 'me@example.com', ['me@example.com'], inviteCode)
   t.plan(1)
-  t.same(userInfo, expected)
+  t.deepEqual(userInfo, expected)
 })

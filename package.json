@@ -114,6 +114,7 @@
     "ava": "^0.11.0",
     "babel-plugin-react-transform": "^2.0.0-beta1",
     "bluebird": "^3.3.5",
+    "enzyme": "^2.3.0",
     "eslint": "^2.2.0",
     "eslint-config-xo-react": "^0.3.0",
     "eslint-plugin-react": "^3.16.1",
@@ -167,7 +168,8 @@
       "babel-core/register",
       "babel-polyfill",
       "./config/testConfig"
-    ]
+    ],
+    "babel": "inherit"
   },
   "precommit": [
     "xo"
