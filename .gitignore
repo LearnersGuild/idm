@@ -8,3 +8,5 @@ tmp
 db/database.json
 .floo
 .flooignore
+*.env
+codeship.aes

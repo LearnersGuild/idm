@@ -3,7 +3,7 @@ module.exports = {
     secure: false,
     port: 9001,
     rethinkdb: {
-      url: 'rethinkdb://localhost:28015/idm_test',
+      url: process.env.RETHINKDB_URL || 'rethinkdb://localhost:28015/idm_test',
     },
     redis: {
       url: 'redis://localhost:6379',

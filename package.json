@@ -19,10 +19,13 @@
     "db:drop": "node ./scripts/dbDrop.js",
     "db:migrate:configure": "node ./scripts/dbConfig.js > ./db/database.json",
     "db:migrate": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db",
+    "db:migrate:up": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db up",
+    "db:migrate:down": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db down",
     "dev:testdata": "./node_modules/.bin/babel-node test/generateTestData",
     "xo": "./node_modules/.bin/xo",
     "start": "npm run icons:fetch && node server",
     "postinstall": "npm run build",
+    "test:ci": "npm run db:create && npm run db:migrate:up && npm run test",
     "test": "npm run xo && NODE_ENV=test ./node_modules/.bin/ava"
   },
   "keywords": [

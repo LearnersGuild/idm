@@ -1,0 +1,9 @@
+- service: app
+  name: ci
+  command: npm run test:ci
+- service: herokudeployment
+  command: codeship_heroku deploy /deploy lg-idm
+  tag: master
+- service: herokudeployment
+  command: heroku run --app lg-idm 'npm run db:migrate -- up'
+  tag: master

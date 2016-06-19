@@ -1,0 +1,19 @@
+app:
+  build:
+    image: learnersguild/idm-test
+    dockerfile_path: Dockerfile
+  links:
+    - rethinkdb
+  encrypted_env_file: app.env.encrypted
+  environment:
+    - RETHINKDB_URL=rethinkdb://rethinkdb:28015/idm_test
+rethinkdb:
+  image: rethinkdb:2.3
+herokudeployment:
+  image: codeship/heroku-deployment
+  encrypted_env_file: herokudeployment.env.encrypted
+  volumes:
+    - ./:/deploy
+cache:
+  image: rethinkdb:2.3
+  image: codeship/heroku-deployment:latest
