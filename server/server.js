@@ -12,6 +12,8 @@ const config = require('../config')
 import configureApp from './configureApp'
 import configureChangeFeeds from './configureChangeFeeds'
 
+import {formatServerError} from './util'
+
 const sentry = new raven.Client(config.server.sentryDSN)
 
 export function start() {
@@ -21,16 +23,6 @@ export function start() {
 
     const app = new Express()
     const httpServer = http.createServer(app)
-
-    // catch-all error handler
-    app.use((err, req, res, next) => {
-      const errCode = err.code || 500
-      const errType = err.type || 'Internal Server Error'
-      const errMessage = err.message || config.server.secure ? err.toString() : err.stack
-      const errInfo = `<h1>${errCode} - ${errType}</h1><p>${errMessage}</p>`
-      console.error(err.stack)
-      res.status(500).send(errInfo)
-    })
 
     configureApp(app)
 
@@ -62,12 +54,29 @@ export function start() {
       require('./render').default(req, res, next)
     })
 
+    // catch-all error handler
+    app.use((err, req, res, next) => {
+      const serverError = formatServerError(err)
+      const responseBody = `<h1>${serverError.statusCode} - ${serverError.type}</h1><p>${serverError.message}</p>`
+
+      if (serverError.statusCode >= 400) {
+        sentry.captureException(err)
+
+        console.error(`${serverError.name || 'UNHANDLED ERROR'}:
+          method: ${req.method.toUpperCase()} ${req.originalUrl}
+          params: ${JSON.stringify(req.params)}
+          ${config.server.secure ? serverError.toString() : serverError.stack}`)
+      }
+
+      res.status(serverError.statusCode).send(responseBody)
+    })
+
     // change feeds
     configureChangeFeeds()
 
-    return httpServer.listen(config.server.port, error => {
-      if (error) {
-        console.error(error)
+    return httpServer.listen(config.server.port, err => {
+      if (err) {
+        console.error(err)
       } else {
         console.info('🌍  Listening at %s', config.app.baseURL)
       }

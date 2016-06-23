@@ -1,20 +1,15 @@
-import raven from 'raven'
-
 import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
-import config from '../../../../config'
 import db from '../../../../db'
 
 import {GraphQLPhoneNumber} from '../types'
 import {User} from './schema'
 
 const r = db.connect()
-
-const sentry = new raven.Client(config.server.sentryDSN)
 
 const InputUser = new GraphQLInputObjectType({
   name: 'InputUser',
@@ -37,24 +32,26 @@ export default {
       user: {type: new GraphQLNonNull(InputUser)},
     },
     async resolve(source, {user}, {rootValue: {currentUser}}) {
-      const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-      if (!currentUser || (user.id !== currentUser.id && !currentUserIsBackOffice)) {
-        throw new GraphQLError('You are not authorized to do that.')
-      }
       try {
+        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
+        if (!currentUser || (user.id !== currentUser.id && !currentUserIsBackOffice)) {
+          throw new GraphQLError('You are not authorized to do that.')
+        }
+
         const userWithTimestamps = Object.assign(user, {updatedAt: r.now()})
         const updatedUser = await r.table('users')
           .get(user.id)
           .update(userWithTimestamps, {returnChanges: 'always'})
           .run()
+
         if (updatedUser.replaced) {
           return updatedUser.changes[0].new_val
         } else if (updatedUser.unchanged) {
           return updatedUser.changes[0].old_val
         }
+
         throw new GraphQLError('Could not update user, please try again')
       } catch (err) {
-        sentry.captureException(err)
         throw err
       }
     }

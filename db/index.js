@@ -5,9 +5,7 @@ import rethinkDBDash from 'rethinkdbdash'
 const config = require('../config')
 
 if (!config || !config.server || !config.server.rethinkdb) {
-  const error = new Error('Rethink db configuration not found')
-  console.error(error.stack)
-  throw error
+  throw new Error('Rethink db configuration not found')
 }
 
 const dbUrl = url.parse(config.server.rethinkdb.url)

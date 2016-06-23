@@ -1,5 +1,3 @@
-import raven from 'raven'
-
 import React from 'react'
 import {renderToString} from 'react-dom/server'
 import {createStore, applyMiddleware, compose} from 'redux'
@@ -9,9 +7,7 @@ import {RouterContext, match} from 'react-router'
 
 import iconsMetadata from '../dist/icons-metadata'
 
-import config from '../config'
-
-const sentry = new raven.Client(config.server.sentryDSN)
+const config = require('../config')
 
 export function renderFullPage(renderedAppHtml, initialState) {
   const title = 'Identity Management'
@@ -56,8 +52,6 @@ export function renderFullPage(renderedAppHtml, initialState) {
 }
 
 function getInitialState(req) {
-  // console.log('user:', req.user)
-  // console.log('lgJWT:', req.lgJWT)
   const initialState = {
     auth: {
       currentUser: req.user,
@@ -89,13 +83,7 @@ function fetchAllComponentData(dispatch, renderProps) {
   return Promise.all(funcs)
 }
 
-function handleError(error, res) {
-  console.error(error.stack)
-  sentry.captureException(error)
-  res.status(500).send(`<h1>500 - Internal Server Error</h1><p>${error}</p>`)
-}
-
-export default function handleRender(req, res) {
+export default function handleRender(req, res, next) {
   try {
     // we require() these rather than importing them because (in development)
     // we may have flushed the require cache (when files change), but if we
@@ -115,7 +103,6 @@ export default function handleRender(req, res) {
 
     match({routes: routes(store), location: req.originalUrl}, async (error, redirectLocation, renderProps) => {
       try {
-        // console.log('error:', error, 'redirectLocation:', redirectLocation, 'renderProps:', renderProps)
         if (error) {
           throw new Error(error)
         } else if (redirectLocation) {
@@ -132,10 +119,10 @@ export default function handleRender(req, res) {
           res.status(200).send(renderFullPage(renderedAppHtml, store.getState()))
         }
       } catch (error) {
-        handleError(error)
+        next(error)
       }
     })
   } catch (error) {
-    handleError(error, res)
+    next(error)
   }
 }

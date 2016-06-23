@@ -1,17 +1,12 @@
-import raven from 'raven'
-
 import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import config from '../../../../config'
 import db from '../../../../db'
 
 import {User} from './schema'
 
 const r = db.connect()
-
-const sentry = new raven.Client(config.server.sentryDSN)
 
 export default {
   getUserById: {
@@ -29,9 +24,9 @@ export default {
         if (result) {
           return result
         }
+
         throw new GraphQLError('No such user')
       } catch (err) {
-        sentry.captureException(err)
         throw err
       }
     }
@@ -49,7 +44,6 @@ export default {
 
         return await r.table('users').getAll(...handles, {index: 'handle'}).run()
       } catch (err) {
-        sentry.captureException(err)
         throw err
       }
     }
@@ -67,7 +61,6 @@ export default {
 
         return await r.table('users').getAll(...ids).run()
       } catch (err) {
-        sentry.captureException(err)
         throw err
       }
     }
