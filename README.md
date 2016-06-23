@@ -10,21 +10,28 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 2. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
 
-        $ echo 9001 > ~/.mehserve/idm.learnersguild
+```bash
+echo 9001 > ~/.mehserve/idm.learnersguild
+```
 
 3. Set your `NODE_ENV` environment variable:
 
-        $ export NODE_ENV=development
+```bash
+export NODE_ENV=development
+```
 
 4. [Install RethinkDB][install-rethinkdb].
 
-        # With Homebrew on a mac:
-
-        $ brew install rethinkdb
+```bash
+# With Homebrew on a mac:
+brew install rethinkdb
+```
 
 5. Install [Redis][redis].
 
-        $ brew install redis
+```bash
+brew install redis
+```
 
 6. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
     - Application name: Learners Guild IDM (dev)
@@ -33,16 +40,20 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 7. Generate a key-pair for JWT token signing / verifying:
 
-        $ openssl genrsa -out /tmp/private-key.pem 2048
-        $ openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
+```bash
+openssl genrsa -out /tmp/private-key.pem 2048
+openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
+```
 
-8. Create your `.env` file for your environment. Example:
+8. Create your `.env.development` file for your environment. Example:
 
-        GITHUB_CLIENT_ID=<from above>
-        GITHUB_CLIENT_SECRET=<from above>
-        IDM_BASE_URL=http://idm.learnersguild.dev
-        JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem with \n for newlines>"
-        JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem with \n for newlines>"
+```bash
+GITHUB_CLIENT_ID=<from above>
+GITHUB_CLIENT_SECRET=<from above>
+IDM_BASE_URL=http://idm.learnersguild.dev
+JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem with \n for newlines>"
+JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem with \n for newlines>"
+```
 
 9. Setup npm auth
 
@@ -50,36 +61,73 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 11. Login from the command line
 
-        $ npm login
-
+```bash
+npm login
+```
 
 12. Get your npm auth token from your `~/.npmrc`
 
-        $ cat ~/.npmrc
-        //registry.npmjs.org/:_authToken=<YOUR NPM AUTH TOKEN>
+```bash
+cat ~/.npmrc
+# //registry.npmjs.org/:_authToken=<YOUR NPM AUTH TOKEN>
+```
 
 13.  Set `NPM_AUTH_TOKEN` in your shell.
 
-        # in ~/.bashrc (or ~/.zshrc, etc)
-        export NPM_AUTH_TOKEN=<YOUR NPM AUTH TOKEN>
+```bash
+# in ~/.bashrc (or ~/.zshrc, etc)
+export NPM_AUTH_TOKEN=<YOUR NPM AUTH TOKEN>
+# OR
+export NPM_AUTH_TOKEN=$(cat $HOME/.npmrc | grep _authToken | cut -d '=' -f2)
+```
 
 14. Run the setup tasks:
 
-        $ npm install
-        $ npm run db:create
-        $ npm run db:migrate -- up
+```bash
+npm install
+npm run db:create
+npm run db:migrate -- up
+```
 
-15. (OPTIONAL) Generate some test data. Most likely needed for co-developing the [game][game] service:
+15. Run the server:
 
-        $ npm run dev:testdata
+```bash
+npm start
+```
 
-16. Run the server:
+16. Visit the server in your browser:
 
-        $ npm start
+```bash
+open http://idm.learnersguild.dev
+```
 
-17. Visit the server in your browser:
+## Gotchas
 
-        $ open http://idm.learnersguild.dev
+### Random C errors
+
+Install `nvm` and then use `5.6`
+
+### `TypeError: OAuth2Strategy requires a clientID option`
+
+`export NODE_ENV=development`
+
+
+## Creating an Account
+
+### Invite Code
+
+Go to `localhost:8080` and use the `Data Explorer` to run the following command
+
+```ReQl
+r.db('idm_development').table('inviteCodes').insert({
+  id: "58abd2aa-3826-4604-bf7c-f8f2cf7eaad9",
+  code: "hand_crafted_artisanal_invite_code",
+  description: "hand crafted artisanal invite code",
+  roles: ["player", "backoffice", "moderator"],
+  createdAt: r.now(),
+  updatedAt: r.now(),
+})
+```
 
 ## License
 
