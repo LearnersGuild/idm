@@ -38,26 +38,36 @@ export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
     return fetch('/graphql', options)
       .then(resp => {
         if (!resp.ok) {
-          console.error('GraphQL ERROR:', resp.statusText)
-          if (throwErrors) {
-            throw new Error(`GraphQL ERROR: ${resp.statusText}`)
-          }
+          return resp.json().then(errorResponse => {
+            throw errorResponse
+          })
         }
+
         // for sliding-sessions, update our JWT from the LearnersGuild-JWT header
         const lgJWT = resp.headers.get('LearnersGuild-JWT')
         if (lgJWT) {
           dispatch(updateJWT(lgJWT))
         }
+
         return resp.json()
       })
       .then(graphQLResponse => {
-        if (graphQLResponse.errors && graphQLResponse.errors.length) {
-          if (throwErrors) {
-            // throw the first error
-            throw new Error(graphQLResponse.errors[0].message)
-          }
+        if (graphQLResponse.errors) {
+          throw graphQLResponse
         }
+
         return graphQLResponse
+      })
+      .catch(err => {
+        if (err && err.errors && err.errors.length) {
+          if (throwErrors) {
+            throw new Error(err.errors[0].message)
+          }
+
+          console.error('GraphQL ERRORS:', err.errors)
+        }
+
+        console.error('GraphQL ERROR:', err)
       })
   }
 }

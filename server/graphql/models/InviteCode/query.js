@@ -1,16 +1,11 @@
-import raven from 'raven'
-
 import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLError} from 'graphql/error'
 
-import config from '../../../../config'
 import db from '../../../../db'
 
 import {InviteCode} from './schema'
 
 const r = db.connect()
-
-const sentry = new raven.Client(config.server.sentryDSN)
 
 export default {
   getInviteCodeByCode: {
@@ -27,7 +22,6 @@ export default {
         }
         throw new GraphQLError('No such invite code')
       } catch (err) {
-        sentry.captureException(err)
         throw err
       }
     }

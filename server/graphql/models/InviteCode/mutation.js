@@ -1,17 +1,12 @@
-import raven from 'raven'
-
 import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import config from '../../../../config'
 import db from '../../../../db'
 
 import {InviteCode} from './schema'
 
 const r = db.connect()
-
-const sentry = new raven.Client(config.server.sentryDSN)
 
 const InputInviteCode = new GraphQLInputObjectType({
   name: 'InputInviteCode',
@@ -35,21 +30,24 @@ export default {
         if (!currentUserIsBackOffice) {
           throw new GraphQLError('You are not authorized to do that')
         }
+
         const inviteCodes = await r.table('inviteCodes').getAll(inviteCode.code, {index: 'code'}).limit(1).run()
         const result = inviteCodes[0]
         if (result) {
           throw new GraphQLError('Invite codes must be unique')
         }
+
         const inviteCodeWithTimestamps = Object.assign(inviteCode, {createdAt: r.now(), updatedAt: r.now()})
         const insertedInviteCode = await r.table('inviteCodes')
           .insert(inviteCodeWithTimestamps, {returnChanges: 'always'})
           .run()
+
         if (insertedInviteCode.inserted) {
           return insertedInviteCode.changes[0].new_val
         }
+
         throw new GraphQLError('Could not create invite code, please try again')
       } catch (err) {
-        sentry.captureException(err)
         throw err
       }
     }

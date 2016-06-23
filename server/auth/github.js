@@ -53,7 +53,6 @@ async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
     cb(null, user)
   } catch (err) {
-    console.error(err.stack)
     sentry.captureException(err)
     cb(err)
   }
@@ -72,7 +71,6 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
     cb(null, user)
   } catch (err) {
-    console.error(err.stack)
     sentry.captureException(err)
     cb(err)
   }
