@@ -23,6 +23,9 @@ module.exports = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
       callbackURL: process.env.APP_BASE_URL + '/auth/github/callback',
     },
+    newrelic: {
+      enabled: false,
+    },
   },
 
   app: {

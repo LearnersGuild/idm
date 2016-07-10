@@ -3,5 +3,8 @@ module.exports = {
     rethinkdb: {
       replicas: 3,
     },
+    newrelic: {
+      enabled: true,
+    },
   },
 }
