@@ -121,6 +121,12 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
     Use the invitation code `hand_crafted_artisanal_invite_code` to create an account.
 
+19. (OPTIONAL) Add some test users:
+
+    ```bash
+    npm run data:users -- --verbose --role=player some-dummy-invite-code
+    ```
+
 ## Gotchas
 
 ### Node version
