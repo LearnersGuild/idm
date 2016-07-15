@@ -31,6 +31,7 @@ export const User = new GraphQLObjectType({
     email: {type: new GraphQLNonNull(GraphQLEmail), description: 'The user email'},
     emails: {type: new GraphQLNonNull(new GraphQLList(GraphQLEmail)), description: 'The user emails'},
     handle: {type: new GraphQLNonNull(GraphQLString), description: 'The user handle'},
+    profileUrl: {type: GraphQLString, description: 'The user profile image URL'},
     name: {type: new GraphQLNonNull(GraphQLString), description: 'The user name'},
     phone: {type: GraphQLPhoneNumber, description: 'The user phone number'},
     dateOfBirth: {type: GraphQLDateTime, description: "The user's date of birth"},
