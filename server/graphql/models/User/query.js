@@ -3,6 +3,7 @@ import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
 import db from '../../../../db'
+import {getUserProfileUrl} from '../../../../common/util'
 
 import {User} from './schema'
 
@@ -20,9 +21,10 @@ export default {
           throw new GraphQLError('You are not authorized to do that.')
         }
 
-        const result = await r.table('users').get(args.id).run()
-        if (result) {
-          return result
+        let user = await r.table('users').get(args.id).run()
+        if (user) {
+          user = applyUserProfileUrl(user)
+          return user
         }
 
         throw new GraphQLError('No such user')
@@ -42,7 +44,9 @@ export default {
           throw new GraphQLError('You are not authorized to do that.')
         }
 
-        return await r.table('users').getAll(...handles, {index: 'handle'}).run()
+        const users = await r.table('users').getAll(...handles, {index: 'handle'}).run()
+
+        return users.map(user => applyUserProfileUrl(user)) // FIXME
       } catch (err) {
         throw err
       }
@@ -59,10 +63,16 @@ export default {
           throw new GraphQLError('You are not authorized to do that.')
         }
 
-        return await r.table('users').getAll(...ids).run()
+        const users = await r.table('users').getAll(...ids).run()
+
+        return users.map(user => applyUserProfileUrl(user)) // FIXME
       } catch (err) {
         throw err
       }
     }
   }
+}
+
+function applyUserProfileUrl(user) {
+  return user ? {...user, profileUrl: getUserProfileUrl(user)} : null
 }
