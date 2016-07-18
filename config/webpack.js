@@ -19,6 +19,7 @@ if (config.app.hotReload) {
 }
 if (config.app.minify) {
   entry.vendor = [
+    'google-libphonenumber',
     'raven-js',
     'react',
     'react-dom',
@@ -192,6 +193,10 @@ const loaders = [
   },
 ]
 
+const noParse = [
+  /node_modules\/google-libphonenumber\/dist/,
+]
+
 module.exports = {
   entry,
   output,
@@ -199,7 +204,7 @@ module.exports = {
   resolve,
   plugins,
   context: ROOT_DIR,
-  module: {loaders},
+  module: {loaders, noParse},
   sassResources: './config/sass-resources.scss',
   toolbox: {theme: './common/theme.scss'},
 }

@@ -24,8 +24,8 @@ class UserForm extends Component {
       fields: {phone}
     } = this.props
 
-    const onlyDigits = (newPhone || '').replace(/\D/g, '')
-    phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
+    const validPhoneChars = (newPhone || '').replace(/[^+\d]/g, '')
+    phone.onChange(validPhoneChars)
   }
 
   handleDateOfBirthChange(date) {

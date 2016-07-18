@@ -1,22 +1,18 @@
 import fetch from 'isomorphic-fetch'
+import {AsYouTypeFormatter} from 'google-libphonenumber'
 
 import {updateJWT} from '../actions/updateJWT'
 
-export function formatPhoneNumber(phone) {
+export function formatPhoneNumber(phone, countryCode = 'US') {
   if (!phone) {
-    return phone
+    return ''
   }
-  const phoneDigits = phone.toString().replace(/\D/g, '')
-  const areaCode = phoneDigits.slice(0, 3)
-  const prefix = phoneDigits.slice(3, 6)
-  const suffix = phoneDigits.slice(6, 10)
-  let formatted = String(areaCode)
-  if (phoneDigits.length > 3) {
-    formatted = `(${areaCode}) ${prefix}`
-  }
-  if (phoneDigits.length > 6) {
-    formatted += `-${suffix}`
-  }
+  const formatter = new AsYouTypeFormatter(countryCode)
+  formatter.clear()
+  let formatted
+  phone.toString().split('').forEach(d => {
+    formatted = formatter.inputDigit(d)
+  })
   return formatted
 }
 

@@ -1,31 +1,33 @@
 import test from 'ava'
 import {formatPhoneNumber, buildURL} from '../index'
 
-test('formatPhoneNumber does not parenthesize area code when # digits === 3', t => {
-  t.plan(1)
+test('formatPhoneNumber does not parenthesize area code when # digits < 7', t => {
+  t.plan(3)
 
-  const input = '111'
-  const formatted = formatPhoneNumber(input)
-
-  t.is(input, formatted)
+  let formatted = formatPhoneNumber('415')
+  t.is(formatted, '415')
+  formatted = formatPhoneNumber('41533')
+  t.is(formatted, '415-33')
+  formatted = formatPhoneNumber('4153333')
+  t.is(formatted, '415-3333')
 })
 
-test('formatPhoneNumber parenthesizes area code when # digits > 3', t => {
-  t.plan(1)
+test('formatPhoneNumber parenthesizes area code when # digits > 7', t => {
+  t.plan(2)
 
-  const input = '1111'
-  const formatted = formatPhoneNumber(input)
-
-  t.is('(111) 1', formatted)
+  let formatted = formatPhoneNumber('41533333')
+  t.is(formatted, '(415) 333-33')
+  formatted = formatPhoneNumber('4153333333')
+  t.is(formatted, '(415) 333-3333')
 })
 
-test('formatPhoneNumber renders a hyphen between prefix and suffix # digits > 6', t => {
-  t.plan(1)
+test('formatPhoneNumber renders a hyphen between prefix and suffix when # digits > 3', t => {
+  t.plan(2)
 
-  const input = '1111111'
-  const formatted = formatPhoneNumber(input)
-
-  t.is('(111) 111-1', formatted)
+  let formatted = formatPhoneNumber('33333')
+  t.is(formatted, '333-33')
+  formatted = formatPhoneNumber('3333333')
+  t.is(formatted, '333-3333')
 })
 
 test('buildURL properly builds URL w/o query params', t => {
