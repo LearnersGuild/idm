@@ -1,20 +1,8 @@
 import fetch from 'isomorphic-fetch'
-import {AsYouTypeFormatter} from 'google-libphonenumber'
 
 import {updateJWT} from '../actions/updateJWT'
 
-export function formatPhoneNumber(phone, countryCode = 'US') {
-  if (!phone) {
-    return ''
-  }
-  const formatter = new AsYouTypeFormatter(countryCode)
-  formatter.clear()
-  let formatted
-  phone.toString().split('').forEach(d => {
-    formatted = formatter.inputDigit(d)
-  })
-  return formatted
-}
+export * from './phoneNumber'
 
 export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
   return graphQLParams => {

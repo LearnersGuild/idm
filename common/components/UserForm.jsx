@@ -7,7 +7,10 @@ import Dropdown from 'react-toolbox/lib/dropdown'
 import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 
-import {formatPhoneNumber} from '../util'
+import {
+  formatPhoneNumber,
+  stripNonE164Chars,
+} from '../util/phoneNumber'
 
 import styles from './UserForm.scss'
 
@@ -24,8 +27,7 @@ class UserForm extends Component {
       fields: {phone}
     } = this.props
 
-    const validPhoneChars = (newPhone || '').replace(/[^+\d]/g, '')
-    phone.onChange(validPhoneChars)
+    phone.onChange(stripNonE164Chars(newPhone || ''))
   }
 
   handleDateOfBirthChange(date) {
