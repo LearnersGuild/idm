@@ -1,37 +1,37 @@
 import test from 'ava'
 
 import {
-  formatPhoneNumber,
+  formatPartialPhoneNumber,
   stripNonE164Chars,
   phoneNumberAsE164,
 } from '../phoneNumber'
 
-test('formatPhoneNumber does not parenthesize area code when # digits < 7', t => {
+test('formatPartialPhoneNumber does not parenthesize area code when # digits < 7', t => {
   t.plan(3)
 
-  let formatted = formatPhoneNumber('415')
+  let formatted = formatPartialPhoneNumber('415')
   t.is(formatted, '415')
-  formatted = formatPhoneNumber('41533')
+  formatted = formatPartialPhoneNumber('41533')
   t.is(formatted, '415-33')
-  formatted = formatPhoneNumber('4153333')
+  formatted = formatPartialPhoneNumber('4153333')
   t.is(formatted, '415-3333')
 })
 
-test('formatPhoneNumber parenthesizes area code when # digits > 7', t => {
+test('formatPartialPhoneNumber parenthesizes area code when # digits > 7', t => {
   t.plan(2)
 
-  let formatted = formatPhoneNumber('41533333')
+  let formatted = formatPartialPhoneNumber('41533333')
   t.is(formatted, '(415) 333-33')
-  formatted = formatPhoneNumber('4153333333')
+  formatted = formatPartialPhoneNumber('4153333333')
   t.is(formatted, '(415) 333-3333')
 })
 
-test('formatPhoneNumber renders a hyphen between prefix and suffix when # digits > 3', t => {
+test('formatPartialPhoneNumber renders a hyphen between prefix and suffix when # digits > 3', t => {
   t.plan(2)
 
-  let formatted = formatPhoneNumber('33333')
+  let formatted = formatPartialPhoneNumber('33333')
   t.is(formatted, '333-33')
-  formatted = formatPhoneNumber('3333333')
+  formatted = formatPartialPhoneNumber('3333333')
   t.is(formatted, '333-3333')
 })
 

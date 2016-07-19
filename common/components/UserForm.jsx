@@ -8,7 +8,7 @@ import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 
 import {
-  formatPhoneNumber,
+  formatPartialPhoneNumber,
   stripNonE164Chars,
 } from '../util/phoneNumber'
 
@@ -73,7 +73,7 @@ class UserForm extends Component {
     } = this.props
 
     const emails = currentUser ? currentUser.emails.map(email => ({value: email, label: email})) : []
-    const phoneNum = formatPhoneNumber(phone.value)
+    const phoneNum = formatPartialPhoneNumber(phone.value)
     const now = new Date()
     const maxDate = new Date(now)
     maxDate.setYear(now.getFullYear() - 21)   // learners must be 21 years old
