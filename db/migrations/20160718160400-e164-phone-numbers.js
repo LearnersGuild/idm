@@ -22,7 +22,7 @@ exports.down = function (r, conn) {
 
 function phoneNumberToE164(phone) {
   const phoneUtil = PhoneNumberUtil.getInstance()
-  const phoneDigits = phone.toString().replace(/\D/g, '')
+  const phoneDigits = (phone || '').toString().replace(/\D/g, '')
   const phoneNumber = phoneUtil.parse(phoneDigits, 'US')
   return phoneUtil.format(phoneNumber, PhoneNumberFormat.E164)
 }
