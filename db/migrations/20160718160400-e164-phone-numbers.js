@@ -20,16 +20,26 @@ exports.down = function (r, conn) {
   })
 }
 
+const phoneUtil = PhoneNumberUtil.getInstance()
+
 function phoneNumberToE164(phone) {
-  const phoneUtil = PhoneNumberUtil.getInstance()
-  const phoneDigits = (phone || '').toString().replace(/\D/g, '')
+  const phoneDigits = stripNonE164Chars(phone)
+  if (phoneDigits.length < 10) {
+    return null
+  }
   const phoneNumber = phoneUtil.parse(phoneDigits, 'US')
   return phoneUtil.format(phoneNumber, PhoneNumberFormat.E164)
 }
 
 function e164ToPhoneNumber(e164) {
-  const phoneUtil = PhoneNumberUtil.getInstance()
   const phoneNumber = phoneUtil.parse(e164, 'US')
   const phone = phoneUtil.format(phoneNumber, PhoneNumberFormat.NATIONAL)
-  return parseInt(phone.replace(/\D/g, ''), 10)
+  return parseInt(stripNonE164Chars(phone), 10)
+}
+
+function stripNonE164Chars(str) {
+  if (!str) {
+    return ''
+  }
+  return str.toString().replace(/[^+\d]/g, '')
 }
