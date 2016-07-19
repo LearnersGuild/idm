@@ -50,3 +50,9 @@ test('phoneNumberAsE164 returns an e.164 formatted string', t => {
   t.is(phoneNumberAsE164('+1-415-555-1212'), '+14155551212')
   t.is(phoneNumberAsE164('+1 (415) 555-1212'), '+14155551212')
 })
+
+test('phoneNumberAsE164 throws an error when phone numbers are too short', t => {
+  t.plan(1)
+
+  t.throws(() => phoneNumberAsE164('5551212'))
+})
