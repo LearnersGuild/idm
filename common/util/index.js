@@ -2,23 +2,7 @@ import fetch from 'isomorphic-fetch'
 
 import {updateJWT} from '../actions/updateJWT'
 
-export function formatPhoneNumber(phone) {
-  if (!phone) {
-    return phone
-  }
-  const phoneDigits = phone.toString().replace(/\D/g, '')
-  const areaCode = phoneDigits.slice(0, 3)
-  const prefix = phoneDigits.slice(3, 6)
-  const suffix = phoneDigits.slice(6, 10)
-  let formatted = String(areaCode)
-  if (phoneDigits.length > 3) {
-    formatted = `(${areaCode}) ${prefix}`
-  }
-  if (phoneDigits.length > 6) {
-    formatted += `-${suffix}`
-  }
-  return formatted
-}
+export * from './phoneNumber'
 
 export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
   return graphQLParams => {

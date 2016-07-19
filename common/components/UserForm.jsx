@@ -7,7 +7,10 @@ import Dropdown from 'react-toolbox/lib/dropdown'
 import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 
-import {formatPhoneNumber} from '../util'
+import {
+  formatPartialPhoneNumber,
+  stripNonE164Chars,
+} from '../util/phoneNumber'
 
 import styles from './UserForm.scss'
 
@@ -24,8 +27,7 @@ class UserForm extends Component {
       fields: {phone}
     } = this.props
 
-    const onlyDigits = (newPhone || '').replace(/\D/g, '')
-    phone.onChange(onlyDigits ? parseInt(onlyDigits, 10) : onlyDigits)
+    phone.onChange(stripNonE164Chars(newPhone || ''))
   }
 
   handleDateOfBirthChange(date) {
@@ -71,7 +73,7 @@ class UserForm extends Component {
     } = this.props
 
     const emails = currentUser ? currentUser.emails.map(email => ({value: email, label: email})) : []
-    const phoneNum = formatPhoneNumber(phone.value)
+    const phoneNum = formatPartialPhoneNumber(phone.value)
     const now = new Date()
     const maxDate = new Date(now)
     maxDate.setYear(now.getFullYear() - 21)   // learners must be 21 years old

@@ -8,7 +8,7 @@ function validate({name, phone, dateOfBirth}) {
   if (!name || !name.match(/\w{3,}/)) {
     errors.name = 'Please use your full, legal name'
   }
-  if (!phone || phone < 100000000 || phone > 9999999999) {
+  if (!phone || phone.length < 10) {
     errors.phone = '3-digit area code and 7-digit phone number'
   }
   if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
