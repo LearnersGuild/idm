@@ -43,6 +43,13 @@ test('stripNonE164Chars allows only pluses and digits', t => {
   t.is(stripNonE164Chars('+1 (415) 555-1212'), '+14155551212')
 })
 
+test('stripNonE164Chars returns empty string for null or undefined', t => {
+  t.plan(2)
+
+  t.is(stripNonE164Chars(null), '')
+  t.is(stripNonE164Chars(), '')
+})
+
 test('phoneNumberAsE164 returns an e.164 formatted string', t => {
   t.plan(3)
 

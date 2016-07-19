@@ -20,7 +20,10 @@ export function formatPartialPhoneNumber(str, countryCode = 'US') {
 }
 
 export function stripNonE164Chars(str) {
-  return str.replace(/[^+\d]/g, '')
+  if (!str) {
+    return ''
+  }
+  return str.toString().replace(/[^+\d]/g, '')
 }
 
 export function phoneNumberAsE164(str, countryCode = 'US') {
