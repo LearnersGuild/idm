@@ -68,7 +68,17 @@ export function buildURL(baseURL, queryArgs) {
   return `${baseURL}${search}`
 }
 
+export function getUserAvatarUrl(user) {
+  const githubProfile = getUserGithubProfile(user)
+  return githubProfile && githubProfile.photos && githubProfile.photos.length ?
+    githubProfile.photos[0].value : null
+}
+
 export function getUserProfileUrl(user) {
-  const githubPhotos = (((user || {}).authProviderProfiles || {}).githubOAuth2 || {}).photos
-  return githubPhotos && githubPhotos.length ? githubPhotos[0].value : null
+  const githubProfile = getUserGithubProfile(user)
+  return githubProfile ? githubProfile.profileUrl : null
+}
+
+function getUserGithubProfile(user) {
+  return user ? ((user || {}).authProviderProfiles || {}).githubOAuth2 || {} : null
 }

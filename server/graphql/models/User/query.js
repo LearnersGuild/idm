@@ -3,7 +3,7 @@ import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
 import db from '../../../../db'
-import {getUserProfileUrl} from '../../../../common/util'
+import {getUserAvatarUrl, getUserProfileUrl} from '../../../../common/util'
 
 import {User} from './schema'
 
@@ -23,7 +23,7 @@ export default {
 
         let user = await r.table('users').get(args.id).run()
         if (user) {
-          user = applyUserProfileUrl(user)
+          user = applyUserProfileUrls(user)
           return user
         }
 
@@ -46,7 +46,7 @@ export default {
 
         const users = await r.table('users').getAll(...handles, {index: 'handle'}).run()
 
-        return users.map(user => applyUserProfileUrl(user)) // FIXME
+        return users.map(user => applyUserProfileUrls(user))
       } catch (err) {
         throw err
       }
@@ -65,7 +65,7 @@ export default {
 
         const users = await r.table('users').getAll(...ids).run()
 
-        return users.map(user => applyUserProfileUrl(user)) // FIXME
+        return users.map(user => applyUserProfileUrls(user))
       } catch (err) {
         throw err
       }
@@ -73,6 +73,11 @@ export default {
   }
 }
 
-function applyUserProfileUrl(user) {
-  return user ? {...user, profileUrl: getUserProfileUrl(user)} : null
+ // FIXME: this is a bit janky
+function applyUserProfileUrls(user) {
+  return user ? {
+    ...user,
+    profileUrl: getUserProfileUrl(user),
+    avatarUrl: getUserAvatarUrl(user),
+  } : null
 }
