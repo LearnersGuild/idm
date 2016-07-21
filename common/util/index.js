@@ -67,8 +67,3 @@ export function buildURL(baseURL, queryArgs) {
   const search = queryStr ? `?${queryStr}` : ''
   return `${baseURL}${search}`
 }
-
-export function getUserProfileUrl(user) {
-  const githubPhotos = (((user || {}).authProviderProfiles || {}).githubOAuth2 || {}).photos
-  return githubPhotos && githubPhotos.length ? githubPhotos[0].value : null
-}
