@@ -24,3 +24,18 @@ export function formatServerError(err = {}) {
 
   return serverError
 }
+
+export function extractUserAvatarUrl(user) {
+  const githubProfile = _extractUserGithubProfile(user)
+  return githubProfile && githubProfile.photos && githubProfile.photos.length ?
+    githubProfile.photos[0].value : null
+}
+
+export function extractUserProfileUrl(user) {
+  const githubProfile = _extractUserGithubProfile(user)
+  return githubProfile ? githubProfile.profileUrl : null
+}
+
+function _extractUserGithubProfile(user) {
+  return user ? ((user || {}).authProviderProfiles || {}).githubOAuth2 || {} : null
+}

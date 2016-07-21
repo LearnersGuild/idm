@@ -3,7 +3,7 @@ import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
 import db from '../../../../db'
-import {getUserAvatarUrl, getUserProfileUrl} from '../../../../common/util'
+import {extractUserAvatarUrl, extractUserProfileUrl} from '../../../util'
 
 import {User} from './schema'
 
@@ -77,7 +77,7 @@ export default {
 function applyUserProfileUrls(user) {
   return user ? {
     ...user,
-    profileUrl: getUserProfileUrl(user),
-    avatarUrl: getUserAvatarUrl(user),
+    profileUrl: extractUserProfileUrl(user),
+    avatarUrl: extractUserAvatarUrl(user),
   } : null
 }
