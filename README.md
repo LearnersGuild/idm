@@ -1,5 +1,9 @@
 # idm
 
+[![Code Climate GPA](https://codeclimate.com/repos/579a58e53f93500064001746/badges/e60dd0bcd126c656cd24/gpa.svg)](https://codeclimate.com/repos/579a58e53f93500064001746/feed)
+[![Code Climate Issue Count](https://codeclimate.com/repos/579a58e53f93500064001746/badges/e60dd0bcd126c656cd24/issue_count.svg)](https://codeclimate.com/repos/579a58e53f93500064001746/feed)
+[![Test Coverage](https://codeclimate.com/repos/579a58e53f93500064001746/badges/e60dd0bcd126c656cd24/coverage.svg)](https://codeclimate.com/repos/579a58e53f93500064001746/coverage)
+
 This is the identity management service.
 
 ## Getting Started
