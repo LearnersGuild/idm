@@ -22,11 +22,15 @@
     "db:migrate:up": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db up",
     "db:migrate:down": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db down",
     "data:users": "./node_modules/.bin/babel-node test/generateUsers",
-    "xo": "./node_modules/.bin/xo",
+    "lint": "./node_modules/.bin/xo",
     "start": "npm run icons:fetch && node server",
     "postinstall": "npm run build",
-    "test:ci": "npm run db:create && npm run db:migrate:up && npm run test",
-    "test": "npm run xo && NODE_ENV=test ./node_modules/.bin/ava"
+    "test:ci": "npm run db:create && npm run db:migrate:up && npm run test:cov",
+    "test:cov": "npm run test:cov:run && npm run test:cov:send",
+    "test:cov:run": "./node_modules/.bin/nyc npm run test:run",
+    "test:cov:send": "./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
+    "test:run": "NODE_ENV=test ./node_modules/.bin/ava",
+    "test": "npm run lint && npm run test:run"
   },
   "keywords": [
     "idm"
@@ -117,7 +121,6 @@
     "yamljs": "^0.2.5"
   },
   "devDependencies": {
-    "ava": "^0.11.0",
     "babel-plugin-react-transform": "^2.0.0-beta1",
     "bluebird": "^3.3.5",
     "enzyme": "^2.3.0",
@@ -177,7 +180,11 @@
     ],
     "babel": "inherit"
   },
+  "nyc": {
+    "sourceMap": false,
+    "instrument": false
+  },
   "precommit": [
-    "xo"
+    "lint"
   ]
 }
