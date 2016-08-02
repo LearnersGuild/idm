@@ -43,7 +43,6 @@
   "homepage": "https://github.com/LearnersGuild/idm#readme",
   "dependencies": {
     "@learnersguild/idm-jwt-auth": "^0.2.5",
-    "ava": "^0.14.0",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.0",
     "babel-loader": "^6.2.4",
@@ -121,6 +120,7 @@
     "yamljs": "^0.2.5"
   },
   "devDependencies": {
+    "ava": "^0.14.0",
     "babel-plugin-react-transform": "^2.0.0-beta1",
     "bluebird": "^3.3.5",
     "enzyme": "^2.3.0",
