@@ -13,6 +13,7 @@ import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 import {
   createOrUpdateUser,
   getUsersForEmails,
+  getActiveUsersForEmails,
   getInviteCodesByCode,
   defaultSuccessRedirect,
 } from './helpers'
@@ -44,7 +45,7 @@ async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb)
     const ghEmails = await getGitHubEmails(accessToken)
     const primaryEmail = ghEmails.filter(email => email.primary)[0].email
     const emails = ghEmails.map(email => email.email)
-    let user = (await getUsersForEmails(emails))[0]
+    let user = (await getActiveUsersForEmails(emails))[0]
     if (!user) {
       return cb(null, false)
     }
@@ -65,6 +66,10 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
     const primaryEmail = ghEmails.filter(email => email.primary)[0].email
     const emails = ghEmails.map(email => email.email)
     let user = (await getUsersForEmails(emails))[0]
+    if (user && !user.active) {
+      console.warn(`WARNING: An inactive user attempted to sign up. user=${user.handle} inviteCode=${code}`)
+      return cb(null, false)
+    }
     const inviteCode = (await getInviteCodesByCode(code))[0]
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode)
     const result = await createOrUpdateUser(user, userInfo)

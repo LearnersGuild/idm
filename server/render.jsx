@@ -65,7 +65,7 @@ function getInitialState(req) {
   switch (req.query.err) {
     case 'auth':
       initialState.errors = {
-        messages: ['Authentication failed. Are you sure you have an account?']
+        messages: ['Authentication failed. Are you sure you have an active account?']
       }
       break
     default:

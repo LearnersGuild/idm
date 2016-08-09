@@ -22,7 +22,14 @@ export function createOrUpdateUser(user, userInfo) {
 }
 
 export function getUsersForEmails(emails) {
-  return r.table('users').getAll(...emails, {index: 'emails'}).distinct().run()
+  return r.table('users')
+    .getAll(...emails, {index: 'emails'})
+    .distinct()
+}
+
+export function getActiveUsersForEmails(emails) {
+  return getUsersForEmails(emails)
+    .filter({active: true})
 }
 
 export function getUserById(id) {
