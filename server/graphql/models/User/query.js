@@ -16,21 +16,18 @@ export default {
       id: {type: new GraphQLNonNull(GraphQLID)}
     },
     async resolve(source, args, {rootValue: {currentUser}}) {
-      try {
-        if (!currentUser) {
-          throw new GraphQLError('You are not authorized to do that.')
-        }
-
-        let user = await r.table('users').get(args.id).run()
-        if (user) {
-          user = applyUserProfileUrls(user)
-          return user
-        }
-
-        throw new GraphQLError('No such user')
-      } catch (err) {
-        throw err
+      if (!currentUser) {
+        throw new GraphQLError('You are not authorized to do that.')
       }
+
+      let user = await r.table('users').get(args.id).run()
+
+      if (!user) {
+        throw new GraphQLError('No such user')
+      }
+
+      user = applyUserProfileUrls(user)
+      return user
     }
   },
   getUsersByHandles: {
@@ -39,17 +36,15 @@ export default {
       handles: {type: new GraphQLNonNull(new GraphQLList(GraphQLString))},
     },
     async resolve(source, {handles}, {rootValue: {currentUser}}) {
-      try {
-        if (!currentUser) {
-          throw new GraphQLError('You are not authorized to do that.')
-        }
-
-        const users = await r.table('users').getAll(...handles, {index: 'handle'}).run()
-
-        return users.map(user => applyUserProfileUrls(user))
-      } catch (err) {
-        throw err
+      if (!currentUser) {
+        throw new GraphQLError('You are not authorized to do that.')
       }
+
+      const users = await r.table('users')
+        .getAll(...handles, {index: 'handle'})
+        .run()
+
+      return users.map(user => applyUserProfileUrls(user))
     }
   },
   getUsersByIds: {
@@ -58,17 +53,15 @@ export default {
       ids: {type: new GraphQLList(GraphQLID)},
     },
     async resolve(source, {ids}, {rootValue: {currentUser}}) {
-      try {
-        if (!currentUser) {
-          throw new GraphQLError('You are not authorized to do that.')
-        }
-
-        const users = await r.table('users').getAll(...ids).run()
-
-        return users.map(user => applyUserProfileUrls(user))
-      } catch (err) {
-        throw err
+      if (!currentUser) {
+        throw new GraphQLError('You are not authorized to do that.')
       }
+
+      const users = await r.table('users')
+        .getAll(...ids)
+        .run()
+
+      return users.map(user => applyUserProfileUrls(user))
     }
   }
 }

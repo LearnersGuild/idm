@@ -17,11 +17,19 @@ export function createOrUpdateUser(user, userInfo) {
     return r.table('users').update(mergeUserInfo(user, Object.assign({}, userInfo, timestamps)), {returnChanges: true}).run()
   }
   timestamps.createdAt = r.now()
-  return r.table('users').insert(Object.assign({}, userInfo, timestamps), {returnChanges: true}).run()
+  const newUserDefaults = {active: true}
+  return r.table('users').insert(Object.assign({}, newUserDefaults, userInfo, timestamps), {returnChanges: true}).run()
 }
 
 export function getUsersForEmails(emails) {
-  return r.table('users').getAll(...emails, {index: 'emails'}).distinct().run()
+  return r.table('users')
+    .getAll(...emails, {index: 'emails'})
+    .distinct()
+}
+
+export function getActiveUsersForEmails(emails) {
+  return getUsersForEmails(emails)
+    .filter({active: true})
 }
 
 export function getUserById(id) {
