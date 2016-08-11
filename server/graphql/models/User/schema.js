@@ -1,4 +1,4 @@
-import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
+import {GraphQLString, GraphQLNonNull, GraphQLID, GraphQLBoolean} from 'graphql'
 import {GraphQLObjectType, GraphQLList} from 'graphql/type'
 
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
@@ -28,6 +28,7 @@ export const User = new GraphQLObjectType({
   description: 'The user account',
   fields: () => ({
     id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
+    active: {type: new GraphQLNonNull(GraphQLBoolean), description: 'True if the user is active'},
     email: {type: new GraphQLNonNull(GraphQLEmail), description: 'The user email'},
     emails: {type: new GraphQLNonNull(new GraphQLList(GraphQLEmail)), description: 'The user emails'},
     handle: {type: new GraphQLNonNull(GraphQLString), description: 'The user handle'},

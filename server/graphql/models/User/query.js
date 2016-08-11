@@ -26,10 +26,6 @@ export default {
         throw new GraphQLError('No such user')
       }
 
-      if (!user.active) {
-        throw new GraphQLError('User not active')
-      }
-
       user = applyUserProfileUrls(user)
       return user
     }
@@ -46,7 +42,6 @@ export default {
 
       const users = await r.table('users')
         .getAll(...handles, {index: 'handle'})
-        .filter({active: true})
         .run()
 
       return users.map(user => applyUserProfileUrls(user))
@@ -64,7 +59,6 @@ export default {
 
       const users = await r.table('users')
         .getAll(...ids)
-        .filter({active: true})
         .run()
 
       return users.map(user => applyUserProfileUrls(user))
