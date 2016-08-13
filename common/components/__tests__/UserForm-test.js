@@ -2,7 +2,7 @@ import test from 'ava'
 import React from 'react'
 import {shallow} from 'enzyme'
 
-import UserForm from '../UserForm'
+import UserForm from 'src/common/components/UserForm'
 
 test('UserForm renders emails into dropdown', t => {
   t.plan(1)

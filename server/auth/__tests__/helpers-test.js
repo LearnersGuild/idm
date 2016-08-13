@@ -1,8 +1,9 @@
 import test from 'ava'
 import {cloneDeep, merge} from 'lodash'
 
-test("mergeUserInfo doesn't overwrite invite code", t => {
-  const mergeUserInfo = require('../helpers').mergeUserInfo
+import {mergeUserInfo} from 'src/server/auth/helpers'
+
+test('mergeUserInfo doesn\'t overwrite email address', t => {
   const user = {
     name: 'Me',
     email: 'me@example.com',

@@ -1,7 +1,7 @@
 import {reduxForm} from 'redux-form'
 
-import updateUser from '../actions/updateUser'
-import UserFormComponent from '../components/UserForm'
+import updateUser from 'src/common/actions/updateUser'
+import UserFormComponent from 'src/common/components/UserForm'
 
 function validate({name, phone, dateOfBirth}) {
   const errors = {}

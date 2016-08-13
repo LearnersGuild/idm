@@ -2,8 +2,8 @@
 import url from 'url'
 import getBullQueue from 'bull'
 
-import config from '../config'
-import db from '../db'
+import config from 'src/config'
+import db from 'src/db'
 
 const r = db.connect()
 

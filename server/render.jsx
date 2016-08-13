@@ -7,7 +7,7 @@ import {RouterContext, match} from 'react-router'
 
 import iconsMetadata from '../dist/icons-metadata'
 
-const config = require('../config')
+const config = require('src/config')
 
 export function renderFullPage(renderedAppHtml, initialState) {
   const title = 'Identity Management'

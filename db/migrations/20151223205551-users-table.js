@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-var config = require('../../config')
+var config = require('src/config')
 
 exports.up = function up(r, conn) {
   return r.tableCreate('users', {replicas: config.server.rethinkdb.replicas})

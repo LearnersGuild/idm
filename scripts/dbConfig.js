@@ -2,6 +2,6 @@
 require('babel-core/register')
 require('babel-polyfill')
 
-var db = require('../db')
+var db = require('src/db')
 
 console.log(JSON.stringify(db.config))

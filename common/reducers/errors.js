@@ -1,6 +1,6 @@
-import {DISMISS_ERROR} from '../actions/dismissError'
-import {UPDATE_USER_FAILURE} from '../actions/updateUser'
-import {GET_INVITE_CODE_FAILURE} from '../actions/getInviteCode'
+import {DISMISS_ERROR} from 'src/common/actions/dismissError'
+import {UPDATE_USER_FAILURE} from 'src/common/actions/updateUser'
+import {GET_INVITE_CODE_FAILURE} from 'src/common/actions/getInviteCode'
 
 const initialState = {
   messages: [],

@@ -1,4 +1,4 @@
-import {getGraphQLFetcher} from '../util'
+import {getGraphQLFetcher} from 'src/common/util'
 
 export const GET_INVITE_CODE_REQUEST = 'GET_INVITE_CODE_REQUEST'
 export const GET_INVITE_CODE_SUCCESS = 'GET_INVITE_CODE_SUCCESS'

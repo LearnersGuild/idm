@@ -11,4 +11,4 @@ global.window = win
 global.navigator = win.navigator
 
 // CSS modules setup
-require('../server/configureCSSModules')()
+require('src/server/configureCSSModules')()
