@@ -7,8 +7,8 @@ const r = db.connect()
 export const defaultSuccessRedirect = '/'
 
 export function mergeUserInfo(user, userInfo) {
-  // don't overwrite primary email address or inviteCode
-  return merge(user, userInfo, {email: user.email, inviteCode: user.inviteCode})
+  // don't overwrite inviteCode
+  return merge(user, userInfo, {inviteCode: user.inviteCode})
 }
 
 export function createOrUpdateUser(user, userInfo) {
@@ -21,15 +21,11 @@ export function createOrUpdateUser(user, userInfo) {
   return r.table('users').insert(Object.assign({}, newUserDefaults, userInfo, timestamps), {returnChanges: true}).run()
 }
 
-export function getUsersForEmails(emails) {
+export function getUserByGithubId(githubId) {
   return r.table('users')
-    .getAll(...emails, {index: 'emails'})
-    .distinct()
-}
-
-export function getActiveUsersForEmails(emails) {
-  return getUsersForEmails(emails)
-    .filter({active: true})
+    .filter({authProviderProfiles: {githubOAuth2: {id: githubId}}})
+    .nth(0)
+    .default(null)
 }
 
 export function getUserById(id) {
