@@ -15,7 +15,7 @@ const entry = {
   ]
 }
 if (config.app.hotReload) {
-  entry.app.splice(1, 'webpack-hot-middleware/client')
+  entry.app.splice(1, 0, 'webpack-hot-middleware/client')
 }
 if (config.app.minify) {
   entry.vendor = [
