@@ -1,12 +1,13 @@
 import test from 'ava'
 import {cloneDeep, merge} from 'lodash'
 
-test("mergeUserInfo doesn't overwrite email address", t => {
+test("mergeUserInfo doesn't overwrite invite code", t => {
   const mergeUserInfo = require('../helpers').mergeUserInfo
   const user = {
     name: 'Me',
     email: 'me@example.com',
     emails: ['me@example.com'],
+    inviteCode: 'oakland123',
     authProviders: {
       googleOAuth2: {
         accessToken: 'abcd1234',
@@ -15,9 +16,9 @@ test("mergeUserInfo doesn't overwrite email address", t => {
       },
     },
   }
-  const userInfo = merge(cloneDeep(user), {email: 'me2@example.com'})
+  const userInfo = merge(cloneDeep(user), {inviteCode: 'DIFFERENT VALUE'})
   const mergedUser = mergeUserInfo(user, userInfo)
 
   t.plan(1)
-  t.is(mergedUser.email, 'me@example.com')
+  t.is(mergedUser.inviteCode, 'oakland123')
 })
