@@ -1,6 +1,9 @@
 /* eslint-disable react/jsx-handler-names */
+import moment from 'moment-timezone'
+
 import React, {Component, PropTypes} from 'react'
 
+import Autocomplete from 'react-toolbox/lib/autocomplete'
 import {Button} from 'react-toolbox/lib/button'
 import DatePicker from 'react-toolbox/lib/date_picker'
 import Dropdown from 'react-toolbox/lib/dropdown'
@@ -19,7 +22,6 @@ class UserForm extends Component {
     super(props)
     this.handlePhoneChange = this.handlePhoneChange.bind(this)
     this.handleDateOfBirthChange = this.handleDateOfBirthChange.bind(this)
-    this.handleRefreshTimezoneFromBrowser = this.handleRefreshTimezoneFromBrowser.bind(this)
   }
 
   handlePhoneChange(newPhone) {
@@ -40,22 +42,8 @@ class UserForm extends Component {
     dateOfBirth.onChange(dobWithoutTime.toISOString().slice(0, 10))
   }
 
-  handleRefreshTimezoneFromBrowser() {
-    const {
-      fields: {timezone}
-    } = this.props
-
-    timezone.onChange(this.getTimezone())
-  }
-
   formatDateOfBirth(date) {
     return date.toISOString().slice(0, 10)
-  }
-
-  getTimezone() {
-    /* global Intl */
-    /* eslint new-cap: [2, {"capIsNewExceptions": ["DateTimeFormat"]}] */
-    return Intl.DateTimeFormat().resolved.timeZone
   }
 
   hasErrors() {
@@ -78,7 +66,6 @@ class UserForm extends Component {
     const maxDate = new Date(now)
     maxDate.setYear(now.getFullYear() - 21)   // learners must be 21 years old
     const dob = dateOfBirth.value ? new Date(dateOfBirth.value) : undefined
-    const tz = timezone.value || this.getTimezone()
 
     return (
       <form onSubmit={handleSubmit}>
@@ -127,21 +114,14 @@ class UserForm extends Component {
             />
           <FontIcon value="today" className={styles.dateOfBirthIcon}/>
         </div>
-        <div className={styles.timezone}>
-          <Input
-            disabled
-            icon="place"
-            type="text"
-            label="Timezone (from browser)"
-            {...timezone}
-            value={tz}
-            />
-          <Button
-            type="button"
-            icon="refresh"
-            onClick={this.handleRefreshTimezoneFromBrowser}
-            />
-        </div>
+        <Autocomplete
+          icon="place"
+          label="Timezone"
+          multiple={false}
+          suggestionMatch="anywhere"
+          source={moment.tz.names()}
+          {...timezone}
+          />
         <Button
           label={buttonLabel || 'Save'}
           primary
