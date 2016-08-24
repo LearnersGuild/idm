@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
-import dismissError from '../actions/dismissError'
-import Error from '../components/Error'
+import dismissError from 'src/common/actions/dismissError'
+import Error from 'src/common/components/Error'
 
 export function renderErrors({dispatch, errors}) {
   const theErrors = errors.messages.map((message, i) => {

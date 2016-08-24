@@ -1,13 +1,11 @@
 import React, {Component, PropTypes} from 'react'
 import {Link} from 'react-router'
-
 import {Card} from 'react-toolbox/lib/card'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-import {buildURL} from '../util'
-import AuthButton from './AuthButton'
-
-import styles from './SignInUp.scss'
+import {buildURL} from 'src/common/util'
+import AuthButton from 'src/common/components/AuthButton'
+import styles from 'src/common/components/SignInUp/index.scss'
 
 export default class SignIn extends Component {
   render() {

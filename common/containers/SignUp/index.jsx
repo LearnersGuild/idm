@@ -2,10 +2,10 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 
-import authenticate from '../actions/authenticate'
-import getInviteCode from '../actions/getInviteCode'
-import SignUp from '../components/SignUp'
-import {buildURL} from '../util'
+import authenticate from 'src/common/actions/authenticate'
+import getInviteCode from 'src/common/actions/getInviteCode'
+import SignUp from 'src/common/components/SignUp'
+import {buildURL} from 'src/common/util'
 
 class SignUpContainer extends Component {
   constructor(props) {

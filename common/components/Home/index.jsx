@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react'
-
 import {Card, CardTitle} from 'react-toolbox/lib/card'
 import {List, ListItem} from 'react-toolbox'
 
-import styles from './Home.css'
+import styles from './index.css'
 
 export default class Home extends Component {
   render() {

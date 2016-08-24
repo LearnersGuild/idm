@@ -1,6 +1,6 @@
-import {AUTHENTICATE} from '../actions/authenticate'
-import {UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE} from '../actions/updateUser'
-import {UPDATE_JWT} from '../actions/updateJWT'
+import {AUTHENTICATE} from 'src/common/actions/authenticate'
+import {UPDATE_JWT} from 'src/common/actions/updateJWT'
+import {UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE} from 'src/common/actions/updateUser'
 
 const initialState = {
   currentUser: null,

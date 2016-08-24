@@ -2,8 +2,8 @@ import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import db from '../../../../db'
-import {extractUserAvatarUrl, extractUserProfileUrl} from '../../../util'
+import db from 'src/db'
+import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
 
 import {User} from './schema'
 

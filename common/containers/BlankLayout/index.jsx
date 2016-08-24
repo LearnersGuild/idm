@@ -1,9 +1,9 @@
 import React, {PropTypes} from 'react'
 import {connect} from 'react-redux'
 
-import Errors from './Errors'
+import Errors from 'src/common/containers/Errors'
 
-import styles from './BlankLayout.scss'
+import styles from './index.scss'
 
 export function blankLayout({children}) {
   return (

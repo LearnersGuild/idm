@@ -1,15 +1,13 @@
 import React, {Component, PropTypes} from 'react'
-
 import {Button} from 'react-toolbox/lib/button'
 import {Card, CardText} from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-import UserForm from '../containers/UserForm'
-import {buildURL} from '../util'
-import AuthButton from './AuthButton'
-
-import styles from './SignInUp.scss'
+import {buildURL} from 'src/common/util'
+import AuthButton from 'src/common/components/AuthButton'
+import UserForm from 'src/common/containers/UserForm'
+import styles from 'src/common/components/SignInUp/index.scss'
 
 class SignUp extends Component {
   constructor(props) {

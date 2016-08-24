@@ -7,7 +7,7 @@ import {HTTPS as https} from 'express-sslify'
 import cookieParser from 'cookie-parser'
 import raven from 'raven'
 
-import config from '../config'
+import config from 'src/config'
 
 import configureApp from './configureApp'
 import configureChangeFeeds from './configureChangeFeeds'

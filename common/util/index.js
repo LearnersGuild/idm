@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch'
 
-import {updateJWT} from '../actions/updateJWT'
+import {updateJWT} from 'src/common/actions/updateJWT'
 
 export * from './phoneNumber'
 

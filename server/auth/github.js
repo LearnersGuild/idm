@@ -3,19 +3,17 @@ import raven from 'raven'
 import fetch from 'isomorphic-fetch'
 import passport from 'passport'
 import {Strategy as GitHubStrategy} from 'passport-github'
-
-const config = require('../../config')
-
-import {encrypt, decrypt} from '../symmetricCryptoAES'
-
 import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 
+import {encrypt, decrypt} from 'src/server/symmetricCryptoAES'
 import {
   createOrUpdateUser,
   getUserByGithubId,
   getInviteCodesByCode,
   defaultSuccessRedirect,
 } from './helpers'
+
+const config = require('src/config')
 
 const sentry = new raven.Client(config.server.sentryDSN)
 

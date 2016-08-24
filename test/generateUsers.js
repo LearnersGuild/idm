@@ -1,10 +1,10 @@
 import path from 'path'
 import parseArgs from 'minimist'
 
-import db from '../db'
+import db from 'src/db'
 import factory from './factories'
 
-import '../config'
+import 'src/config'
 
 const r = db.connect()
 

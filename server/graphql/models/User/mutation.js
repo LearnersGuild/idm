@@ -1,12 +1,11 @@
 import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
-
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
-import db from '../../../../db'
+import {GraphQLPhoneNumber} from 'src/server/graphql/models/types'
+import db from 'src/db'
 
-import {GraphQLPhoneNumber} from '../types'
 import {User} from './schema'
 
 const r = db.connect()

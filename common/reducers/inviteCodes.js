@@ -2,7 +2,7 @@ import {
   GET_INVITE_CODE_REQUEST,
   GET_INVITE_CODE_SUCCESS,
   GET_INVITE_CODE_FAILURE,
-} from '../actions/getInviteCode'
+} from 'src/common/actions/getInviteCode'
 
 const initialState = {
   codes: {},

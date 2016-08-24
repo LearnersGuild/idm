@@ -2,7 +2,7 @@ import {GraphQLScalarType} from 'graphql'
 import {GraphQLError} from 'graphql/error'
 import {Kind} from 'graphql/language'
 
-import {phoneNumberAsE164} from '../../../common/util/phoneNumber'
+import {phoneNumberAsE164} from 'src/common/util/phoneNumber'
 
 function parsePhoneNumber(str) {
   try {

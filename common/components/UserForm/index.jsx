@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-handler-names */
 import React, {Component, PropTypes} from 'react'
-
 import {Button} from 'react-toolbox/lib/button'
 import DatePicker from 'react-toolbox/lib/date_picker'
 import Dropdown from 'react-toolbox/lib/dropdown'
@@ -10,9 +9,9 @@ import Input from 'react-toolbox/lib/input'
 import {
   formatPartialPhoneNumber,
   stripNonE164Chars,
-} from '../util/phoneNumber'
+} from 'src/common/util/phoneNumber'
 
-import styles from './UserForm.scss'
+import styles from './index.scss'
 
 class UserForm extends Component {
   constructor(props) {
