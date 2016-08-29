@@ -1,6 +1,5 @@
 import {GraphQLString, GraphQLNonNull, GraphQLID} from 'graphql'
 import {GraphQLObjectType, GraphQLList} from 'graphql/type'
-
 import {GraphQLDateTime} from 'graphql-custom-types'
 
 export const InviteCode = new GraphQLObjectType({

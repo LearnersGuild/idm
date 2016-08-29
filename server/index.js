@@ -2,7 +2,7 @@
 require('babel-core/register')
 require('babel-polyfill')
 
-const config = require('../config')
+const config = require('src/config')
 
 if (config.server.newrelic.enabled) {
   require('newrelic')

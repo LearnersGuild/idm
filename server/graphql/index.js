@@ -3,13 +3,13 @@ import express from 'express'
 import graphqlHTTP from 'express-graphql'
 import cors from 'cors'
 
-const config = require('../../config')
+import {formatServerError} from 'src/server/util'
 
-import {formatServerError} from '../util'
 import rootSchema from './rootSchema'
 
-const sentry = new raven.Client(config.server.sentryDSN)
+const config = require('src/config')
 
+const sentry = new raven.Client(config.server.sentryDSN)
 const app = new express.Router()
 
 const corsOptions = {
@@ -27,7 +27,7 @@ app.use('/graphql', cors(corsOptions), graphqlHTTP(req => ({
   formatError: error => {
     const serverError = formatServerError(error)
 
-    if (serverError.statusCode >= 400) {
+    if (serverError.statusCode >= 500) {
       sentry.captureException(serverError)
 
       console.error(`${serverError.name || 'UNHANDLED GRAPHQL ERROR'}:

@@ -1,28 +1,18 @@
 import {GraphQLError} from 'graphql/error'
 
-export function formatServerError(err = {}) {
-  const serverError = (err instanceof Error) ? err : new Error()
-
-  // TODO: set 4xx status codes as appropriate for certain types of
-  // client errors, such as db constraint violations, etc.
-  if (/Reql\w+Error/.test(serverError.name) || (serverError.originalError &&
-      /Reql\w+Error/.test(serverError.originalError.name))) {
-    serverError.statusCode = 500
-  } else if (!(serverError instanceof GraphQLError)) {
-    // only set default statusCode for non-GraphQLError instances
-    serverError.statusCode = err.code || 500
+export function formatServerError(error = new Error()) {
+  if (/Reql\w+Error/.test(error.name) || (error.originalError &&
+      /Reql\w+Error/.test(error.originalError.name))) {
+    // RethinkDb errors masked as internal errors
+    return _internalServerError()
+  } else if (error.name === 'BadRequestError') {
+    return _badRequestError(error)
+  } else if (!(error instanceof GraphQLError)) {
+    // any other non-graphql error masked as internal error
+    return _internalServerError()
   }
 
-  if (serverError.statusCode === 500) {
-    serverError.message = 'An internal server error occurred'
-    serverError.type = 'Internal Server Error'
-
-    if (serverError.hasOwnProperty('originalError')) {
-      delete serverError.originalError
-    }
-  }
-
-  return serverError
+  return _defaultError(error)
 }
 
 export function extractUserAvatarUrl(user) {
@@ -38,4 +28,26 @@ export function extractUserProfileUrl(user) {
 
 function _extractUserGithubProfile(user) {
   return user ? ((user || {}).authProviderProfiles || {}).githubOAuth2 || {} : null
+}
+
+function _badRequestError(originalError) {
+  const error = _defaultError(originalError)
+  error.statusCode = originalError.code || 400
+  error.type = originalError.type || originalError.message
+  error.message = originalError.message
+  return error
+}
+
+function _internalServerError(originalError) {
+  const error = _defaultError(originalError)
+  error.statusCode = 500
+  error.message = 'An internal server error occurred'
+  error.type = 'Internal Server Error'
+  return error
+}
+
+function _defaultError(originalError) {
+  const error = (originalError instanceof Error) ? originalError : new Error()
+  error.statusCode = error.statusCode || error.code
+  return error
 }

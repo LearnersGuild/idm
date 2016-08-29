@@ -2,7 +2,7 @@ import test from 'ava'
 import React from 'react'
 import {shallow} from 'enzyme'
 
-import SignUp from '../SignUp'
+import SignUp from 'src/common/components/SignUp'
 
 test('SignUp renders validation message when invite code is being loaded', t => {
   t.plan(1)

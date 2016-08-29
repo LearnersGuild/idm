@@ -1,5 +1,5 @@
-import {getGraphQLFetcher} from '../util'
-import redirect from './redirect'
+import {getGraphQLFetcher} from 'src/common/util'
+import redirect from 'src/common/actions/redirect'
 
 export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST'
 export const UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS'

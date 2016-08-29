@@ -1,11 +1,10 @@
 import React, {Component, PropTypes} from 'react'
-import {connect} from 'react-redux'
-import {Provider} from 'react-redux'
-
+import {connect, Provider} from 'react-redux'
 import ToolboxApp from 'react-toolbox/lib/app'
 
 import 'react-toolbox/lib/commons.scss' // reset
-import './Root.css'
+
+import './index.css'
 
 export class Root extends Component {
   render() {

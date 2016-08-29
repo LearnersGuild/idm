@@ -1,5 +1,6 @@
 import test from 'ava'
-import {buildURL} from '../index'
+
+import {buildURL} from 'src/common/util/index'
 
 test('buildURL properly builds URL w/o query params', t => {
   const baseURL = 'http://www.foo.com'

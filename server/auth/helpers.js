@@ -1,6 +1,6 @@
 import {merge} from 'lodash'
 
-import db from '../../db'
+import db from 'src/db'
 
 const r = db.connect()
 

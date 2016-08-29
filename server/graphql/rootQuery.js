@@ -1,4 +1,5 @@
 import {GraphQLObjectType} from 'graphql'
+
 import user from './models/User/query'
 import inviteCode from './models/InviteCode/query'
 

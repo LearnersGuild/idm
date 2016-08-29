@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react'
-
 import {Button} from 'react-toolbox/lib/button'
 
-import {buildURL} from '../util'
+import {buildURL} from 'src/common/util'
 
 export default function AuthButton(props) {
   const {

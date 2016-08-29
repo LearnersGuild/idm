@@ -12,25 +12,26 @@
     "email": "jeffrey@learnersguild.org"
   },
   "scripts": {
-    "build": "mkdir -p dist && webpack --config config/webpack.js",
-    "build:profile": "mkdir -p dist && webpack --profile --json --config config/webpack.js > tmp/webpack.json",
-    "icons:fetch": "mkdir -p dist && curl -s https://brand.learnersguild.org/icontags > dist/icons-metadata.json",
-    "db:create": "node ./scripts/dbCreate.js",
-    "db:drop": "node ./scripts/dbDrop.js",
-    "db:migrate:configure": "node ./scripts/dbConfig.js > ./db/database.json",
+    "build": "npm run symlinks && mkdir -p dist && webpack --config config/webpack.js",
+    "build:profile": "npm run symlinks && mkdir -p dist && webpack --profile --json --config config/webpack.js > tmp/webpack.json",
+    "start": "npm run symlinks && npm run icons:fetch && node server",
+    "db:create": "npm run symlinks && node ./scripts/dbCreate.js",
+    "db:drop": "npm run symlinks && node ./scripts/dbDrop.js",
     "db:migrate": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db",
-    "db:migrate:up": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db up",
-    "db:migrate:down": "npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db down",
-    "data:users": "./node_modules/.bin/babel-node test/generateUsers",
-    "lint": "./node_modules/.bin/xo",
-    "start": "npm run icons:fetch && node server",
-    "postinstall": "npm run build",
+    "db:migrate:configure": "npm run symlinks && node ./scripts/dbConfig.js > ./db/database.json",
+    "db:migrate:up": "npm run symlinks && npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db up",
+    "db:migrate:down": "npm run symlinks && npm run db:migrate:configure && node ./node_modules/.bin/rethink-migrate -r db down",
+    "data:users": "npm run symlinks && ./node_modules/.bin/babel-node test/generateUsers",
+    "test": "npm run symlinks && npm run lint && npm run test:run",
     "test:ci": "npm run db:create && npm run db:migrate:up && npm run test:cov",
     "test:cov": "npm run test:cov:run && npm run test:cov:send",
     "test:cov:run": "./node_modules/.bin/nyc --reporter=lcov npm run test:run",
     "test:cov:send": "./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
     "test:run": "NODE_ENV=test ./node_modules/.bin/ava",
-    "test": "npm run lint && npm run test:run"
+    "lint": "./node_modules/.bin/xo",
+    "symlinks": "./node_modules/.bin/babel-node ./scripts/createSymlinks",
+    "icons:fetch": "mkdir -p dist && curl -s https://brand.learnersguild.org/icontags > dist/icons-metadata.json",
+    "postinstall": "npm run build"
   },
   "keywords": [
     "idm"
@@ -149,6 +150,7 @@
       "comma-dangle": [
         0
       ],
+      "import/no-extraneous-dependencies": 0,
       "no-negated-condition": [
         0
       ],

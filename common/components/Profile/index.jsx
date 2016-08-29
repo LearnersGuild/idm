@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-
 import {Card, CardTitle} from 'react-toolbox/lib/card'
 
-import UserForm from '../containers/UserForm'
-import styles from './Profile.css'
+// FIXME: "dumb" components shouldn't import containers
+import UserForm from 'src/common/containers/UserForm'
+
+import styles from './index.css'
 
 export default class Profile extends Component {
   render() {

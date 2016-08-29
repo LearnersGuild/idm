@@ -1,5 +1,6 @@
 import {push} from 'react-router-redux'
-import {buildURL} from '../util'
+
+import {buildURL} from 'src/common/util'
 
 export default function redirect(redirect, responseType) {
   return (dispatch, getState) => {

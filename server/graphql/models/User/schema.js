@@ -1,9 +1,8 @@
 import {GraphQLString, GraphQLNonNull, GraphQLID, GraphQLBoolean} from 'graphql'
 import {GraphQLObjectType, GraphQLList} from 'graphql/type'
-
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
-import {GraphQLPhoneNumber} from '../types'
+import {GraphQLPhoneNumber} from 'src/server/graphql/models/types'
 
 const AuthProvider = new GraphQLObjectType({
   name: 'AuthProvider',

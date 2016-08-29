@@ -13,9 +13,9 @@ import Input from 'react-toolbox/lib/input'
 import {
   formatPartialPhoneNumber,
   stripNonE164Chars,
-} from '../util/phoneNumber'
+} from 'src/common/util/phoneNumber'
 
-import styles from './UserForm.scss'
+import styles from './index.scss'
 
 class UserForm extends Component {
   constructor(props) {

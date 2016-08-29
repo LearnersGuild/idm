@@ -2,7 +2,7 @@ import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import db from '../../../../db'
+import db from 'src/db'
 
 import {InviteCode} from './schema'
 

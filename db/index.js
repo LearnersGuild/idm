@@ -2,7 +2,7 @@
 import url from 'url'
 import rethinkDBDash from 'rethinkdbdash'
 
-const config = require('../config')
+const config = require('src/config')
 
 if (!config || !config.server || !config.server.rethinkdb) {
   throw new Error('Rethink db configuration not found')

@@ -4,15 +4,15 @@ import {routerActions} from 'react-router-redux'
 import {UserAuthWrapper as userAuthWrapper} from 'redux-auth-wrapper'
 
 // TODO: use webpack code-splitting and System.import to reduce initial bundle size
-import App from '../containers/App'
+import App from 'src/common/containers/App'
 
-import BlankLayout from '../containers/BlankLayout'
-import SignUp from '../containers/SignUp'
-import SignIn from '../containers/SignIn'
+import BlankLayout from 'src/common/containers/BlankLayout'
+import SignUp from 'src/common/containers/SignUp'
+import SignIn from 'src/common/containers/SignIn'
 
-import Home from '../containers/Home'
-import Profile from '../components/Profile'
-import {buildURL} from '../util'
+import Home from 'src/common/containers/Home'
+import Profile from 'src/common/components/Profile'
+import {buildURL} from 'src/common/util'
 
 const userIsAuthenticated = userAuthWrapper({
   failureRedirectPath: '/sign-in',

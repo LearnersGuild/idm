@@ -4,7 +4,7 @@ import {
   formatPartialPhoneNumber,
   stripNonE164Chars,
   phoneNumberAsE164,
-} from '../phoneNumber'
+} from 'src/common/util/phoneNumber'
 
 test('formatPartialPhoneNumber does not parenthesize area code when # digits < 7', t => {
   t.plan(3)
