@@ -20,24 +20,3 @@
   text-align: center;
   transition: color $animation-duration $animation-curve-default;
 }
-
-.timezone {
-  >div {
-    display: inline-block;
-    width: 65%;
-  }
-  button {
-    margin-top: $input-padding;
-    margin-left: 1rem;
-    @include media($desktop) {
-      margin-left: 2.3rem;
-    }
-    min-width: $input-icon-size;
-    width: $input-icon-size;
-    height: $input-icon-size;
-    display: inline-block;
-    >span {
-      margin: auto;
-    }
-  }
-}

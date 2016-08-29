@@ -1,9 +1,10 @@
 import {reduxForm} from 'redux-form'
+import moment from 'moment-timezone'
 
 import updateUser from 'src/common/actions/updateUser'
 import UserFormComponent from 'src/common/components/UserForm'
 
-function validate({name, phone, dateOfBirth}) {
+function validate({name, phone, dateOfBirth, timezone}) {
   const errors = {}
   if (!name || !name.match(/\w{3,}/)) {
     errors.name = 'Please use your full, legal name'
@@ -13,6 +14,10 @@ function validate({name, phone, dateOfBirth}) {
   }
   if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
     errors.dateOfBirth = 'Your birth date'
+  }
+  if (!timezone || moment.tz.names().indexOf(timezone) < 0) {
+    console.log('here')
+    errors.timezone = 'Must be a valid timezone (e.g., America/Los_Angeles)'
   }
   return errors
 }
@@ -30,7 +35,9 @@ export default reduxForm({
   validate,
 }, state => ({
   auth: state.auth,
-  initialValues: state.auth.currentUser, // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
+  // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
+  // initialValues: {...state.auth.currentUser, timezone: state.auth.currentUser.timezone || moment.tz.guess()},
+  initialValues: state.auth.currentUser,
 }), (dispatch, props) => props
 , (stateProps, dispatchProps) => Object.assign({}, stateProps, dispatchProps, {
   onSubmit: saveUser(stateProps, dispatchProps),

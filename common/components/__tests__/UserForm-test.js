@@ -21,7 +21,7 @@ test('UserForm renders emails into dropdown', t => {
 })
 
 test('UserForm updates fields when they are changed', t => {
-  const changesToTest = ['id', 'name', 'phone', 'timezone']
+  const changesToTest = ['id', 'name', 'phone']
 
   t.plan(changesToTest.length)
 
