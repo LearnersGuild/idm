@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const WebpackFailPlugin = require('webpack-fail-plugin')
 
 const config = require('./index')
 
@@ -53,6 +54,7 @@ const resolve = {
 
 /** plugins */
 const plugins = [
+  WebpackFailPlugin,
   new webpack.DefinePlugin({
     'process.env': {
       // useful to reduce the size of client-side libraries, e.g. react

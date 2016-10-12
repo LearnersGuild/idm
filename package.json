@@ -118,6 +118,7 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.6.1",
+    "webpack-fail-plugin": "^1.0.5",
     "webpack-hot-middleware": "^2.10.0",
     "yamljs": "^0.2.5"
   },
