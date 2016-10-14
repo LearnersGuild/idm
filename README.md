@@ -53,6 +53,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 8. Create your `.env.development` file for your environment. Example:
 
     ```bash
+    RETHINKDB_URL=rethinkdb://localhost:28015/idm_development
     GITHUB_CLIENT_ID=<from above>
     GITHUB_CLIENT_SECRET=<from above>
     IDM_BASE_URL=http://idm.learnersguild.dev
