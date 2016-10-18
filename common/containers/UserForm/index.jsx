@@ -16,7 +16,6 @@ function validate({name, phone, dateOfBirth, timezone}) {
     errors.dateOfBirth = 'Your birth date'
   }
   if (!timezone || moment.tz.names().indexOf(timezone) < 0) {
-    console.log('here')
     errors.timezone = 'Must be a valid timezone (e.g., America/Los_Angeles)'
   }
   return errors
