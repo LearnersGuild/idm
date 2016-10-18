@@ -11,7 +11,7 @@ test('UserForm renders emails into dropdown', t => {
   const props = {auth, fields, submitting: false, errors: {}, handleSubmit: () => null}
 
   const root = shallow(React.createElement(UserForm, props))
-  const emailDropdown = root.find('Dropdown')
+  const emailDropdown = root.find('ThemedDropdown')
   const emailDropdownHtml = emailDropdown.html()
   const matchedEmailItems = auth.currentUser.emails.filter(email => {
     return emailDropdownHtml.includes(`<li>${email}</li>`)
@@ -28,7 +28,7 @@ test('UserForm updates fields when they are changed', t => {
   const {auth, fields, fieldsChanged} = getMockData()
   const props = {auth, fields, submitting: false, errors: {}, handleSubmit: () => null}
   const root = shallow(React.createElement(UserForm, props))
-  const inputs = root.find('Input')
+  const inputs = root.find('ThemedInput')
 
   inputs.forEach(input => input.simulate('change'))
 

@@ -7,7 +7,6 @@ import Autocomplete from 'react-toolbox/lib/autocomplete'
 import {Button} from 'react-toolbox/lib/button'
 import DatePicker from 'react-toolbox/lib/date_picker'
 import Dropdown from 'react-toolbox/lib/dropdown'
-import FontIcon from 'react-toolbox/lib/font_icon'
 import Input from 'react-toolbox/lib/input'
 
 import {
@@ -15,7 +14,23 @@ import {
   stripNonE164Chars,
 } from 'src/common/util/phoneNumber'
 
-import styles from './index.scss'
+// see: https://github.com/erikras/redux-form/issues/1441
+const domOnlyProps = ({
+  /* eslint-disable no-unused-vars */
+  initialValue,
+  autofill,
+  onUpdate,
+  valid,
+  invalid,
+  dirty,
+  pristine,
+  active,
+  touched,
+  visited,
+  autofilled,
+  /* eslint-enable no-unused-vars */
+  ...domProps,
+}) => domProps
 
 class UserForm extends Component {
   constructor(props) {
@@ -71,27 +86,27 @@ class UserForm extends Component {
       <form onSubmit={handleSubmit}>
         <Input
           type="hidden"
-          {...id}
+          {...domOnlyProps(id)}
           />
         <Dropdown
           auto
           icon="email"
           label="Email"
           source={emails}
-          {...email}
+          {...domOnlyProps(email)}
           />
         <Input
           disabled
           icon="account_circle"
           type="text"
           label="Handle (from GitHub)"
-          value={handle.defaultValue}
+          value={handle.value}
           />
         <Input
           icon="title"
           type="text"
           label="Full Legal Name"
-          {...name}
+          {...domOnlyProps(name)}
           />
         <Input
           icon="phone"
@@ -102,25 +117,23 @@ class UserForm extends Component {
           onChange={this.handlePhoneChange}
           error={errors.phone}
           />
-        <div className={styles.dateOfBirth}>
-          <DatePicker
-            label="Date of Birth"
-            maxDate={maxDate}
-            name={dateOfBirth.name}
-            value={dob}
-            inputFormat={this.formatDateOfBirth}
-            onChange={this.handleDateOfBirthChange}
-            error={errors.dateOfBirth}
-            />
-          <FontIcon value="today" className={styles.dateOfBirthIcon}/>
-        </div>
+        <DatePicker
+          icon="today"
+          label="Date of Birth"
+          maxDate={maxDate}
+          name={dateOfBirth.name}
+          value={dob}
+          inputFormat={this.formatDateOfBirth}
+          onChange={this.handleDateOfBirthChange}
+          error={errors.dateOfBirth}
+          />
         <Autocomplete
           icon="place"
           label="Timezone"
           multiple={false}
           suggestionMatch="anywhere"
           source={moment.tz.names()}
-          {...timezone}
+          {...domOnlyProps(timezone)}
           />
         <Button
           label={buttonLabel || 'Save'}

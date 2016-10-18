@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react'
 import {connect, Provider} from 'react-redux'
-import ToolboxApp from 'react-toolbox/lib/app'
 
 import 'react-toolbox/lib/commons.scss' // reset
 
@@ -10,11 +9,9 @@ export class Root extends Component {
   render() {
     const {store, children} = this.props
     return (
-      <ToolboxApp>
-        <Provider store={store}>
-          {children}
-        </Provider>
-      </ToolboxApp>
+      <Provider store={store}>
+        {children}
+      </Provider>
     )
   }
 }

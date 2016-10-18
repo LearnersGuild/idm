@@ -20,7 +20,6 @@ export default function AuthButton(props) {
 
   return (
     <Button
-      linkButton
       raised
       primary
       onMouseUp={handleClick}
