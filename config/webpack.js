@@ -59,6 +59,7 @@ const plugins = [
     'process.env': {
       // useful to reduce the size of client-side libraries, e.g. react
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      APP_BASE_URL: JSON.stringify(config.app.baseURL),
       GRAPHIQL_BASE_URL: JSON.stringify(config.graphiql.baseURL),
     },
     '__CLIENT__': true,
