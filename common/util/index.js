@@ -1,10 +1,13 @@
+/* global __SERVER__ */
 import fetch from 'isomorphic-fetch'
 
 import {updateJWT} from 'src/common/actions/updateJWT'
 
+const APP_BASE_URL = __SERVER__ ? process.env.APP_BASE_URL : ''
+
 export * from './phoneNumber'
 
-export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
+export function getGraphQLFetcher(dispatch, auth, baseUrl = APP_BASE_URL, throwErrors = true) {
   return graphQLParams => {
     const options = {
       method: 'post',
@@ -19,7 +22,7 @@ export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
       })
     }
 
-    return fetch('/graphql', options)
+    return fetch(`${baseUrl}/graphql`, options)
       .then(resp => {
         if (!resp.ok) {
           return resp.json().then(errorResponse => {
@@ -51,7 +54,7 @@ export function getGraphQLFetcher(dispatch, auth, throwErrors = true) {
           console.error('GraphQL ERRORS:', err.errors)
         }
 
-        console.error('GraphQL ERROR:', err)
+        console.error('GraphQL ERROR:', err.stack)
       })
   }
 }

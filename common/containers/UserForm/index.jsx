@@ -16,7 +16,6 @@ function validate({name, phone, dateOfBirth, timezone}) {
     errors.dateOfBirth = 'Your birth date'
   }
   if (!timezone || moment.tz.names().indexOf(timezone) < 0) {
-    console.log('here')
     errors.timezone = 'Must be a valid timezone (e.g., America/Los_Angeles)'
   }
   return errors
@@ -35,9 +34,7 @@ export default reduxForm({
   validate,
 }, state => ({
   auth: state.auth,
-  // TODO: upgrade redux-form when this is fixed: https://github.com/erikras/redux-form/issues/621#issuecomment-181898392
-  // initialValues: {...state.auth.currentUser, timezone: state.auth.currentUser.timezone || moment.tz.guess()},
-  initialValues: state.auth.currentUser,
+  initialValues: {...state.auth.currentUser, timezone: state.auth.currentUser.timezone || moment.tz.guess()},
 }), (dispatch, props) => props
 , (stateProps, dispatchProps) => Object.assign({}, stateProps, dispatchProps, {
   onSubmit: saveUser(stateProps, dispatchProps),

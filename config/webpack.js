@@ -1,5 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
+const autoprefixer = require('autoprefixer')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const WebpackFailPlugin = require('webpack-fail-plugin')
@@ -59,10 +60,11 @@ const plugins = [
     'process.env': {
       // useful to reduce the size of client-side libraries, e.g. react
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      APP_BASE_URL: JSON.stringify(config.app.baseURL),
       GRAPHIQL_BASE_URL: JSON.stringify(config.graphiql.baseURL),
     },
     '__CLIENT__': true,
-    '__SERVER__': false
+    '__SERVER__': false,
   }),
 ]
 if (config.app.hotReload) {
@@ -133,35 +135,19 @@ const loaders = [
     test: /\.scss$/,
     [loaderKey]: config.app.minify ? ExtractTextPlugin.extract(
       'style',
-      'css?modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
-      '!sass' +
-      '!toolbox'
-    ) : [
-      'style',
-      'css?modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2',
-      'sass',
-      'toolbox',
-    ],
-    include: [
-      path.resolve(ROOT_DIR, 'node_modules', 'react-toolbox'),
-    ],
-  },
-
-  // app sass styles
-  {
-    test: /\.scss$/,
-    [loaderKey]: config.app.minify ? ExtractTextPlugin.extract(
-      'style',
-      'css?modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2' +
+      'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=3' +
+      '!postcss' +
       '!sass?sourceMap' +
       '!sass-resources'
     ) : [
       'style',
-      'css?modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=2',
+      'css?sourceMap&modules&localIdentName=[name]__[local]__[hash:base64:5]&importLoaders=3',
+      'postcss',
       'sass?sourceMap',
       'sass-resources',
     ],
     include: [
+      path.resolve(ROOT_DIR, 'node_modules', 'react-toolbox'),
       path.resolve(ROOT_DIR, 'common'),
     ],
   },
@@ -207,6 +193,7 @@ module.exports = {
   plugins,
   context: ROOT_DIR,
   module: {loaders, noParse},
+  postcss: [autoprefixer],
   sassResources: './config/sass-resources.scss',
-  toolbox: {theme: './common/theme.scss'},
+  sassLoader: {data: `@import "${path.resolve(__dirname, '..', 'common', 'theme.scss')}";`},
 }
