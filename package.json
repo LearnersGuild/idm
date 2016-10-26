@@ -105,7 +105,7 @@
     "react-redux": "^4.0.5",
     "react-router": "^2.8.1",
     "react-router-redux": "^4.0.6",
-    "react-toolbox": "^1.2.2",
+    "react-toolbox": "1.2.2",
     "redux": "^3.0.5",
     "redux-auth-wrapper": "^0.3.0",
     "redux-form": "^5.3.3",
