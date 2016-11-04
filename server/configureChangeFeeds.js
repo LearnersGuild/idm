@@ -27,7 +27,12 @@ function pushRelevantNewUsersToGame() {
       cursor.each((err, {new_val: user}) => {
         if (!err) {
           console.log('pushing new game participant to game:', user)
-          newGameUserQueue.add(user)
+
+          const jobOpts = {
+            attempts: 3,
+            backoff: {type: 'fixed', delay: 60000},
+          }
+          newGameUserQueue.add(user, jobOpts)
         }
       })
     })
