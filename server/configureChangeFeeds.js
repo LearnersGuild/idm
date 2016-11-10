@@ -1,43 +1,49 @@
 /* eslint-disable no-console, camelcase */
 import url from 'url'
 import getBullQueue from 'bull'
+import raven from 'raven'
+import processChangeFeedWithAutoReconnect from 'rethinkdb-changefeed-reconnect'
 
 import config from 'src/config'
 import db from 'src/db'
 
+const sentry = new raven.Client(config.server.sentryDSN)
 const r = db.connect()
 
-function getQueue(queueName) {
+export default function configureChangeFeeds() {
+  const newGameUserQueue = _getQueue('newGameUser')
+  processChangeFeedWithAutoReconnect(_getFeed, _getFeedProcessor(newGameUserQueue), _handleConnectionError, {
+    changefeedName: 'new users',
+  })
+}
+
+function _getQueue(queueName) {
   const redisConfig = url.parse(config.server.redis.url)
   const redisOpts = redisConfig.auth ? {auth_pass: redisConfig.auth.split(':')[1]} : undefined
   return getBullQueue(queueName, redisConfig.port, redisConfig.hostname, redisOpts)
 }
 
-function pushRelevantNewUsersToGame() {
-  const newGameUserQueue = getQueue('newGameUser')
-
+function _getFeed() {
   // this is not ideal, because if a user has both the 'moderator' and the
   // 'player' role, we'll add that user to the queue twice, so on the other
   // end of the queue, some de-duplication needs to happen
-  r.table('users')
+  return r.table('users')
     .getAll('moderator', 'player', {index: 'roles'})
     .changes()
     .filter(r.row('old_val').eq(null))
-    .then(cursor => {
-      cursor.each((err, {new_val: user}) => {
-        if (!err) {
-          console.log('pushing new game participant to game:', user)
-
-          const jobOpts = {
-            attempts: 3,
-            backoff: {type: 'fixed', delay: 60000},
-          }
-          newGameUserQueue.add(user, jobOpts)
-        }
-      })
-    })
 }
 
-export default function configureChangeFeeds() {
-  pushRelevantNewUsersToGame()
+function _getFeedProcessor(newGameUserQueue) {
+  return ({new_val: user}) => {
+    const jobOpts = {
+      attempts: 3,
+      backoff: {type: 'fixed', delay: 60000},
+    }
+    newGameUserQueue.add(user, jobOpts)
+  }
+}
+
+function _handleConnectionError(err) {
+  console.error(err.stack)
+  sentry.captureException(err)
 }
