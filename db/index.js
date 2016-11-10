@@ -31,7 +31,8 @@ let r = null
 function connect() {
   if (!r) {
     r = rethinkDBDash({
-      servers: [dbConfig]
+      servers: [dbConfig],
+      silent: true,
     })
   }
 
