@@ -2,7 +2,7 @@ import {config, create} from 'src/db'
 
 create()
   .then(() => {
-    console.log(`Successfully created database '${config.db}'.`)
+    console.log(`Created db '${config.db}'.`)
     process.exit(0)
   })
   .catch(err => {

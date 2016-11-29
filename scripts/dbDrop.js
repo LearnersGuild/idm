@@ -2,7 +2,7 @@ import {config, drop} from 'src/db'
 
 drop()
   .then(() => {
-    console.log(`Successfully dropped database '${config.db}'.`)
+    console.log(`Dropped db '${config.db}'.`)
     process.exit(0)
   })
   .catch(err => {
