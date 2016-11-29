@@ -14,6 +14,7 @@
   "scripts": {
     "build": "npm run symlinks && mkdir -p dist && webpack --config config/webpack.js",
     "build:profile": "npm run symlinks && mkdir -p dist && webpack --profile --json --config config/webpack.js > tmp/webpack.json",
+<<<<<<< fa38cd840e736cfddbd47ab20c227ce31f6696df
     "data:users": "npm run symlinks && ./node_modules/.bin/babel-node test/generateUsers",
     "db:create": "npm run symlinks && node ./scripts/dbCreate.js",
     "db:drop": "npm run symlinks && node ./scripts/dbDrop.js",
@@ -27,6 +28,16 @@
     "start": "npm run symlinks && npm run icons:fetch && node server",
     "symlinks": "./node_modules/.bin/babel-node ./scripts/createSymlinks",
     "symlinks:remove": "./node_modules/.bin/rimraf ./node_modules/src",
+=======
+    "start": "npm run symlinks && npm run icons:fetch && node server",
+    "db:create": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbCreate.js",
+    "db:drop": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbDrop.js",
+    "db:migrate": "npm run db:migrate:configure && ./node_modules/.bin/babel-node ./node_modules/.bin/rethink-migrate -r db",
+    "db:migrate:configure": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbConfig.js > ./db/database.json",
+    "db:migrate:up": "npm run symlinks && npm run db:migrate:configure && ./node_modules/.bin/babel-node ./node_modules/.bin/rethink-migrate -r db up",
+    "db:migrate:down": "npm run symlinks && npm run db:migrate:configure && ./node_modules/.bin/babel-node ./node_modules/.bin/rethink-migrate -r db down",
+    "data:users": "npm run symlinks && ./node_modules/.bin/babel-node test/generateUsers",
+>>>>>>> add api tests; add/refactor test utils; misc clean-up
     "test": "npm run symlinks && npm run lint && npm run test:run",
     "test:ci": "npm run db:create && npm run db:migrate:up && npm run test:cov",
     "test:cov": "npm run test:cov:run && npm run test:cov:send",

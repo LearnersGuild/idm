@@ -2,11 +2,10 @@ import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import db from 'src/db'
-
+import {connect} from 'src/db'
 import {InviteCode} from './schema'
 
-const r = db.connect()
+const r = connect()
 
 const InputInviteCode = new GraphQLInputObjectType({
   name: 'InputInviteCode',

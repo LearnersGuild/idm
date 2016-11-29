@@ -1,20 +1,9 @@
 import path from 'path'
 import parseArgs from 'minimist'
 
-import db from 'src/db'
-import factory from './factories'
-
 import 'src/config'
-
-const r = db.connect()
-
-async function createUsers(inviteCode, roles, count) {
-  const users = await factory.buildMany('user', {inviteCode, roles}, count)
-  return r.table('users')
-    .insert(users, {returnChanges: 'always'})
-    .run()
-    .then(result => result.changes.map(c => c.new_val))
-}
+import {createUsers} from './helpers'
+import {drainPool} from './db'
 
 function printUsage(logger = console.error) {
   const command = path.basename(process.argv[1])
@@ -69,7 +58,7 @@ async function run() {
   } catch (err) {
     console.error('Error:', err.stack || err)
   } finally {
-    r.getPoolMaster().drain()
+    drainPool()
   }
 }
 

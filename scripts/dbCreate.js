@@ -1,12 +1,8 @@
-/* eslint-disable no-var, xo/no-process-exit */
-require('babel-core/register')
-require('babel-polyfill')
+import {config, create} from 'src/db'
 
-var db = require('src/db')
-
-db.create()
+create()
   .then(() => {
-    console.log(`Successfully created database '${db.config.db}'.`)
+    console.log(`Successfully created database '${config.db}'.`)
     process.exit(0)
   })
   .catch(err => {

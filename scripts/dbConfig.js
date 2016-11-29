@@ -1,7 +1,3 @@
-/* eslint-disable no-var */
-require('babel-core/register')
-require('babel-polyfill')
+import {config} from 'src/db'
 
-var db = require('src/db')
-
-console.log(JSON.stringify(db.config))
+console.log(JSON.stringify(config))
