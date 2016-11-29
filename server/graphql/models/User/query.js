@@ -1,3 +1,4 @@
+/* eslint-disable no-use-extend-native/no-use-extend-native */
 import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 
@@ -103,12 +104,19 @@ export default {
         table.getAll(...identifiers, {index: 'handle'}),
       ])
 
-      return usersByIds.concat(usersByHandles).map(applyUserProfileUrls)
+      // remove any potential duplicates
+      const combinedUsersById = usersByIds.concat(usersByHandles)
+        .reduce((result, user) => {
+          result[user.id] = applyUserProfileUrls(user)
+          return result
+        }, {})
+
+      return Object.values(combinedUsersById)
     }
   },
 }
 
- // FIXME: this is a bit janky
+// FIXME: this is a bit janky
 function applyUserProfileUrls(user) {
   return user ? {
     ...user,

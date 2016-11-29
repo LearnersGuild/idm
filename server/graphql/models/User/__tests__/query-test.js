@@ -166,6 +166,15 @@ test('findUsers: returns correct user for combination of ids and handles', async
   t.truthy(results.data.findUsers.find(u => u.id === testUser3.id))
 })
 
+test('findUsers: returns only unique users for duplicate identifiers', async t => {
+  t.plan(2)
+  const [testUser1] = testUsers
+  const identifiers = [testUser1.id, testUser1.handle]
+  const results = await runQuery(queries.findUsers, api, {identifiers})
+  t.is(results.data.findUsers.length, 1)
+  t.is(results.data.findUsers[0].id, testUser1.id)
+})
+
 test('findUsers: returns all users if identifiers missing', async t => {
   t.plan(1)
   const results = await runQuery(queries.findUsers, api)
