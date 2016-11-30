@@ -94,24 +94,21 @@ export default {
       }
 
       const {identifiers} = args || {}
-      if (!identifiers) {
-        const users = await table.run()
-        return users.map(applyUserProfileUrls)
-      }
 
-      const [usersByIds, usersByHandles] = await Promise.all([
-        table.getAll(...identifiers),
-        table.getAll(...identifiers, {index: 'handle'}),
-      ])
+      const users = await (
+        !Array.isArray(identifiers) ?
+          table.run() :
+          table
+            .getAll(...identifiers)
+            .union(
+              r.table('users')
+                .getAll(...identifiers, {index: 'handle'})
+            )
+            .distinct()
+            .run()
+      )
 
-      // remove any potential duplicates
-      const combinedUsersById = usersByIds.concat(usersByHandles)
-        .reduce((result, user) => {
-          result[user.id] = applyUserProfileUrls(user)
-          return result
-        }, {})
-
-      return Object.values(combinedUsersById)
+      return users.map(applyUserProfileUrls)
     }
   },
 }
