@@ -19,7 +19,7 @@ const dbConfig = {
   authKey: typeof dbUrl.auth === 'string' ? dbUrl.auth.split(':')[1] : undefined,
 }
 if (appConfig.server.rethinkdb.certificate) {
-  appConfig.ssl = {
+  dbConfig.ssl = {
     ca: appConfig.server.rethinkdb.certificate
   }
 }
