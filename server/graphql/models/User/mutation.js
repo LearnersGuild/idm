@@ -4,11 +4,11 @@ import {GraphQLError} from 'graphql/error'
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
 import {GraphQLPhoneNumber} from 'src/server/graphql/models/types'
-import db from 'src/db'
+import {connect} from 'src/db'
 
 import {User} from './schema'
 
-const r = db.connect()
+const r = connect()
 
 const InputUser = new GraphQLInputObjectType({
   name: 'InputUser',

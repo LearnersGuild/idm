@@ -1,13 +1,17 @@
+/* eslint-disable no-use-extend-native/no-use-extend-native */
 import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
-import {GraphQLError} from 'graphql/error'
 
-import db from 'src/db'
+import {connect} from 'src/db'
 import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
+import {errors} from 'src/server/graphql/util'
 
 import {User} from './schema'
 
-const r = db.connect()
+const {notAuthorized, notFound} = errors
+
+const r = connect()
+const table = r.table('users')
 
 export default {
   getUserById: {
@@ -17,17 +21,29 @@ export default {
     },
     async resolve(source, args, {rootValue: {currentUser}}) {
       if (!currentUser) {
-        throw new GraphQLError('You are not authorized to do that.')
+        throw notAuthorized()
       }
 
-      let user = await r.table('users').get(args.id).run()
-
+      const user = await table.get(args.id)
       if (!user) {
-        throw new GraphQLError('No such user')
+        throw notFound('User')
       }
 
-      user = applyUserProfileUrls(user)
-      return user
+      return applyUserProfileUrls(user)
+    }
+  },
+  getUsersByIds: {
+    type: new GraphQLList(User),
+    args: {
+      ids: {type: new GraphQLNonNull(new GraphQLList(GraphQLID))},
+    },
+    async resolve(source, {ids}, {rootValue: {currentUser}}) {
+      if (!currentUser) {
+        throw notAuthorized()
+      }
+
+      const users = await table.getAll(...ids)
+      return users.map(applyUserProfileUrls)
     }
   },
   getUsersByHandles: {
@@ -37,40 +53,71 @@ export default {
     },
     async resolve(source, {handles}, {rootValue: {currentUser}}) {
       if (!currentUser) {
-        throw new GraphQLError('You are not authorized to do that.')
+        throw notAuthorized()
       }
 
-      const users = await r.table('users')
-        .getAll(...handles, {index: 'handle'})
-        .run()
-
-      return users.map(user => applyUserProfileUrls(user))
+      const users = await table.getAll(...handles, {index: 'handle'})
+      return users.map(applyUserProfileUrls)
     }
   },
-  getUsersByIds: {
-    type: new GraphQLList(User),
+  getUser: {
+    type: User,
     args: {
-      ids: {type: new GraphQLList(GraphQLID)},
+      identifier: {type: new GraphQLNonNull(GraphQLString)},
     },
-    async resolve(source, {ids}, {rootValue: {currentUser}}) {
+    async resolve(source, {identifier}, {rootValue: {currentUser}}) {
       if (!currentUser) {
-        throw new GraphQLError('You are not authorized to do that.')
+        throw notAuthorized()
       }
 
-      const users = await r.table('users')
-        .getAll(...ids)
-        .run()
+      const users = await table.filter(row => r.or(
+        row('id').eq(identifier),
+        row('handle').eq(identifier)
+      ))
 
-      return users.map(user => applyUserProfileUrls(user))
+      const user = users[0]
+      if (!user) {
+        throw notFound('User')
+      }
+
+      return applyUserProfileUrls(user)
     }
-  }
+  },
+  findUsers: {
+    type: new GraphQLList(User),
+    args: {
+      identifiers: {type: new GraphQLList(GraphQLString)},
+    },
+    async resolve(source, args, {rootValue: {currentUser}}) {
+      if (!currentUser) {
+        throw notAuthorized()
+      }
+
+      const {identifiers} = args || {}
+
+      const users = await (
+        !Array.isArray(identifiers) ?
+          table.run() :
+          table
+            .getAll(...identifiers)
+            .union(
+              r.table('users')
+                .getAll(...identifiers, {index: 'handle'})
+            )
+            .distinct()
+            .run()
+      )
+
+      return users.map(applyUserProfileUrls)
+    }
+  },
 }
 
- // FIXME: this is a bit janky
+// FIXME: this is a bit janky
 function applyUserProfileUrls(user) {
   return user ? {
     ...user,
     profileUrl: extractUserProfileUrl(user),
     avatarUrl: extractUserAvatarUrl(user),
-  } : null
+  } : user
 }

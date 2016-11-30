@@ -1,12 +1,8 @@
-/* eslint-disable no-var, xo/no-process-exit */
-require('babel-core/register')
-require('babel-polyfill')
+import {config, drop} from 'src/db'
 
-var db = require('src/db')
-
-db.drop()
+drop()
   .then(() => {
-    console.log(`Successfully dropped database '${db.config.db}'.`)
+    console.log(`Dropped db '${config.db}'.`)
     process.exit(0)
   })
   .catch(err => {

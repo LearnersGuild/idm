@@ -5,10 +5,10 @@ import raven from 'raven'
 import processChangeFeedWithAutoReconnect from 'rethinkdb-changefeed-reconnect'
 
 import config from 'src/config'
-import db from 'src/db'
+import {connect} from 'src/db'
 
+const r = connect()
 const sentry = new raven.Client(config.server.sentryDSN)
-const r = db.connect()
 
 export default function configureChangeFeeds() {
   const newGameUserQueue = _getQueue('newGameUser')

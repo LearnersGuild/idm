@@ -1,8 +1,8 @@
 import {merge} from 'lodash'
 
-import db from 'src/db'
+import {connect} from 'src/db'
 
-const r = db.connect()
+const r = connect()
 
 export const defaultSuccessRedirect = '/'
 

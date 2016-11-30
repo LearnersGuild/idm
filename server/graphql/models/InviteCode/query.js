@@ -1,11 +1,10 @@
 import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLError} from 'graphql/error'
 
-import db from 'src/db'
-
+import {connect} from 'src/db'
 import {InviteCode} from './schema'
 
-const r = db.connect()
+const r = connect()
 
 export default {
   getInviteCodeByCode: {
