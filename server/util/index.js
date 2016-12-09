@@ -12,6 +12,7 @@ export class LGInternalServerError extends Error {
       }
     }
     this.name = 'LGInternalServerError'
+    this.type = 'Internal Server Error'
     this.statusCode = 500
   }
 }
