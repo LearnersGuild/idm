@@ -1,15 +1,31 @@
 import {GraphQLError} from 'graphql/error'
 
+export class LGInternalServerError extends Error {
+  constructor(value) {
+    if (typeof value === 'string') {
+      super(value)
+    } else {
+      super()
+      this.message = 'An internal server error occurred'
+      if (value instanceof Error) {
+        this.originalError = value
+      }
+    }
+    this.name = 'LGInternalServerError'
+    this.statusCode = 500
+  }
+}
+
 export function formatServerError(error = new Error()) {
   if (/Reql\w+Error/.test(error.name) || (error.originalError &&
       /Reql\w+Error/.test(error.originalError.name))) {
     // RethinkDb errors masked as internal errors
-    return _internalServerError()
+    return _internalServerError(error)
   } else if (error.name === 'BadRequestError') {
     return _badRequestError(error)
   } else if (!(error instanceof GraphQLError)) {
     // any other non-graphql error masked as internal error
-    return _internalServerError()
+    return _internalServerError(error)
   }
 
   return _defaultError(error)
@@ -39,11 +55,7 @@ function _badRequestError(originalError) {
 }
 
 function _internalServerError(originalError) {
-  const error = _defaultError(originalError)
-  error.statusCode = 500
-  error.message = 'An internal server error occurred'
-  error.type = 'Internal Server Error'
-  return error
+  return new LGInternalServerError(originalError)
 }
 
 function _defaultError(originalError) {
