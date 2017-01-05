@@ -10,18 +10,11 @@ export class Home extends Component {
   constructor(props) {
     super(props)
     this.handleEditProfile = this.handleEditProfile.bind(this)
-    this.handleGraphiQL = this.handleGraphiQL.bind(this)
     this.handleSignOut = this.handleSignOut.bind(this)
   }
 
   handleEditProfile() {
     this.props.dispatch(push('/profile'))
-  }
-
-  handleGraphiQL() {
-    if (__CLIENT__) {
-      window.location.href = process.env.GRAPHIQL_BASE_URL
-    }
   }
 
   handleSignOut() {
@@ -32,7 +25,7 @@ export class Home extends Component {
 
   render() {
     return (
-      <HomeComponent onEditProfile={this.handleEditProfile} onGraphiQL={this.handleGraphiQL} onSignOut={this.handleSignOut}/>
+      <HomeComponent onEditProfile={this.handleEditProfile} onSignOut={this.handleSignOut}/>
     )
   }
 }
