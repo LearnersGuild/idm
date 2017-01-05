@@ -19,11 +19,6 @@ export default class Home extends Component {
             onClick={this.props.onEditProfile}
             />
           <ListItem
-            caption="Explore API"
-            leftIcon="flash_on"
-            onClick={this.props.onGraphiQL}
-            />
-          <ListItem
             caption="Sign Out"
             leftIcon="subdirectory_arrow_left"
             onClick={this.props.onSignOut}
@@ -36,6 +31,5 @@ export default class Home extends Component {
 
 Home.propTypes = {
   onEditProfile: PropTypes.func.isRequired,
-  onGraphiQL: PropTypes.func.isRequired,
   onSignOut: PropTypes.func.isRequired,
 }
