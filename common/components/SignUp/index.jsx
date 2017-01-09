@@ -135,7 +135,7 @@ class SignUp extends Component {
     return (
       <Card className={styles.card}>
         <div className={styles.cardContent}>
-          <img className={styles.lgLogo} src="https://brand.learnersguild.org/assets/learners-guild-logo-black-250x149.png"/>
+          <img className={styles.lgLogo} src="https://brand.learnersguild.org/assets/learners-guild-logo-color-250x149.png"/>
           {cardContent}
         </div>
       </Card>
