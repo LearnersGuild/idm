@@ -31,6 +31,8 @@ export function connect() {
     r = rethinkDBDash({
       servers: [dbConfig],
       silent: true,
+      max: 100,
+      buffer: 10,
     })
   }
 
