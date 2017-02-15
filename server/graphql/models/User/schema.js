@@ -44,3 +44,12 @@ export const User = new GraphQLObjectType({
     updatedAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was last updated'},
   })
 })
+
+export const ActiveStatus = new GraphQLObjectType({
+  name: 'ActiveStatus',
+  description: 'A user id and whether or not the user is active',
+  fields: () => ({
+    id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
+    active: {type: new GraphQLNonNull(GraphQLBoolean), description: 'True if the user is active'},
+  }),
+})

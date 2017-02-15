@@ -6,7 +6,7 @@ import {connect} from 'src/db'
 import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
 import {errors} from 'src/server/graphql/util'
 
-import {User} from './schema'
+import {User, ActiveStatus} from './schema'
 
 const {notAuthorized, notFound} = errors
 
@@ -109,6 +109,25 @@ export default {
       )
 
       return users.map(applyUserProfileUrls)
+    }
+  },
+  getActiveStatuses: {
+    type: new GraphQLList(ActiveStatus),
+    args: {
+      ids: {type: new GraphQLNonNull(new GraphQLList(GraphQLID))},
+    },
+    async resolve(source, {ids}) {
+      // intentionally a public API not requiring authentication
+      // used by marketing reports for our public-facing web site
+      if (ids.length > 0) {
+        const idsAndActiveStatuses = await table
+          .getAll(...ids)
+          .pluck('id', 'active')
+
+        return idsAndActiveStatuses
+      }
+
+      return []
     }
   },
 }

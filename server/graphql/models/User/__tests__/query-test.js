@@ -13,6 +13,7 @@ const queries = {
   getUsersByHandles: `query($handles: [String]!) { getUsersByHandles(handles: $handles) { ${fields} } }`,
   getUser: `query($identifier: String!) { getUser(identifier: $identifier) { ${fields} } }`,
   findUsers: `query($identifiers: [String]) { findUsers(identifiers: $identifiers) { ${fields} } }`,
+  getActiveStatuses: 'query($ids: [ID]!) { getActiveStatuses(ids: $ids) { id active } }',
 }
 
 const ERROR_MSG_MISSING_PARAM = 'not provided'
@@ -219,4 +220,26 @@ test('findUsers: throws an error if user is not signed-in', async t => {
     null,
     {currentUser: null}
   )
+})
+
+test('getActiveStatuses: returns empty array for empty array', async t => {
+  const result = await runQuery(queries.getActiveStatuses, api, {ids: []})
+  t.is(result.data.getActiveStatuses.length, 0)
+})
+
+test('getActiveStatuses: returns the status for all IDs', async t => {
+  t.plan(2)
+  const ids = testUsers.map(_ => _.id)
+  const result = await runQuery(queries.getActiveStatuses, api, {ids})
+  const statuses = result.data.getActiveStatuses
+  const attributes = Object.keys(statuses[0])
+  t.is(statuses.length, testUsers.length)
+  t.deepEqual(attributes, ['id', 'active'])
+})
+
+test('getActiveStatuses: does not require an authenticated user', async t => {
+  const ids = testUsers.map(_ => _.id)
+  const result = await runQuery(queries.getActiveStatuses, api, {ids}, {/* no currentUser */})
+  const statuses = result.data.getActiveStatuses
+  t.is(statuses.length, testUsers.length)
 })
