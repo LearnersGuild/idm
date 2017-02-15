@@ -11,8 +11,8 @@ const r = connect()
 const sentry = new raven.Client(config.server.sentryDSN)
 
 export default function configureChangeFeeds() {
-  const newGameUserQueue = _getQueue('newGameUser')
-  processChangeFeedWithAutoReconnect(_getFeed, _getFeedProcessor(newGameUserQueue), _handleConnectionError, {
+  const userCreatedQueue = _getQueue('userCreated')
+  processChangeFeedWithAutoReconnect(_getFeed, _getFeedProcessor(userCreatedQueue), _handleConnectionError, {
     changefeedName: 'new users',
   })
 }
@@ -33,13 +33,13 @@ function _getFeed() {
     .filter(r.row('old_val').eq(null))
 }
 
-function _getFeedProcessor(newGameUserQueue) {
+function _getFeedProcessor(userCreatedQueue) {
   return ({new_val: user}) => {
     const jobOpts = {
       attempts: 3,
       backoff: {type: 'fixed', delay: 60000},
     }
-    newGameUserQueue.add(user, jobOpts)
+    userCreatedQueue.add(user, jobOpts)
   }
 }
 
