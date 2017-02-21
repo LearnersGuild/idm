@@ -1,4 +1,4 @@
-import {GraphQLNonNull, GraphQLString} from 'graphql'
+import {GraphQLNonNull, GraphQLString, GraphQLBoolean} from 'graphql'
 import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
@@ -14,6 +14,8 @@ const InputInviteCode = new GraphQLInputObjectType({
     code: {type: new GraphQLNonNull(GraphQLString), description: 'The invite code'},
     description: {type: new GraphQLNonNull(GraphQLString), description: 'The description of for whom the code was created'},
     roles: {type: new GraphQLList(GraphQLString), description: 'The roles to assign to users who sign-up with this invite code'},
+    active: {type: GraphQLBoolean, description: 'Whether or not this invite code is active'},
+    permanent: {type: GraphQLBoolean, description: 'Whether or not this invite code should automatically expire'},
   })
 })
 
@@ -36,7 +38,10 @@ export default {
           throw new GraphQLError('Invite codes must be unique')
         }
 
-        const inviteCodeWithTimestamps = Object.assign(inviteCode, {createdAt: r.now(), updatedAt: r.now()})
+        const active = inviteCode.active !== false
+        const permanent = inviteCode.permanent === true
+        const inviteCodeWithFlags = {...inviteCode, active, permanent}
+        const inviteCodeWithTimestamps = {...inviteCodeWithFlags, createdAt: r.now(), updatedAt: r.now()}
         const insertedInviteCode = await r.table('inviteCodes')
           .insert(inviteCodeWithTimestamps, {returnChanges: 'always'})
           .run()
