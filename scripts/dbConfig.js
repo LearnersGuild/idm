@@ -1,3 +1,3 @@
 import {config} from 'src/db'
 
-console.log(JSON.stringify(config))
+console.log(JSON.stringify(config()))
