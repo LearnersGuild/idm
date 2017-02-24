@@ -1,7 +1,7 @@
 import test from 'ava'
 
 import {connect} from 'src/db'
-import {resetData} from 'src/test/db'
+import {resetData, cleanupDB} from 'src/test/db'
 import factory from 'src/test/factories'
 import {runQuery} from 'src/test/graphql'
 
@@ -11,6 +11,10 @@ import api from '../query'
 
 test.before(async () => {
   await resetData()
+})
+
+test.after(async () => {
+  await cleanupDB()
 })
 
 test('getInviteCodeByCode: returns the correct invite code', async t => {

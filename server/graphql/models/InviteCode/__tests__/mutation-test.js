@@ -1,7 +1,7 @@
 import test from 'ava'
 
 import {connect} from 'src/db'
-import {resetData} from 'src/test/db'
+import {resetData, cleanupDB} from 'src/test/db'
 import {runMutation} from 'src/test/graphql'
 
 const r = connect()
@@ -17,6 +17,10 @@ const inputInviteCode = {
 const backofficeUser = {id: 'me', handle: 'me', roles: ['backoffice']}
 test.before(async () => {
   await resetData()
+})
+
+test.after(async () => {
+  await cleanupDB()
 })
 
 test('createInviteCode: creates the invite code correctly', async t => {

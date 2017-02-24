@@ -28,9 +28,8 @@ export function config(dbName = null) {
 
 // TODO: address the meh-ness of using module caching to create a singleton
 let r = null
-export function connect(dbName = null) {
+export function connect(dbConfig = config()) {
   if (!r) {
-    const dbConfig = config(dbName)
     r = rethinkDBDash({
       servers: [dbConfig],
       silent: true,
@@ -42,21 +41,21 @@ export function connect(dbName = null) {
   return r
 }
 
-export async function create(db = config().db) {
-  if (!r) connect()
+export async function create(dbConfig = config()) {
+  if (!r) connect(dbConfig)
 
   try {
-    return await r.dbCreate(db).run()
+    return await r.dbCreate(dbConfig.db).run()
   } catch (err) {
     console.error(err.stack)
   }
 }
 
-export async function drop(db = config().db) {
-  if (!r) connect()
+export async function drop(dbConfig = config()) {
+  if (!r) connect(dbConfig)
 
   try {
-    return await r.dbDrop(db).run()
+    return await r.dbDrop(dbConfig.db).run()
   } catch (err) {
     console.error(err.stack)
   }

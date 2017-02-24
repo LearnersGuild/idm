@@ -1,8 +1,10 @@
 import {config, drop} from 'src/db'
 
-drop()
+const dbConfig = config()
+
+drop(dbConfig)
   .then(() => {
-    console.log(`Dropped db '${config.db}'.`)
+    console.log(`Dropped db '${dbConfig.db}'.`)
     process.exit(0)
   })
   .catch(err => {

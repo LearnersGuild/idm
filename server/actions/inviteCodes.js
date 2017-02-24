@@ -26,7 +26,7 @@ export async function findInviteCodesToExpire(since = null) {
   return codesToExpire
 }
 
-export async function expireInviteCodes(codes) {
+export async function deactivateInviteCodes(codes) {
   if (codes.length > 0) {
     const {replaced: numChangedCodes} = await r.table('inviteCodes')
       .getAll(...codes, {index: 'code'})
@@ -37,5 +37,3 @@ export async function expireInviteCodes(codes) {
 
   return 0
 }
-
-export default expireInviteCodes

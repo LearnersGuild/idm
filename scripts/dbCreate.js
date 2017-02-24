@@ -1,8 +1,9 @@
 import {config, create} from 'src/db'
 
-create()
+const dbConfig = config()
+create(dbConfig)
   .then(() => {
-    console.log(`Created db '${config.db}'.`)
+    console.log(`Created db '${dbConfig.db}'.`)
     process.exit(0)
   })
   .catch(err => {
