@@ -13,3 +13,6 @@ global.navigator = win.navigator
 
 // CSS modules setup
 require('src/server/configureCSSModules')()
+
+// use one database per-process b/c ava runs tests in parallel
+global.dbConfig = require('src/test/db').configureDB()

@@ -1,6 +1,6 @@
 import test from 'ava'
 
-import {resetData} from 'src/test/db'
+import {resetData, cleanupDB} from 'src/test/db'
 import {runQuery} from 'src/test/graphql'
 import {createUsers, assertQueryError} from 'src/test/helpers'
 
@@ -28,6 +28,10 @@ let testUsers
 test.before(async () => {
   await resetData()
   testUsers = await createUsers(TEST_USER_INVITE_CODE, TEST_USER_ROLES, TEST_USER_COUNT)
+})
+
+test.after(async () => {
+  await cleanupDB()
 })
 
 test('getUserById: returns correct user for valid id', async t => {
