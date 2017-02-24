@@ -7,16 +7,9 @@ engines:
     config:
       languages:
         javascript:
-          mass_threshold: 100
+          mass_threshold: 300
   eslint:
-    enabled: true
-    checks:
-      global-require:
-        enabled: false
-      comma-dangle:
-        enabled: false
-      semi:
-        enabled: false
+    enabled: false
   fixme:
     enabled: true
 ratings:
@@ -25,11 +18,7 @@ ratings:
   - "**.inc"
   - "**.js"
   - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
-# exclude_paths:
-# - config/
-# - db/
-# - test/
+exclude_paths:
+- node_modules/
+- test/
+- "__tests__/"
