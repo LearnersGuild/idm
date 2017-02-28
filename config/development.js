@@ -1,7 +1,6 @@
 module.exports = {
   server: {
     secure: false,
-    port: 9001,
     rethinkdb: {
       url: process.env.RETHINKDB_URL || 'rethinkdb://localhost:28015/idm_development',
     },
