@@ -61,28 +61,29 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     # Both of the URLs below are needed and remove this commented line
     APP_BASE_URL=http://idm.learnersguild.dev
     IDM_BASE_URL=http://idm.learnersguild.dev
-    JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem with \n for newlines>"
-    JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem with \n for newlines>"
+    # For JWT string data below, replace all linebreaks with \n
+    # and include -----BEGIN RSA PRIVATE KEY----- and -----END RSA PRIVATE KEY-----
+    # remove these three commented lines
+    JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem >"
+    JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem replace all linebreaks with \n >"
     ```
 
-9. Setup npm auth
+9. Create an [npmjs.org](https://www.npmjs.com/) account if you don't have one.
 
-10. Create an [npmjs.org](https://www.npmjs.com/) account if you don't have one.
-
-11. Login from the command line
+10. Login from the command line
 
     ```bash
     npm login
     ```
 
-12. Get your npm auth token from your `~/.npmrc`
+11. Get your npm auth token from your `~/.npmrc`
 
     ```bash
     cat ~/.npmrc
     # //registry.npmjs.org/:_authToken=<YOUR NPM AUTH TOKEN>
     ```
 
-13.  Set `NPM_AUTH_TOKEN` in your shell.
+12.  Set `NPM_AUTH_TOKEN` in your shell.
 
     ```bash
     # in ~/.bashrc (or ~/.zshrc, etc)
@@ -91,7 +92,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     export NPM_AUTH_TOKEN=$(cat $HOME/.npmrc | grep _authToken | cut -d '=' -f2)
     ```
 
-14. Run the setup tasks:
+13. Run the setup tasks:
 
     ```bash
     npm install
@@ -99,38 +100,39 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     npm run db:migrate -- up
     ```
 
-15. Run the server:
+14. Run the server:
 
     ```bash
     npm start
     ```
 
-16. Visit the server in your browser:
+15. Visit the server in your browser:
 
     ```bash
     open http://idm.learnersguild.dev
     ```
 
-17. Create an Account
+16. Create an Account
 
     Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
 
     ```ReQl
     r.db('idm_development').table('inviteCodes').insert({
-      id: "58abd2aa-3826-4604-bf7c-f8f2cf7eaad9",
-      code: "hand_crafted_artisanal_invite_code",
-      description: "hand crafted artisanal invite code",
-      roles: ["player", "backoffice", "moderator"],
+      id: '58abd2aa-3826-4604-bf7c-f8f2cf7eaad9',
+      code: 'hand_crafted_artisanal_invite_code',
+      description: 'hand crafted artisanal invite code',
+      roles: ['player', 'backoffice', 'moderator'],
+      active: true,
       createdAt: r.now(),
       updatedAt: r.now(),
     })
     ```
 
-18. Sign In
+17. Sign In
 
     Use the invitation code `hand_crafted_artisanal_invite_code` to create an account.
 
-19. (OPTIONAL) Add some test users:
+18. (OPTIONAL) Add some test users:
 
     ```bash
     npm run data:users -- --verbose --role=player some-dummy-invite-code
