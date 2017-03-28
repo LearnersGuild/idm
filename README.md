@@ -10,47 +10,63 @@ This is the identity management service.
 
 Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
-1. Clone the repository.
+1. **Globally** install [nvm][nvm], [avn][avn], and [avn-nvm][avn-nvm].
 
-2. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
+    ```bash
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+    npm install -g avn avn-nvm
+    avn setup
+    ```
+
+2. Create an [npm][npm] account if you don't have one, then setup your `NPM_AUTH_TOKEN`:
+
+    ```bash
+    npm login
+    # in your current shell as well as in ~/.bashrc (or ~/.zshrc, etc)
+    export NPM_AUTH_TOKEN=$(cat $HOME/.npmrc | grep _authToken | cut -d '=' -f2)
+    ```
+
+3. Clone the repository.
+
+4. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
 
     ```bash
     echo 9001 > ~/.mehserve/idm.learnersguild
     mehserve run
     ```
 
-3. Set your `NODE_ENV` environment variable:
+5. Set your `NODE_ENV` environment variable:
 
     ```bash
     export NODE_ENV=development
     ```
 
-4. [Install RethinkDB][install-rethinkdb].
+6. [Install RethinkDB][install-rethinkdb].
 
     ```bash
     # With Homebrew on a mac:
     brew install rethinkdb
     ```
 
-5. Install [Redis][redis].
+7. Install [Redis][redis].
 
     ```bash
     brew install redis
     ```
 
-6. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
+8. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
     - Application name: Learners Guild IDM (dev)
     - Homepage URL: http://idm.learnersguild.dev
     - Authorization callback URL: http://idm.learnersguild.dev/auth/github/callback
 
-7. Generate a key-pair for JWT token signing / verifying:
+9. Generate a key-pair for JWT token signing / verifying:
 
     ```bash
     openssl genrsa -out /tmp/private-key.pem 2048
     openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
     ```
 
-8. Create your `.env.development` file for your environment. Example:
+10. Create your `.env.development` file for your environment. Example:
 
     ```bash
     PORT=9001
@@ -68,31 +84,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem replace all linebreaks with \n >"
     ```
 
-9. Create an [npmjs.org](https://www.npmjs.com/) account if you don't have one.
-
-10. Login from the command line
-
-    ```bash
-    npm login
-    ```
-
-11. Get your npm auth token from your `~/.npmrc`
-
-    ```bash
-    cat ~/.npmrc
-    # //registry.npmjs.org/:_authToken=<YOUR NPM AUTH TOKEN>
-    ```
-
-12.  Set `NPM_AUTH_TOKEN` in your shell.
-
-    ```bash
-    # in ~/.bashrc (or ~/.zshrc, etc)
-    export NPM_AUTH_TOKEN=<YOUR NPM AUTH TOKEN>
-    # OR
-    export NPM_AUTH_TOKEN=$(cat $HOME/.npmrc | grep _authToken | cut -d '=' -f2)
-    ```
-
-13. Run the setup tasks:
+11. Run the setup tasks:
 
     ```bash
     npm install
@@ -100,19 +92,19 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     npm run db:migrate -- up
     ```
 
-14. Run the server:
+12. Run the server:
 
     ```bash
     npm start
     ```
 
-15. Visit the server in your browser:
+13. Visit the server in your browser:
 
     ```bash
     open http://idm.learnersguild.dev
     ```
 
-16. Create an Account
+14. Create an Account
 
     Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
 
@@ -128,11 +120,11 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     })
     ```
 
-17. Sign In
+15. Sign In
 
     Use the invitation code `hand_crafted_artisanal_invite_code` to create an account.
 
-18. (OPTIONAL) Add some test users:
+16. (OPTIONAL) Add some test users:
 
     ```bash
     npm run data:users -- --verbose --role=player some-dummy-invite-code
@@ -190,3 +182,7 @@ See the [LICENSE](./LICENSE) file.
 [install-rethinkdb]: https://www.rethinkdb.com/docs/install/
 [redis]: http://redis.io/
 [mehserve]: https://github.com/timecounts/mehserve
+[npm]: https://www.npmjs.com/
+[nvm]: https://github.com/creationix/nvm
+[avn]: https://github.com/wbyoung/avn
+[avn-nvm]: https://github.com/wbyoung/avn-nvm
