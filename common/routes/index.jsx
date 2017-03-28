@@ -39,9 +39,17 @@ function redirectIfSignedIn(store) {
   return (nextState, replace) => {
     const {location: {query}} = nextState
     if (userHasCompletedProfile(currentUser) && lgJWT) {
-      const {redirect, responseType} = query
-      if (__SERVER__ && !redirect) {
-        return replace('/')
+      const {redirect, responseType, SAMLRequest, RelayState} = query
+      if (__SERVER__) {
+        if (SAMLRequest) {
+          // FIXME: unify this logic with what is in common/components/SignIn
+          const redirectQuery = {SAMLRequest, RelayState}
+          const redirectURL = buildURL('/auth/github', redirectQuery)
+          return replace(redirectURL)
+        }
+        if (!redirect) {
+          return replace('/')
+        }
       }
       if (redirect) {
         if (redirect.match(/^\//)) {

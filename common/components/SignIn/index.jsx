@@ -10,10 +10,15 @@ import styles from 'src/common/components/SignInUp/index.scss'
 export default class SignIn extends Component {
   render() {
     const {
-      location: {query: {redirect, responseType}},
+      location: {
+        query: {redirect, responseType, SAMLRequest, RelayState}
+      },
       isBusy,
       onAuthenticate,
     } = this.props
+
+    const authInfo = {SAMLRequest, RelayState}
+
     const signUpLink = buildURL('/sign-up', {redirect, responseType})
 
     const authActions = isBusy ? (
@@ -24,6 +29,7 @@ export default class SignIn extends Component {
           label="Sign-in"
           redirect={redirect}
           responseType={responseType}
+          authInfo={authInfo}
           onAuthenticate={onAuthenticate}
           />
         <div className={styles.signUpLink} >

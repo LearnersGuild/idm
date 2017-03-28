@@ -11,9 +11,17 @@ export default function AuthButton(props) {
     inviteCode,
     responseType,
     onAuthenticate,
+    authInfo: {SAMLRequest, RelayState},
   } = props
+
+  const query = {redirect, inviteCode, responseType}
+  if (SAMLRequest && RelayState) {
+    query.SAMLRequest = SAMLRequest
+    query.RelayState = RelayState
+  }
+
   const baseURL = authURL ? authURL : '/auth/github'
-  const signInGitHubHref = buildURL(baseURL, {redirect, inviteCode, responseType})
+  const signInGitHubHref = buildURL(baseURL, query)
   const handleClick = () => {
     onAuthenticate(signInGitHubHref)
   }
@@ -34,6 +42,7 @@ AuthButton.propTypes = {
   authURL: PropTypes.string,
   redirect: PropTypes.string,
   responseType: PropTypes.string,
+  authInfo: PropTypes.object,
   inviteCode: PropTypes.string,
   onAuthenticate: PropTypes.func.isRequired,
 }

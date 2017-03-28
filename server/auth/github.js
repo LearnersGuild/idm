@@ -2,6 +2,7 @@ import url from 'url'
 import raven from 'raven'
 import fetch from 'isomorphic-fetch'
 import passport from 'passport'
+import samlp from 'samlp'
 import {Strategy as GitHubStrategy} from 'passport-github'
 import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 
@@ -11,6 +12,7 @@ import {
   getUserByGithubId,
   getInviteCodesByCode,
   defaultSuccessRedirect,
+  mapSlackUserAttributes,
 } from './helpers'
 
 const config = require('src/config')
@@ -115,13 +117,31 @@ export function configureAuthWithGitHub(app) {
     (req, res, next) => {
       const appState = JSON.parse(decrypt(req.query.state))
       // sign-up and sign-in have different strategy names, but use the same OAuth2 app
-      const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirect)}&err=auth`
+      const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirect || defaultSuccessRedirect)}&err=auth`
       return passport.authenticate(appState.strategyName, {failureRedirect})(req, res, next)
     },
     (req, res) => {
       const appState = JSON.parse(decrypt(req.query.state))
-      let redirect = decodeURIComponent(appState.redirect) || defaultSuccessRedirect
+      let redirect = decodeURIComponent(appState.redirect || defaultSuccessRedirect)
       extendJWTExpiration(req, res)
+
+      if (appState.SAMLRequest) {
+        return samlp.auth({
+          issuer: process.env.SAML_ISSUER,
+          cert: process.env.SAML_PUBLIC_CERT,
+          key: process.env.SAML_PRIVATE_KEY,
+          audience: 'https://learnersguild.slack.com',
+          destination: process.env.SAML_SLACK_POSTBACK_URL,
+          profileMapper: mapSlackUserAttributes,
+          signResponse: true,
+          signatureNamespacePrefix: 'ds',
+          RelayState: appState.RelayState,
+          getPostURL(audience, samlRequestDom, req, cb) {
+            cb(null, process.env.SAML_SLACK_POSTBACK_URL)
+          }
+        })(req, res)
+      }
+
       // sometimes, we want to tack the JWT onto the end of the redirect URL
       // for cases when cookie-based authentication won't work (e.g., Cordova
       // apps like Rocket.Chat)
