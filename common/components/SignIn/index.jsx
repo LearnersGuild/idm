@@ -3,21 +3,19 @@ import {Link} from 'react-router'
 import {Card} from 'react-toolbox/lib/card'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-import {buildURL} from 'src/common/util'
+import {buildURL, extractDataFromState} from 'src/common/util'
 import AuthButton from 'src/common/components/AuthButton'
 import styles from 'src/common/components/SignInUp/index.scss'
 
 export default class SignIn extends Component {
   render() {
+    const {isBusy, onAuthenticate} = this.props
     const {
-      location: {
-        query: {redirect, responseType, SAMLRequest, RelayState}
-      },
-      isBusy,
-      onAuthenticate,
-    } = this.props
-
-    const authInfo = {SAMLRequest, RelayState}
+      SAMLRequest, 
+      RelayState, 
+      redirect, 
+      responseType
+    } = extractDataFromState(nextState)
 
     const signUpLink = buildURL('/sign-up', {redirect, responseType})
 
@@ -29,7 +27,8 @@ export default class SignIn extends Component {
           label="Sign-in"
           redirect={redirect}
           responseType={responseType}
-          authInfo={authInfo}
+          SAMLRequest={SAMLRequest}
+          RelayState={RelayState}
           onAuthenticate={onAuthenticate}
           />
         <div className={styles.signUpLink} >

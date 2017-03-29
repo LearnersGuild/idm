@@ -2,8 +2,9 @@ import samlp from 'samlp'
 import url from 'url'
 import {decrypt} from 'src/server/symmetricCryptoAES'
 import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
+import {defaultSuccessRedirect} from './helpers'
 
-function redirectOnSuccess(req, res, next) {
+function redirectOnSuccess(req, res) {
   const appState = JSON.parse(decrypt(req.query.state))
   // sometimes, we want to tack the JWT onto the end of the redirect URL
   // for cases when cookie-based authentication won't work (e.g., Cordova
