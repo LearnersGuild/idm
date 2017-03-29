@@ -12,7 +12,7 @@ import SignIn from 'src/common/containers/SignIn'
 
 import Home from 'src/common/containers/Home'
 import Profile from 'src/common/components/Profile'
-import {buildURL} from 'src/common/util'
+import {buildURL, extractDataFromState} from 'src/common/util'
 
 const userIsAuthenticated = userAuthWrapper({
   failureRedirectPath: '/sign-in',
@@ -37,9 +37,14 @@ function redirectIfSignedIn(store) {
   /* global __CLIENT__, __SERVER__, window */
   const {auth: {currentUser, lgJWT}} = store.getState()
   return (nextState, replace) => {
-    const {location: {query}} = nextState
+    const {
+      SAMLRequest,
+      RelayState,
+      redirect,
+      responseType
+    } = extractDataFromState(nextState)
+
     if (userHasCompletedProfile(currentUser) && lgJWT) {
-      const {redirect, responseType, SAMLRequest, RelayState} = query
       if (__SERVER__) {
         if (SAMLRequest) {
           // FIXME: unify this logic with what is in common/components/SignIn

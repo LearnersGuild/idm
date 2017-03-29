@@ -12,7 +12,6 @@ import {
   defaultSuccessRedirect,
 } from './helpers'
 
-
 const config = require('src/config')
 
 const sentry = new raven.Client(config.server.sentryDSN)
