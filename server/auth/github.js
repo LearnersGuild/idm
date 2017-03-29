@@ -1,10 +1,13 @@
 import raven from 'raven'
 import fetch from 'isomorphic-fetch'
 import passport from 'passport'
+import url from 'url'
+
 import {Strategy as GitHubStrategy} from 'passport-github'
+import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 
 import {encrypt, decrypt} from 'src/server/symmetricCryptoAES'
-import {authSuccess} from './saml'
+import {samlPost} from './saml'
 import {
   createOrUpdateUser,
   getUserByGithubId,
@@ -118,4 +121,28 @@ function passportAuth(req, res, next) {
   // sign-up and sign-in have different strategy names, but use the same OAuth2 app
   const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirect || defaultSuccessRedirect)}&err=auth`
   return passport.authenticate(appState.strategyName, {failureRedirect})(req, res, next)
+}
+
+function redirectOnSuccess(req, res) {
+  const appState = JSON.parse(decrypt(req.query.state))
+  // sometimes, we want to tack the JWT onto the end of the redirect URL
+  // for cases when cookie-based authentication won't work (e.g., Cordova
+  // apps like Rocket.Chat)
+  let redirect = decodeURIComponent(appState.redirect || defaultSuccessRedirect)
+  if (appState.responseType === 'token') {
+    const urlParts = url.parse(redirect)
+    urlParts.query = urlParts.query || {}
+    urlParts.query.lgJWT = req.lgJWT
+    redirect = url.format(urlParts)
+  }
+  res.redirect(redirect)
+}
+
+export function authSuccess(req, res, next) {
+  extendJWTExpiration(req, res)
+  const {SAMLRequest} = JSON.parse(decrypt(req.query.state))
+  if (SAMLRequest) {
+    return samlPost(req)(req, res, next)
+  }
+  return redirectOnSuccess
 }

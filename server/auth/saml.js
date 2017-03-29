@@ -1,32 +1,5 @@
 import samlp from 'samlp'
-import url from 'url'
 import {decrypt} from 'src/server/symmetricCryptoAES'
-import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
-import {defaultSuccessRedirect} from './helpers'
-
-function redirectOnSuccess(req, res) {
-  const appState = JSON.parse(decrypt(req.query.state))
-  // sometimes, we want to tack the JWT onto the end of the redirect URL
-  // for cases when cookie-based authentication won't work (e.g., Cordova
-  // apps like Rocket.Chat)
-  let redirect = decodeURIComponent(appState.redirect || defaultSuccessRedirect)
-  if (appState.responseType === 'token') {
-    const urlParts = url.parse(redirect)
-    urlParts.query = urlParts.query || {}
-    urlParts.query.lgJWT = req.lgJWT
-    redirect = url.format(urlParts)
-  }
-  res.redirect(redirect)
-}
-
-export function authSuccess(req, res, next) {
-  extendJWTExpiration(req, res)
-  const {SAMLRequest} = JSON.parse(decrypt(req.query.state))
-  if (SAMLRequest) {
-    return samlPost(req)(req, res, next)
-  }
-  return redirectOnSuccess
-}
 
 export function samlPost(req) {
   const appState = JSON.parse(decrypt(req.query.state))
