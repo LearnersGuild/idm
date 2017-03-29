@@ -70,10 +70,3 @@ export function buildURL(baseURL, queryArgs) {
   const search = queryStr ? `?${queryStr}` : ''
   return `${baseURL}${search}`
 }
-
-export function extractDataFromState(state) {
-  if (state.location.query) {
-    const {SAMLRequest, RelayState, redirect, responseType} = state.location.query
-    return {SAMLRequest, RelayState, redirect, responseType}
-  }
-}

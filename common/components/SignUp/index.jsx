@@ -4,7 +4,6 @@ import {Card, CardText} from 'react-toolbox/lib/card'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-import {buildURL} from 'src/common/util'
 import AuthButton from 'src/common/components/AuthButton'
 import UserForm from 'src/common/containers/UserForm'
 import styles from 'src/common/components/SignInUp/index.scss'
@@ -65,19 +64,18 @@ class SignUp extends Component {
 
   renderAuth(code) {
     const {
-      location: {query: {redirect, responseType}},
+      location: {query},
       auth: {isBusy},
       onAuthenticate,
     } = this.props
-    const redirectPath = buildURL(`/sign-up/${code}`, {redirect, responseType})
     const authActions = isBusy ? (
       <ProgressBar className={styles.authActions} type="linear" mode="indeterminate"/>
     ) : (
       <AuthButton
         className={styles.authActions}
         label="Authenticate"
-        authURL={'/auth/github/sign-up'}
-        redirect={redirectPath}
+        authBaseURL={'/auth/github/sign-up'}
+        queryParams={query}
         inviteCode={code}
         onAuthenticate={onAuthenticate}
         />

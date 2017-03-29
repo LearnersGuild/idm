@@ -3,21 +3,14 @@ import {Link} from 'react-router'
 import {Card} from 'react-toolbox/lib/card'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 
-import {buildURL, extractDataFromState} from 'src/common/util'
+import {buildURL} from 'src/common/util'
 import AuthButton from 'src/common/components/AuthButton'
 import styles from 'src/common/components/SignInUp/index.scss'
 
 export default class SignIn extends Component {
   render() {
-    const {isBusy, onAuthenticate} = this.props
-    const {
-      SAMLRequest,
-      RelayState,
-      redirect,
-      responseType
-    } = extractDataFromState(this.props)
-
-    const signUpLink = buildURL('/sign-up', {redirect, responseType})
+    const {isBusy, onAuthenticate, location: {query}} = this.props
+    const signUpLink = buildURL('/sign-up', query)
 
     const authActions = isBusy ? (
       <ProgressBar className={styles.authActions} type="linear" mode="indeterminate"/>
@@ -25,10 +18,7 @@ export default class SignIn extends Component {
       <div className={styles.authActions}>
         <AuthButton
           label="Sign-in"
-          redirect={redirect}
-          responseType={responseType}
-          SAMLRequest={SAMLRequest}
-          RelayState={RelayState}
+          queryParams={query}
           onAuthenticate={onAuthenticate}
           />
         <div className={styles.signUpLink} >

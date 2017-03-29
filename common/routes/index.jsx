@@ -12,7 +12,7 @@ import SignIn from 'src/common/containers/SignIn'
 
 import Home from 'src/common/containers/Home'
 import Profile from 'src/common/components/Profile'
-import {buildURL, extractDataFromState} from 'src/common/util'
+import {buildURL} from 'src/common/util'
 
 const userIsAuthenticated = userAuthWrapper({
   failureRedirectPath: '/sign-in',
@@ -34,37 +34,27 @@ function userHasCompletedProfile(currentUser) {
 }
 
 function redirectIfSignedIn(store) {
-  /* global __CLIENT__, __SERVER__, window */
+  /* global __CLIENT__, window */
   const {auth: {currentUser, lgJWT}} = store.getState()
   return (nextState, replace) => {
-    const {
-      SAMLRequest,
-      RelayState,
-      redirect,
-      responseType
-    } = extractDataFromState(nextState)
+    const {location: {query}} = nextState
+    const {redirect, responseType, SAMLRequest} = query
 
     if (userHasCompletedProfile(currentUser) && lgJWT) {
-      if (__SERVER__) {
-        if (SAMLRequest) {
-          // FIXME: unify this logic with what is in common/components/SignIn
-          const redirectQuery = {SAMLRequest, RelayState}
-          const redirectURL = buildURL('/auth/github', redirectQuery)
-          return replace(redirectURL)
-        }
-        if (!redirect) {
-          return replace('/')
-        }
-      }
       if (redirect) {
-        if (redirect.match(/^\//)) {
-          return replace(redirect)
-        }
         if (__CLIENT__) {
           const redirectQuery = (responseType === 'token') ? {lgJWT} : {}
           const redirectURL = buildURL(decodeURIComponent(redirect), redirectQuery)
           window.location.href = redirectURL
+          return
         }
+        if (redirect.match(/^\//)) {
+          replace(redirect)
+          return
+        }
+      } else if (SAMLRequest) {
+        replace(buildURL('/auth/github', query))
+        return
       }
     }
   }
