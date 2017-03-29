@@ -1,26 +1,23 @@
 import samlp from 'samlp'
-import {decrypt} from 'src/server/symmetricCryptoAES'
 
-export function samlPost(req) {
-  const appState = JSON.parse(decrypt(req.query.state))
-
+export function slackSAMLPost(RelayState) {
   return samlp.auth({
     issuer: process.env.SAML_ISSUER,
     cert: process.env.SAML_PUBLIC_CERT,
     key: process.env.SAML_PRIVATE_KEY,
     audience: 'https://learnersguild.slack.com',
     destination: process.env.SAML_SLACK_POSTBACK_URL,
-    profileMapper: mapSAMLUserAttributes,
+    profileMapper: _slackProfileMapper,
     signResponse: true,
     signatureNamespacePrefix: 'ds',
-    RelayState: appState.RelayState,
+    RelayState,
     getPostURL(audience, samlRequestDom, req, cb) {
       cb(null, process.env.SAML_SLACK_POSTBACK_URL)
     }
   })
 }
 
-export function mapSAMLUserAttributes(user) {
+function _slackProfileMapper(user) {
   return {
     getClaims() {
       const nameParts = user.name.split(/\s+/)
