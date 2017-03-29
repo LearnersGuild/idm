@@ -117,6 +117,7 @@
     "rethinkdb": "2.3.3",
     "rethinkdb-changefeed-reconnect": "^0.3.1",
     "rethinkdbdash": "2.3.25",
+    "samlp": "github:learnersguild/node-samlp",
     "sass-loader": "^3.2.0",
     "sass-resources-loader": "^1.0.2",
     "serve-static": "^1.10.0",

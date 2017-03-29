@@ -34,24 +34,27 @@ function userHasCompletedProfile(currentUser) {
 }
 
 function redirectIfSignedIn(store) {
-  /* global __CLIENT__, __SERVER__, window */
+  /* global __CLIENT__, window */
   const {auth: {currentUser, lgJWT}} = store.getState()
   return (nextState, replace) => {
     const {location: {query}} = nextState
+    const {redirect, responseType, SAMLRequest} = query
+
     if (userHasCompletedProfile(currentUser) && lgJWT) {
-      const {redirect, responseType} = query
-      if (__SERVER__ && !redirect) {
-        return replace('/')
-      }
       if (redirect) {
-        if (redirect.match(/^\//)) {
-          return replace(redirect)
-        }
         if (__CLIENT__) {
           const redirectQuery = (responseType === 'token') ? {lgJWT} : {}
           const redirectURL = buildURL(decodeURIComponent(redirect), redirectQuery)
           window.location.href = redirectURL
+          return
         }
+        if (redirect.match(/^\//)) {
+          replace(redirect)
+          return
+        }
+      } else if (SAMLRequest) {
+        replace(buildURL('/auth/github', query))
+        return
       }
     }
   }

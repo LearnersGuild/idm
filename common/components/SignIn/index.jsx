@@ -9,12 +9,8 @@ import styles from 'src/common/components/SignInUp/index.scss'
 
 export default class SignIn extends Component {
   render() {
-    const {
-      location: {query: {redirect, responseType}},
-      isBusy,
-      onAuthenticate,
-    } = this.props
-    const signUpLink = buildURL('/sign-up', {redirect, responseType})
+    const {isBusy, onAuthenticate, location: {query}} = this.props
+    const signUpLink = buildURL('/sign-up', query)
 
     const authActions = isBusy ? (
       <ProgressBar className={styles.authActions} type="linear" mode="indeterminate"/>
@@ -22,8 +18,7 @@ export default class SignIn extends Component {
       <div className={styles.authActions}>
         <AuthButton
           label="Sign-in"
-          redirect={redirect}
-          responseType={responseType}
+          queryParams={query}
           onAuthenticate={onAuthenticate}
           />
         <div className={styles.signUpLink} >

@@ -1,11 +1,13 @@
-import url from 'url'
 import raven from 'raven'
 import fetch from 'isomorphic-fetch'
 import passport from 'passport'
+import url from 'url'
+
 import {Strategy as GitHubStrategy} from 'passport-github'
 import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 
 import {encrypt, decrypt} from 'src/server/symmetricCryptoAES'
+import {slackSAMLPost} from './samlSlack'
 import {
   createOrUpdateUser,
   getUserByGithubId,
@@ -58,7 +60,7 @@ async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb)
 
 async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, profile, cb) {
   try {
-    const {inviteCode: code} = JSON.parse(decrypt(req.query.state))
+    const {inviteCode: code} = getAuthState(req)
     let user = await getUserByGithubId(profile.id)
     if (user && !user.active) {
       console.warn(`WARNING: An inactive user attempted to sign up. user=${user.handle} inviteCode=${code}`)
@@ -78,17 +80,73 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
   }
 }
 
+function cookieDomain() {
+  const urlParts = url.parse(config.app.baseURL)
+  return `.${urlParts.hostname}`
+}
+
+function saveAuthState(req, res, strategyName) {
+  // we use a temporary cookie to store state information relevant to the
+  // user's given authentication session
+  const authState = Object.assign({strategyName}, req.query)
+  const lgAuthState = encrypt(JSON.stringify(authState))
+  res.cookie('lgAuthState', lgAuthState, {
+    domain: cookieDomain(),
+    secure: config.server.secure,
+    httpOnly: true
+  })
+}
+
+function getAuthState(req) {
+  const {lgAuthState} = req.cookies
+  return JSON.parse(decrypt(lgAuthState))
+}
+
+function clearAuthState(res) {
+  res.clearCookie('lgAuthState', {domain: cookieDomain()})
+}
+
 function authWithGitHub(strategyName) {
   return (req, res) => {
-    // rather than using something heavyweight like express sessions, we'll just
-    // use OAuth2 state to store relevant context information since the payload
-    // is small
-    const appState = Object.assign({strategyName}, req.query)
+    saveAuthState(req, res, strategyName)
     passport.authenticate(strategyName, {
       scope: ['user', 'repo'],
       approvalPrompt: 'auto',
-      state: encrypt(JSON.stringify(appState)),
     })(req, res)
+  }
+}
+
+function passportAuthCallback(req, res, next) {
+  const authState = getAuthState(req)
+  // sign-up and sign-in have different strategy names, but use the same OAuth2 app
+  const failureRedirect = `/sign-in?redirect=${encodeURIComponent(authState.redirect || defaultSuccessRedirect)}&err=auth`
+  return passport.authenticate(authState.strategyName, {failureRedirect})(req, res, next)
+}
+
+export function authSuccess(req, res, next) {
+  const {redirect, responseType, SAMLRequest, RelayState} = getAuthState(req)
+  extendJWTExpiration(req, res)
+  clearAuthState(res)
+
+  if (SAMLRequest) {
+    return slackSAMLPost(RelayState)(req, res, next)
+  }
+  return redirectOnSuccess(redirect, responseType)(req, res)
+}
+
+function redirectOnSuccess(redirect, responseType) {
+  return (req, res) => {
+    // sometimes, we want to tack the JWT onto the end of the redirect URL
+    // for cases when cookie-based authentication won't work (e.g., Cordova
+    // apps like Rocket.Chat)
+    let redirectTo = decodeURIComponent(redirect || defaultSuccessRedirect)
+    if (responseType === 'token') {
+      const urlParts = url.parse(redirectTo)
+      urlParts.query = urlParts.query || {}
+      urlParts.query.lgJWT = req.lgJWT
+      redirectTo = url.format(urlParts)
+    }
+    res.redirect(redirectTo)
   }
 }
 
@@ -111,27 +169,5 @@ export function configureAuthWithGitHub(app) {
 
   app.get('/auth/github', authWithGitHub('github'))
   app.get('/auth/github/sign-up', authWithGitHub('github-sign-up'))
-  app.get('/auth/github/callback',
-    (req, res, next) => {
-      const appState = JSON.parse(decrypt(req.query.state))
-      // sign-up and sign-in have different strategy names, but use the same OAuth2 app
-      const failureRedirect = `/sign-in?redirect=${encodeURIComponent(appState.redirect)}&err=auth`
-      return passport.authenticate(appState.strategyName, {failureRedirect})(req, res, next)
-    },
-    (req, res) => {
-      const appState = JSON.parse(decrypt(req.query.state))
-      let redirect = decodeURIComponent(appState.redirect) || defaultSuccessRedirect
-      extendJWTExpiration(req, res)
-      // sometimes, we want to tack the JWT onto the end of the redirect URL
-      // for cases when cookie-based authentication won't work (e.g., Cordova
-      // apps like Rocket.Chat)
-      if (appState.responseType === 'token') {
-        const urlParts = url.parse(redirect)
-        urlParts.query = urlParts.query || {}
-        urlParts.query.lgJWT = req.lgJWT
-        redirect = url.format(urlParts)
-      }
-      res.redirect(redirect)
-    }
-  )
+  app.get('/auth/github/callback', passportAuthCallback, authSuccess)
 }
