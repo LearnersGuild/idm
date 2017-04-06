@@ -16,6 +16,7 @@ import {
 
 const r = connect()
 
+const scimAPIToken = 'this-is-a-fake-token'
 let idmUsers
 let slackUserNames
 test.before(async () => {
@@ -55,13 +56,13 @@ test('postUserToSlackSCIM returns the API result', async t => {
     .post(SLACK_SCIM_USERS_PATH)
     .reply(201, result)
 
-  const actualResult = await postUserToSlackSCIM(idmUser)
+  const actualResult = await postUserToSlackSCIM(idmUser, scimAPIToken)
   t.is(actualResult.userName, idmUser.handle, 'results did not match')
 })
 
 test('getSlackUserNamesFromSCIM returns the API result', async t => {
   _nockGetUsers()
-  const actualResult = await getSlackUserNamesFromSCIM()
+  const actualResult = await getSlackUserNamesFromSCIM(scimAPIToken)
   t.deepEqual(actualResult, slackUserNames, 'results did not match')
 })
 
@@ -71,6 +72,8 @@ test('migrateUsers calls post function N times', async t => {
     count++
   }
 
+  // migrateUsers parses process.argv
+  process.argv = ['node', 'migrateUsers', scimAPIToken]
   _nockGetUsers()
   await migrateUsers(incr)
 
