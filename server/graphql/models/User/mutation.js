@@ -8,6 +8,8 @@ import {connect} from 'src/db'
 
 import {User} from './schema'
 
+import deactivateUser from 'src/server/actions/deactivateUser'
+
 const r = connect()
 
 const InputUser = new GraphQLInputObjectType({
@@ -25,6 +27,38 @@ const InputUser = new GraphQLInputObjectType({
 })
 
 export default {
+  deactivateUser: {
+    type: User,
+    args: {
+      id: {type: new GraphQLNonNull(GraphQLID)},
+    },
+    async resolve(source, {id}, {rootValue: {currentUser}}) {
+      try {
+        const currentUserIsAuthorized = (currentUser && currentUser.roles &&
+          (
+            currentUser.roles.indexOf('backoffice') >= 0 ||
+            currentUser.roles.indexOf('moderator') >= 0
+          )
+        )
+
+        if (!currentUser || !currentUserIsAuthorized) {
+          throw new GraphQLError('You are not authorized to do that.')
+        }
+
+        const updatedUser = await deactivateUser(id)
+
+        if (updatedUser.replaced) {
+          return updatedUser.changes[0].new_val
+        } else if (updatedUser.unchanged) {
+          return updatedUser.changes[0].old_val
+        }
+
+        throw new GraphQLError('Could not deactivate user, please try again')
+      } catch (err) {
+        throw err
+      }
+    }
+  },
   updateUser: {
     type: User,
     args: {
