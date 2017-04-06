@@ -17,6 +17,14 @@ export default function define(factory) {
     roles: ['player'],
     inviteCode: 'test',
     authProviders: {},
+    authProviderProfiles: {
+      gihubOAuth2: {
+        photos: [{
+          value: faker.internet.url(),
+          type: 'photo',
+        }],
+      },
+    },
     createdAt: cb => cb(null, now),
     updatedAt: cb => cb(null, now),
   })
