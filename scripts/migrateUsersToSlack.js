@@ -65,6 +65,7 @@ function _apiFetch(url, scimAPIToken, opts = {}) {
 }
 
 export function postUserToSlackSCIM(idmUser, scimAPIToken) {
+  console.info(`Migrating user ${idmUser.handle} ...`)
   const slackUser = mapUserAttrs(idmUser)
   const options = {
     method: 'POST',
@@ -77,11 +78,13 @@ export function postUserToSlackSCIM(idmUser, scimAPIToken) {
 }
 
 export function getUsersToMigrate(existingUserNames) {
+  console.info('Skipping these users that were already migrated:', existingUserNames)
   return r.table('users')
     .filter(user => r.expr(existingUserNames).contains(user('handle')).not())
 }
 
 export function getSlackUserNamesFromSCIM(scimAPIToken) {
+  console.info('Finding users that were already migrated ...')
   const startIndex = 1
   const count = 1000
   return _apiFetch(`${SLACK_SCIM_USERS_URL}?startIndex=${startIndex}&count=${count}`, scimAPIToken)
@@ -109,8 +112,8 @@ if (!module.parent) {
   const [scimAPIToken] = argv._
 
   run(scimAPIToken)
-    .then(result => {
-      console.info(result)
+    .then(() => {
+      console.info('... done!')
       process.exit(0)
     })
     .catch(err => {
