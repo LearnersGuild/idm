@@ -10,24 +10,6 @@ export const SLACK_SCIM_BASE_URL = 'https://api.slack.com'
 export const SLACK_SCIM_USERS_PATH = '/scim/v1/Users'
 export const SLACK_SCIM_USERS_URL = `${SLACK_SCIM_BASE_URL}${SLACK_SCIM_USERS_PATH}`
 
-function _apiFetch(url, scimAPIToken, opts = {}) {
-  const headers = {
-    ...(opts.headers || {}),
-    Accept: 'application/json',
-    Authorization: `Bearer ${scimAPIToken}`,
-  }
-  const options = {...opts, headers}
-  return fetch(url, options)
-    .then(resp => {
-      return resp.json().then(result => {
-        if (!resp.ok) {
-          throw new Error(result.Errors.description)
-        }
-        return result
-      })
-    })
-}
-
 export function mapUserAttrs(user) {
   const nameParts = user.name.split(' ')
   const name = nameParts.length === 1 ?
@@ -56,6 +38,32 @@ export function mapUserAttrs(user) {
   }
 }
 
+export function migrateUsers(usersToMigrate, scimAPIToken, postFunc = postUserToSlackSCIM) {
+  return BluebirdPromise.map(
+    usersToMigrate,
+    user => postFunc(user, scimAPIToken),
+    {concurrency: 10}
+  )
+}
+
+function _apiFetch(url, scimAPIToken, opts = {}) {
+  const headers = {
+    ...(opts.headers || {}),
+    Accept: 'application/json',
+    Authorization: `Bearer ${scimAPIToken}`,
+  }
+  const options = {...opts, headers}
+  return fetch(url, options)
+    .then(resp => {
+      return resp.json().then(result => {
+        if (!resp.ok) {
+          throw new Error(result.Errors.description)
+        }
+        return result
+      })
+    })
+}
+
 export function postUserToSlackSCIM(idmUser, scimAPIToken) {
   const slackUser = mapUserAttrs(idmUser)
   const options = {
@@ -68,6 +76,11 @@ export function postUserToSlackSCIM(idmUser, scimAPIToken) {
   return _apiFetch(SLACK_SCIM_USERS_URL, scimAPIToken, options)
 }
 
+export function getUsersToMigrate(existingUserNames) {
+  return r.table('users')
+    .filter(user => r.expr(existingUserNames).contains(user('handle')).not())
+}
+
 export function getSlackUserNamesFromSCIM(scimAPIToken) {
   const startIndex = 1
   const count = 1000
@@ -75,33 +88,27 @@ export function getSlackUserNamesFromSCIM(scimAPIToken) {
     .then(users => users.Resources.map(user => user.userName))
 }
 
-export function migrateUsers(postFunc = postUserToSlackSCIM) {
-  const argv = minimist(process.argv.slice(2), {alias: {help: 'h'}})
-  const usage = 'Usage: migrateUsers SLACK_SCIM_API_TOKEN'
-  if (argv.help) {
-    return Promise.resolve(usage)
-  }
-  if (argv._.length !== 1) {
-    return Promise.reject(usage)
-  }
+async function run(scimAPIToken) {
+  const existingUserNames = await getSlackUserNamesFromSCIM(scimAPIToken)
+  const usersToMigrate = await getUsersToMigrate(existingUserNames)
 
-  const [scimAPIToken] = argv._
-  return getSlackUserNamesFromSCIM(scimAPIToken)
-    .then(userNames => {
-      return r.table('users')
-        .filter(user => r.expr(userNames).contains(user('handle')).not())
-        .then(allUsers => {
-          return BluebirdPromise.map(
-            allUsers,
-            user => postFunc(user, scimAPIToken),
-            {concurrency: 10}
-          )
-        })
-    })
+  await migrateUsers(usersToMigrate, scimAPIToken)
 }
 
 if (!module.parent) {
-  migrateUsers()
+  const argv = minimist(process.argv.slice(2), {alias: {help: 'h'}})
+  const usage = 'Usage: migrateUsers SLACK_SCIM_API_TOKEN'
+  if (argv.help) {
+    console.info(usage)
+    process.exit(0)
+  }
+  if (argv._.length !== 1) {
+    console.error('Missing SCIM API token. Try --help.')
+    process.exit(1)
+  }
+  const [scimAPIToken] = argv._
+
+  run(scimAPIToken)
     .then(result => {
       console.info(result)
       process.exit(0)

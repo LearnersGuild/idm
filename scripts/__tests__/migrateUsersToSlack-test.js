@@ -6,10 +6,11 @@ import {resetData, cleanupDB} from 'src/test/db'
 import factory from 'src/test/factories'
 
 import {
-  getSlackUserNamesFromSCIM,
   mapUserAttrs,
   migrateUsers,
   postUserToSlackSCIM,
+  getSlackUserNamesFromSCIM,
+  getUsersToMigrate,
   SLACK_SCIM_BASE_URL,
   SLACK_SCIM_USERS_PATH,
 } from '../migrateUsersToSlack'
@@ -43,6 +44,17 @@ test('mapUserAttrs correctly maps IDM users to Slack', t => {
   t.is(idmUser.name.includes(mappedUser.name.givenName), true, 'name does not match')
 })
 
+test('migrateUsers calls post function N times', async t => {
+  let count = 0
+  const incr = () => {
+    count++
+  }
+
+  await migrateUsers(idmUsers, scimAPIToken, incr)
+
+  t.deepEqual(count, idmUsers.length, 'post function not invoked correct number of times')
+})
+
 test('postUserToSlackSCIM returns the API result', async t => {
   const [idmUser] = idmUsers
   const result = {
@@ -60,24 +72,18 @@ test('postUserToSlackSCIM returns the API result', async t => {
   t.is(actualResult.userName, idmUser.handle, 'results did not match')
 })
 
+test('getUsersToMigrate returns all users except ones with the passed-in usernames', async t => {
+  const usersToMigrate = await getUsersToMigrate(slackUserNames)
+  t.is(usersToMigrate.length, idmUsers.length - slackUserNames.length)
+  usersToMigrate.forEach(user => {
+    t.is(slackUserNames.includes(user.handle), false, 'should not return users with matching usernames')
+  })
+})
+
 test('getSlackUserNamesFromSCIM returns the API result', async t => {
   _nockGetUsers()
   const actualResult = await getSlackUserNamesFromSCIM(scimAPIToken)
   t.deepEqual(actualResult, slackUserNames, 'results did not match')
-})
-
-test('migrateUsers calls post function N times', async t => {
-  let count = 0
-  const incr = () => {
-    count++
-  }
-
-  // migrateUsers parses process.argv
-  process.argv = ['node', 'migrateUsers', scimAPIToken]
-  _nockGetUsers()
-  await migrateUsers(incr)
-
-  t.deepEqual(count, (idmUsers.length - slackUserNames.length), 'post function not invoked correct number of times')
 })
 
 function _nockGetUsers() {
