@@ -124,17 +124,17 @@ function passportAuthCallback(req, res, next) {
 }
 
 export function authSuccess(req, res, next) {
-  const {redirect, responseType, SAMLRequest, RelayState} = getAuthState(req)
+  const {redirect, responseType, SAMLRequest, RelayState, inviteCode} = getAuthState(req)
   extendJWTExpiration(req, res)
   clearAuthState(res)
 
   if (SAMLRequest) {
     return slackSAMLPost(RelayState)(req, res, next)
   }
-  return redirectOnSuccess(redirect, responseType)(req, res)
+  return redirectOnSuccess(redirect, responseType, inviteCode)(req, res)
 }
 
-function redirectOnSuccess(redirect, responseType) {
+function redirectOnSuccess(redirect, responseType, inviteCode) {
   return (req, res) => {
     // sometimes, we want to tack the JWT onto the end of the redirect URL
     // for cases when cookie-based authentication won't work (e.g., Cordova
@@ -145,6 +145,12 @@ function redirectOnSuccess(redirect, responseType) {
       urlParts.query = urlParts.query || {}
       urlParts.query.lgJWT = req.lgJWT
       redirectTo = url.format(urlParts)
+    }
+    if (inviteCode) {
+      // if we have an invite code, we're still in the sign-up process and the
+      // user may still need to complete their profile, so we redirect to the
+      // sign-up route which will detect incomplete profiles
+      redirectTo = `/sign-up/${inviteCode}?redirect=${encodeURIComponent(redirectTo)}`
     }
     res.redirect(redirectTo)
   }
