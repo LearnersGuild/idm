@@ -44,7 +44,10 @@ class UserForm extends Component {
   constructor(props) {
     super(props)
     const {auth: {currentUser}} = this.props
-    this.state = {avatarEditorActive: false, avatarURL: currentUser.avatarUrl}
+    this.state = {
+      avatarEditorActive: false,
+      avatarURL: `${currentUser.avatarUrl}?t=${Date.now()}`,
+    }
     this.handlePhoneChange = this.handlePhoneChange.bind(this)
     this.handleDateOfBirthChange = this.handleDateOfBirthChange.bind(this)
     this.handleAvatarEditorSave = this.handleAvatarEditorSave.bind(this)

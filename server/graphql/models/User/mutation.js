@@ -60,7 +60,10 @@ export default {
       const jpegData = new Buffer(base64ImgData, 'base64')
       await r.table('userAvatars')
         .get(currentUser.id)
-        .update({jpegData})
+        .update({
+          jpegData,
+          updatedAt: r.now(),
+        })
       return currentUser.id
     },
   }
