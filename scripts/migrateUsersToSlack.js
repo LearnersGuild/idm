@@ -25,17 +25,23 @@ export function mapUserAttrs(user) {
     primary: email === user.email,
   }))
 
-  return {
+  const slackUser = {
     schemas: ['urn:scim:schemas:core:1.0'],
-    userName: user.handle,
+    userName: user.handle.slice(0, 21), // Slack usernames are limited to 21 chars
     name,
     emails,
-    photos: [{
-      value: user.authProviderProfiles.gihubOAuth2.photos[0].value,
-      type: 'photo'
-    }],
     active: user.active,
   }
+
+  const userPhotos = (((user.authProviderProfiles || {}).githubOAuth2) || {}).photos || []
+  if (userPhotos.length > 0) {
+    slackUser.photos = [{
+      value: userPhotos[0].value,
+      type: 'photo',
+    }]
+  }
+
+  return slackUser
 }
 
 export function migrateUsers(usersToMigrate, scimAPIToken, postFunc = postUserToSlackSCIM) {
@@ -80,7 +86,7 @@ export function postUserToSlackSCIM(idmUser, scimAPIToken) {
 export function getUsersToMigrate(existingUserNames) {
   console.info('Skipping these users that were already migrated:', existingUserNames)
   return r.table('users')
-    .filter(user => r.expr(existingUserNames).contains(user('handle')).not())
+    .filter(user => r.expr(existingUserNames).contains(user('handle').downcase().slice(0, 21)).not())
 }
 
 export function getSlackUserNamesFromSCIM(scimAPIToken) {
