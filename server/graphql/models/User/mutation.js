@@ -31,28 +31,37 @@ export default {
       user: {type: new GraphQLNonNull(InputUser)},
     },
     async resolve(source, {user}, {rootValue: {currentUser}}) {
-      try {
-        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-        if (!currentUser || (user.id !== currentUser.id && !currentUserIsBackOffice)) {
-          throw new GraphQLError('You are not authorized to do that.')
-        }
-
-        const userWithTimestamps = Object.assign(user, {updatedAt: r.now()})
-        const updatedUser = await r.table('users')
-          .get(user.id)
-          .update(userWithTimestamps, {returnChanges: 'always'})
-          .run()
-
-        if (updatedUser.replaced) {
-          return updatedUser.changes[0].new_val
-        } else if (updatedUser.unchanged) {
-          return updatedUser.changes[0].old_val
-        }
-
-        throw new GraphQLError('Could not update user, please try again')
-      } catch (err) {
-        throw err
+      const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
+      if (!currentUser || (user.id !== currentUser.id && !currentUserIsBackOffice)) {
+        throw new GraphQLError('You are not authorized to do that.')
       }
-    }
+
+      const userWithTimestamps = Object.assign(user, {updatedAt: r.now()})
+      const updatedUser = await r.table('users')
+        .get(user.id)
+        .update(userWithTimestamps, {returnChanges: 'always'})
+        .run()
+
+      if (updatedUser.replaced) {
+        return updatedUser.changes[0].new_val
+      } else if (updatedUser.unchanged) {
+        return updatedUser.changes[0].old_val
+      }
+
+      throw new GraphQLError('Could not update user, please try again')
+    },
   },
+  updateUserAvatar: {
+    type: GraphQLString,
+    args: {
+      base64ImgData: {type: new GraphQLNonNull(GraphQLString)},
+    },
+    async resolve(source, {base64ImgData}, {rootValue: {currentUser}}) {
+      const jpegData = new Buffer(base64ImgData, 'base64')
+      await r.table('userAvatars')
+        .get(currentUser.id)
+        .update({jpegData})
+      return currentUser.id
+    },
+  }
 }

@@ -30,7 +30,7 @@ class AvatarEditorDialog extends Component {
   }
 
   render() {
-    const {user, active, onCancel} = this.props
+    const {image, active, onCancel} = this.props
     const actions = [{
       label: 'Cancel', onClick: onCancel,
     }, {
@@ -48,7 +48,7 @@ class AvatarEditorDialog extends Component {
         <div className={styles.dialogContent}>
           <AvatarEditor
             ref={this.setEditorRef}
-            image={user.avatarUrl}
+            image={image}
             width={200}
             height={200}
             scale={this.state.zoom}
@@ -69,7 +69,7 @@ class AvatarEditorDialog extends Component {
 
 AvatarEditorDialog.propTypes = {
   active: PropTypes.bool.isRequired,
-  user: PropTypes.object.isRequired,
+  image: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
 }

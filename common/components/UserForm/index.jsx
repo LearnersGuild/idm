@@ -43,7 +43,8 @@ const domOnlyProps = ({
 class UserForm extends Component {
   constructor(props) {
     super(props)
-    this.state = {avatarEditorActive: false}
+    const {auth: {currentUser}} = this.props
+    this.state = {avatarEditorActive: false, avatarURL: currentUser.avatarUrl}
     this.handlePhoneChange = this.handlePhoneChange.bind(this)
     this.handleDateOfBirthChange = this.handleDateOfBirthChange.bind(this)
     this.handleAvatarEditorSave = this.handleAvatarEditorSave.bind(this)
@@ -69,10 +70,9 @@ class UserForm extends Component {
     dateOfBirth.onChange(dobWithoutTime.toISOString().slice(0, 10))
   }
 
-  handleAvatarEditorSave(imageURL) {
-    const base64ImgData = imageURL.replace('data:image/jpeg;base64,', '')
-    console.log({base64ImgData})
-    this.setState({avatarEditorActive: false})
+  handleAvatarEditorSave(avatarURL) {
+    const base64ImgData = avatarURL.replace('data:image/jpeg;base64,', '')
+    this.setState({avatarEditorActive: false, avatarURL})
     this.props.handleSaveAvatar(base64ImgData)
   }
 
@@ -114,15 +114,14 @@ class UserForm extends Component {
       <form onSubmit={handleSubmit}>
         <TooltipAvatar
           className={styles.avatar}
-          image={currentUser.avatarUrl}
+          image={this.state.avatarURL}
           onClick={this.handleShowAvatarEditor}
           tooltip="Click to Edit"
           tooltipPosition="horizontal"
-          tooltipShowOnClick
           />
         <AvatarEditorDialog
           active={this.state.avatarEditorActive}
-          user={currentUser}
+          image={this.state.avatarURL}
           onCancel={this.handleAvatarEditorCancel}
           onSave={this.handleAvatarEditorSave}
           />

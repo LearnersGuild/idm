@@ -8,8 +8,8 @@ function updateUserAvatarRequest() {
   return {type: UPDATE_USER_AVATAR_REQUEST}
 }
 
-export function updateUserAvatarSuccess(currentUser) {
-  return {type: UPDATE_USER_AVATAR_SUCCESS, currentUser}
+export function updateUserAvatarSuccess(id) {
+  return {type: UPDATE_USER_AVATAR_SUCCESS, id}
 }
 
 function updateUserAvatarFailure(error) {
@@ -23,22 +23,7 @@ export default function updateUserAvatar(base64ImgData) {
     const mutation = {
       query: `
 mutation ($base64ImgData: String!) {
-  updateUserAvatar(base64ImgData: $base64ImgData) {
-    id
-    email
-    handle
-    name
-    emails
-    phone
-    dateOfBirth
-    timezone
-    roles
-    authProviders {
-      githubOAuth2 {
-        accessToken
-      }
-    }
-  }
+  updateUserAvatar(base64ImgData: $base64ImgData)
 }
       `,
       variables: {base64ImgData},

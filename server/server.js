@@ -4,6 +4,7 @@ import http from 'http'
 import Express from 'express'
 import serveStatic from 'serve-static'
 import {HTTPS as https} from 'express-sslify'
+import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import raven from 'raven'
 
@@ -26,6 +27,9 @@ export function start() {
 
     configureApp(app)
 
+    // Allow large files to be POSTed to GraphQL endpoints.
+    app.use(bodyParser.json({limit: '10mb'}))
+
     // Parse cookies.
     app.use(cookieParser())
 
@@ -47,6 +51,11 @@ export function start() {
     // GraphQL routes
     app.use((req, res, next) => {
       require('./graphql')(req, res, next)
+    })
+
+    // avatar routes
+    app.use('/avatars', (req, res, next) => {
+      require('./avatars')(req, res, next)
     })
 
     // Default React application

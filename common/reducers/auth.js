@@ -1,7 +1,6 @@
 import {AUTHENTICATE} from 'src/common/actions/authenticate'
 import {UPDATE_JWT} from 'src/common/actions/updateJWT'
 import {UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE} from 'src/common/actions/updateUser'
-import {UPDATE_USER_AVATAR_REQUEST, UPDATE_USER_AVATAR_SUCCESS, UPDATE_USER_AVATAR_FAILURE} from 'src/common/actions/updateUserAvatar'
 
 const initialState = {
   currentUser: null,
@@ -16,18 +15,15 @@ export function auth(state = initialState, action) {
         isBusy: true,
       })
     case UPDATE_USER_REQUEST:
-    case UPDATE_USER_AVATAR_REQUEST:
       return Object.assign({}, state, {
         isBusy: true,
       })
     case UPDATE_USER_SUCCESS:
-    case UPDATE_USER_AVATAR_SUCCESS:
       return Object.assign({}, state, {
         currentUser: Object.assign({}, state.currentUser, action.currentUser),
         isBusy: false,
       })
     case UPDATE_USER_FAILURE:
-    case UPDATE_USER_AVATAR_FAILURE:
       console.error('Update user FAILURE:', action.error)
       return Object.assign({}, state, {
         isBusy: false,

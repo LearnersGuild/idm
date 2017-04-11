@@ -1,5 +1,7 @@
 import {GraphQLError} from 'graphql/error'
 
+import config from 'src/config'
+
 export class LGInternalServerError extends Error {
   constructor(value) {
     if (typeof value === 'string') {
@@ -33,9 +35,8 @@ export function formatServerError(error = new Error()) {
 }
 
 export function extractUserAvatarUrl(user) {
-  const githubProfile = _extractUserGithubProfile(user)
-  return githubProfile && githubProfile.photos && githubProfile.photos.length ?
-    githubProfile.photos[0].value : null
+  const avatarUrl = `${config.app.baseURL}/avatars/${user.id}.jpg`
+  return avatarUrl
 }
 
 export function extractUserProfileUrl(user) {

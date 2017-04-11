@@ -56,6 +56,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-2": "^6.5.0",
     "babel-runtime": "^6.6.1",
+    "body-parser": "^1.17.1",
     "bourbon": "^4.2.6",
     "bourbon-neat": "^1.7.4",
     "bull": "^1.0.0-rc1",
