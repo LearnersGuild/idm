@@ -1,5 +1,6 @@
 import {DISMISS_ERROR} from 'src/common/actions/dismissError'
 import {UPDATE_USER_FAILURE} from 'src/common/actions/updateUser'
+import {UPDATE_USER_AVATAR_FAILURE} from 'src/common/actions/updateUserAvatar'
 import {GET_INVITE_CODE_FAILURE} from 'src/common/actions/getInviteCode'
 
 const initialState = {
@@ -25,9 +26,7 @@ export function errors(state = initialState, action) {
         messages: removeMessage(state, action.index)
       })
     case UPDATE_USER_FAILURE:
-      return Object.assign({}, state, {
-        messages: appendMessage(state, action.error),
-      })
+    case UPDATE_USER_AVATAR_FAILURE:
     case GET_INVITE_CODE_FAILURE:
       return Object.assign({}, state, {
         messages: appendMessage(state, action.error),

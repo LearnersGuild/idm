@@ -2,6 +2,7 @@ import {reduxForm} from 'redux-form'
 import moment from 'moment-timezone'
 
 import updateUser from 'src/common/actions/updateUser'
+import updateUserAvatar from 'src/common/actions/updateUserAvatar'
 import UserFormComponent from 'src/common/components/UserForm'
 
 function validate({name, phone, dateOfBirth, timezone}) {
@@ -28,6 +29,13 @@ function saveUser(stateProps, dispatchProps) {
   }
 }
 
+function saveUserAvatar(stateProps, dispatchProps) {
+  const {dispatch} = dispatchProps
+  return base64ImgData => {
+    dispatch(updateUserAvatar(base64ImgData))
+  }
+}
+
 export default reduxForm({
   form: 'signUp',
   fields: ['id', 'email', 'handle', 'name', 'phone', 'dateOfBirth', 'timezone'],
@@ -38,4 +46,5 @@ export default reduxForm({
 }), (dispatch, props) => props
 , (stateProps, dispatchProps) => Object.assign({}, stateProps, dispatchProps, {
   onSubmit: saveUser(stateProps, dispatchProps),
+  handleSaveAvatar: saveUserAvatar(stateProps, dispatchProps),
 }))(UserFormComponent)
