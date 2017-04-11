@@ -23,7 +23,8 @@ function _slackProfileMapper(user) {
       const nameParts = user.name.split(/\s+/)
       const claims = {
         'User.Email': user.email,
-        'User.Username': user.handle,
+        // Slack usernames are limited to 21 chars
+        'User.Username': user.handle.toLowerCase().slice(0, 21),
       }
       /* eslint-disable camelcase */
       if (nameParts.length > 0) {
