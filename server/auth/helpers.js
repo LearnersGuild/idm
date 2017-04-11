@@ -7,8 +7,9 @@ const r = connect()
 export const defaultSuccessRedirect = '/'
 
 export function mergeUserInfo(user, userInfo) {
-  // don't overwrite inviteCode
-  return merge(user, userInfo, {inviteCode: user.inviteCode})
+  // don't overwrite these attributes
+  const {inviteCode, email, name, roles, createdAt, active, id} = user
+  return merge(user, userInfo, {inviteCode, email, name, roles, createdAt, active, id})
 }
 
 export function createOrUpdateUser(user, userInfo) {
