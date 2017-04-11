@@ -24,7 +24,7 @@ test.before(async () => {
   await resetData()
 
   idmUsers = await factory.buildMany('user', 10)
-  slackUserNames = idmUsers.slice(3).map(user => user.handle)
+  slackUserNames = idmUsers.slice(3).map(user => user.handle.toLowerCase().slice(0, 21))
   await r.table('users').insert(idmUsers)
 })
 
