@@ -1,6 +1,7 @@
 import test from 'ava'
 import nock from 'nock'
 
+import {downcaseTrimTo21Chars} from 'src/common/util'
 import {connect} from 'src/db'
 import {resetData, cleanupDB} from 'src/test/db'
 import factory from 'src/test/factories'
@@ -24,7 +25,7 @@ test.before(async () => {
   await resetData()
 
   idmUsers = await factory.buildMany('user', 10)
-  slackUserNames = idmUsers.slice(3).map(user => user.handle.toLowerCase().slice(0, 21))
+  slackUserNames = idmUsers.slice(3).map(user => downcaseTrimTo21Chars(user.handle))
   await r.table('users').insert(idmUsers)
 })
 

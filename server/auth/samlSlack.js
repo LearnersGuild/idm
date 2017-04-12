@@ -1,5 +1,7 @@
 import samlp from 'samlp'
 
+import {downcaseTrimTo21Chars} from 'src/common/util'
+
 export function slackSAMLPost(RelayState) {
   return samlp.auth({
     issuer: process.env.SAML_ISSUER,
@@ -24,7 +26,7 @@ function _slackProfileMapper(user) {
       const claims = {
         'User.Email': user.email,
         // Slack usernames are limited to 21 chars
-        'User.Username': user.handle.toLowerCase().slice(0, 21),
+        'User.Username': downcaseTrimTo21Chars(user.handle),
       }
       /* eslint-disable camelcase */
       if (nameParts.length > 0) {

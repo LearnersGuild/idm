@@ -2,6 +2,7 @@ import BluebirdPromise from 'bluebird'
 import fetch from 'isomorphic-fetch'
 import minimist from 'minimist'
 
+import {downcaseTrimTo21Chars} from 'src/common/util'
 import {connect} from 'src/db'
 
 const r = connect()
@@ -27,7 +28,7 @@ export function mapUserAttrs(user) {
 
   const slackUser = {
     schemas: ['urn:scim:schemas:core:1.0'],
-    userName: user.handle.slice(0, 21), // Slack usernames are limited to 21 chars
+    userName: downcaseTrimTo21Chars(user.handle), // Slack usernames are limited to 21 chars
     name,
     emails,
     active: user.active,
