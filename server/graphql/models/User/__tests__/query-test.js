@@ -1,10 +1,15 @@
 import test from 'ava'
 
+import {downcaseTrimTo21Chars} from 'src/common/util'
+import {connect} from 'src/db'
 import {resetData, cleanupDB} from 'src/test/db'
 import {runQuery} from 'src/test/graphql'
 import {createUsers, assertQueryError} from 'src/test/helpers'
+import factory from 'src/test/factories'
 
 import api from '../query'
+
+const r = connect()
 
 const fields = 'id name handle active email phone profileUrl avatarUrl roles inviteCode createdAt updatedAt'
 const queries = {
@@ -141,6 +146,30 @@ test('getUsersByHandles: throws an error if user is not signed-in', async t => {
     {handles: ['fake.handle']},
     {currentUser: null}
   )
+})
+
+test('getUsersByHandles: returns the correct users for Slack-compatible handles', async t => {
+  const overwriteObjs = [{
+    handle: 'HasUppercase',
+  }, {
+    handle: 'isLongerThanTwentyOneCharacters',
+  }]
+  const users = await factory.buildMany('user', overwriteObjs)
+  await r.table('users').insert(users)
+  const result = await runQuery(queries.getUsersByHandles, api, {
+    handles: users.map(user => downcaseTrimTo21Chars(user.handle))
+  })
+  const resultUsers = result.data.getUsersByHandles
+  t.is(resultUsers.length, users.length, 'found wrong number of users')
+})
+
+test('getUser: returns correct user for a Slack-compatible handle', async t => {
+  const user = await factory.build('user', {handle: 'isMuchLongerThanTwentyOneCharacters'})
+  await r.table('users').insert(user)
+  const result = await runQuery(queries.getUser, api, {
+    identifier: downcaseTrimTo21Chars(user.handle)
+  })
+  t.is(result.data.getUser.email, user.email, 'users do not match')
 })
 
 test('getUser: returns correct user for valid identifier', async t => {

@@ -2,6 +2,7 @@
 import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 
+import {downcaseTrimTo21Chars} from 'src/common/util'
 import {connect} from 'src/db'
 import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
 import {errors} from 'src/server/graphql/util'
@@ -56,7 +57,8 @@ export default {
         throw notAuthorized()
       }
 
-      const users = await table.getAll(...handles, {index: 'handle'})
+      const queryHandles = handles.map(downcaseTrimTo21Chars)
+      const users = await table.getAll(...queryHandles, {index: 'handle'})
       return users.map(applyUserProfileUrls)
     }
   },
@@ -72,10 +74,10 @@ export default {
 
       const users = await table.filter(row => r.or(
         row('id').eq(identifier),
-        row('handle').eq(identifier)
+        row('handle').downcase().slice(0, 21).eq(downcaseTrimTo21Chars(identifier))
       ))
 
-      const user = users[0]
+      const [user] = users
       if (!user) {
         throw notFound('User')
       }
@@ -94,6 +96,9 @@ export default {
       }
 
       const {identifiers} = args || {}
+      const queryHandles = identifiers ?
+        identifiers.map(downcaseTrimTo21Chars) :
+        undefined
 
       const users = await (
         !Array.isArray(identifiers) ?
@@ -102,7 +107,7 @@ export default {
             .getAll(...identifiers)
             .union(
               r.table('users')
-                .getAll(...identifiers, {index: 'handle'})
+                .getAll(...queryHandles, {index: 'handle'})
             )
             .distinct()
             .run()
