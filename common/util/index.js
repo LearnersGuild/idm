@@ -70,3 +70,7 @@ export function buildURL(baseURL, queryArgs) {
   const search = queryStr ? `?${queryStr}` : ''
   return `${baseURL}${search}`
 }
+
+export function downcaseTrimTo21Chars(str) {
+  return str.toLowerCase(str).slice(0, 21)
+}
