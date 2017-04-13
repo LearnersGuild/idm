@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react'
 
 import Dialog from 'react-toolbox/lib/dialog'
+import {List, ListItem} from 'react-toolbox/lib/list'
+
 import Slider from 'react-toolbox/lib/slider'
 import AvatarEditor from 'react-avatar-editor'
 
@@ -45,7 +47,7 @@ class AvatarEditorDialog extends Component {
         onOverlayClick={this.handleCancel}
         title="Edit Your Avatar"
         >
-        <div className={styles.dialogContent}>
+        <div className={styles.editor}>
           <AvatarEditor
             ref={this.setEditorRef}
             image={image}
@@ -61,6 +63,13 @@ class AvatarEditorDialog extends Component {
             onChange={this.handleZoom}
             value={this.state.zoom}
             />
+        </div>
+        <div className={styles.instructions}>
+          <List>
+            <ListItem caption="Drag a new photo onto the box" leftIcon="navigate_next"/>
+            <ListItem caption="Zoom using the slider" leftIcon="navigate_next"/>
+            <ListItem caption="Move the image to center it" leftIcon="navigate_next"/>
+          </List>
         </div>
       </Dialog>
     )

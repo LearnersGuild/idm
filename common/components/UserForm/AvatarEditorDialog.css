@@ -1,4 +1,13 @@
-.dialogContent {
+.editor, .instructions {
+  float: left;
+}
+
+.editor {
   width: 50%;
-  margin: 0 auto;
+  cursor: move;
+}
+
+.instructions {
+  width: 50%;
+  padding-top: -3em;
 }
