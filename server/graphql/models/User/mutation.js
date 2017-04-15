@@ -33,30 +33,18 @@ export default {
       id: {type: new GraphQLNonNull(GraphQLID)},
     },
     async resolve(source, {id}, {rootValue: {currentUser}}) {
-      try {
-        const currentUserIsAuthorized = (currentUser && currentUser.roles &&
-          (
-            currentUser.roles.indexOf('backoffice') >= 0 ||
-            currentUser.roles.indexOf('moderator') >= 0
-          )
+      const currentUserIsAuthorized = (currentUser && currentUser.roles &&
+        (
+          currentUser.roles.indexOf('backoffice') >= 0 ||
+          currentUser.roles.indexOf('moderator') >= 0
         )
+      )
 
-        if (!currentUser || !currentUserIsAuthorized) {
-          throw new GraphQLError('You are not authorized to do that.')
-        }
-
-        const updatedUser = await deactivateUser(id)
-
-        if (updatedUser.replaced) {
-          return updatedUser.changes[0].new_val
-        } else if (updatedUser.unchanged) {
-          return updatedUser.changes[0].old_val
-        }
-
-        throw new GraphQLError('Could not deactivate user, please try again')
-      } catch (err) {
-        throw err
+      if (!currentUser || !currentUserIsAuthorized) {
+        throw new GraphQLError('You are not authorized to do that.')
       }
+
+      return await deactivateUser(id)
     }
   },
   updateUser: {
