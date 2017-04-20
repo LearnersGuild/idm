@@ -82,9 +82,12 @@ export default {
       const jpegData = new Buffer(base64ImgData, 'base64')
       await r.table('userAvatars')
         .get(currentUser.id)
-        .update({
-          jpegData,
-          updatedAt: r.now(),
+        .replace(userAvatar => {
+          return r.branch(
+            userAvatar.eq(null),
+            {id: currentUser.id, jpegData, createdAt: r.now(), updatedAt: r.now()},
+            userAvatar.merge({jpegData, updatedAt: r.now()})
+          )
         })
       return currentUser.id
     },
