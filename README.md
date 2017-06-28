@@ -177,7 +177,7 @@ When attempting to `npm login`, was seeing `Error: Failed to replace env in conf
 
 See the [LICENSE](./LICENSE) file.
 
-[game]: https://github.com/LearnersGuild/game
+[echo]: https://github.com/LearnersGuild/echo
 [github-register-application]: https://github.com/settings/applications/new
 [install-rethinkdb]: https://www.rethinkdb.com/docs/install/
 [redis]: http://redis.io/
