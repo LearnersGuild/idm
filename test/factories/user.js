@@ -1,5 +1,7 @@
 import faker from 'faker'
 
+import {USER_ROLES} from 'src/common/models/user'
+
 const VALID_TIMEZONES = ['America/Los_Angeles', 'America/Chicago', 'America/New_York']
 const now = new Date()
 
@@ -14,7 +16,7 @@ export default function define(factory) {
     dateOfBirth: cb => cb(null, faker.date.past(21).toISOString().slice(0, 10)),
     timezone: cb => cb(null, faker.random.arrayElement(VALID_TIMEZONES)),
     active: true,
-    roles: ['player'],
+    roles: [USER_ROLES.MEMBER],
     inviteCode: 'test',
     authProviders: {},
     authProviderProfiles: {

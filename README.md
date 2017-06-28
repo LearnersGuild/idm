@@ -113,7 +113,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
       id: '58abd2aa-3826-4604-bf7c-f8f2cf7eaad9',
       code: 'hand_crafted_artisanal_invite_code',
       description: 'hand crafted artisanal invite code',
-      roles: ['player', 'backoffice', 'moderator'],
+      roles: ['admin', 'member'],
       active: true,
       createdAt: r.now(),
       updatedAt: r.now(),
@@ -127,7 +127,7 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 16. (OPTIONAL) Add some test users:
 
     ```bash
-    npm run data:users -- --verbose --role=player some-dummy-invite-code
+    npm run data:users -- --verbose --role=member some-dummy-invite-code
     ```
 
 ## Gotchas

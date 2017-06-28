@@ -6,6 +6,7 @@ import processChangeFeedWithAutoReconnect from 'rethinkdb-changefeed-reconnect'
 
 import config from 'src/config'
 import {connect} from 'src/db'
+import {USER_ROLES} from 'src/common/models/user'
 
 const r = connect()
 const sentry = new raven.Client(config.server.sentryDSN)
@@ -24,11 +25,8 @@ function _getQueue(queueName) {
 }
 
 function _getFeed() {
-  // this is not ideal, because if a user has both the 'moderator' and the
-  // 'player' role, we'll add that user to the queue twice, so on the other
-  // end of the queue, some de-duplication needs to happen
   return r.table('users')
-    .getAll('moderator', 'player', {index: 'roles'})
+    .getAll(USER_ROLES.MEMBER, {index: 'roles'})
     .changes()
     .filter(r.row('old_val').eq(null))
 }

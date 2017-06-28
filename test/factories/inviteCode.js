@@ -1,5 +1,7 @@
 import faker from 'faker'
 
+import {USER_ROLES} from 'src/common/models/user'
+
 const now = new Date()
 
 export default function define(factory) {
@@ -7,7 +9,7 @@ export default function define(factory) {
     id: cb => cb(null, faker.random.uuid()),
     code: cb => cb(null, faker.random.word()),
     description: cb => cb(null, faker.random.words(3)),
-    roles: ['player'],
+    roles: [USER_ROLES.MEMBER],
     active: true,
     permanent: false,
     createdAt: cb => cb(null, now),

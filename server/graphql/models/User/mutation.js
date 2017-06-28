@@ -4,6 +4,7 @@ import {GraphQLError} from 'graphql/error'
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
 import {GraphQLPhoneNumber} from 'src/server/graphql/models/types'
+import {USER_ROLES} from 'src/common/models/user'
 import {connect} from 'src/db'
 
 import {User} from './schema'
@@ -33,12 +34,8 @@ export default {
       id: {type: new GraphQLNonNull(GraphQLID)},
     },
     async resolve(source, {id}, {rootValue: {currentUser}}) {
-      const currentUserIsAuthorized = (currentUser && currentUser.roles &&
-        (
-          currentUser.roles.indexOf('backoffice') >= 0 ||
-          currentUser.roles.indexOf('moderator') >= 0
-        )
-      )
+      const currentUserIsAuthorized = (currentUser && Array.isArray(currentUser.roles) &&
+        currentUser.roles.include(USER_ROLES.ADMIN))
 
       if (!currentUser || !currentUserIsAuthorized) {
         throw new GraphQLError('You are not authorized to do that.')
