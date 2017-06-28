@@ -27,7 +27,7 @@ const ERROR_MSG_NOT_AUTH = 'not authorized'
 
 const TEST_USER_COUNT = 5
 const TEST_USER_INVITE_CODE = 'test-invite-code'
-const TEST_USER_ROLES = ['moderator']
+const TEST_USER_ROLES = ['admin']
 
 let testUsers
 test.before(async () => {

@@ -2,6 +2,7 @@ import path from 'path'
 import parseArgs from 'minimist'
 
 import 'src/config'
+import {USER_ROLES} from 'src/common/models/user'
 import {createUsers} from './helpers'
 import {drainPool} from './db'
 
@@ -13,7 +14,7 @@ function printUsage(logger = console.error) {
 
 Options:
     --help              print this help message
-    --role=ROLE[,ROLE]  create users with these roles (default: 'player')
+    --role=ROLE[,ROLE]  create users with these roles (default: 'member')
     --count             how many users to create (default: 15)
     --verbose           print out ids of created users
 `
@@ -47,7 +48,7 @@ async function run() {
       return 1
     }
 
-    const role = parseRole(roleStr) || 'player'
+    const role = parseRole(roleStr) || USER_ROLES.MEMBER
     const count = countStr ? parseInt(countStr, 10) : 15
 
     const users = await createUsers(inviteCode, role, count)
