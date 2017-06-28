@@ -7,7 +7,7 @@ import UserFormComponent from 'src/common/components/UserForm'
 
 function validate({name, phone, dateOfBirth, timezone}) {
   const errors = {}
-  if (!name || !name.match(/\w{3,}/)) {
+  if (!name || !name.match(/\w{2,} \w{2,}/)) {
     errors.name = 'Please use your full, legal name'
   }
   if (!phone || phone.length < 10) {
