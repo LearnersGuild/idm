@@ -1,8 +1,7 @@
 import test from 'ava'
+import {githubProfileToUserInfo} from 'src/server/auth/github'
 
 test('githubProfileToUserInfo extracts correct information', t => {
-  const githubProfileToUserInfo = require('src/server/auth/github').githubProfileToUserInfo
-
   const expected = {
     name: 'Me',
     email: 'me@example.com',
