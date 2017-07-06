@@ -26,6 +26,13 @@ module.exports = {
     newrelic: {
       enabled: false,
     },
+    aws: {
+      s3: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.SECRET_ACCESS_KEY,
+        region: process.env.AWS_S3_REGION || 'us-west-2',
+      },
+    },
   },
 
   app: {

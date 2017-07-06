@@ -66,7 +66,12 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
     ```
 
-10. Create your `.env.development` file for your environment. Example:
+10. Create a free AWS account:
+[https://aws.amazon.com](https://aws.amazon.com/)
+
+Make a copy of your access key ID and secret access key. You'll need to include these in your  environment variables in the next step.
+
+11. Create your `.env.development` file for your environment. Example:
 
     ```bash
     PORT=9001
@@ -82,9 +87,13 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     # remove these three commented lines
     JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem >"
     JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem replace all linebreaks with \n >"
+    S3_BUCKET=guild-development
+    S3_KEY_PREFIX=db
+    AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
+    AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
     ```
 
-11. Run the setup tasks:
+12. Run the setup tasks:
 
     ```bash
     npm install
@@ -92,19 +101,19 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     npm run db:migrate -- up
     ```
 
-12. Run the server:
+13. Run the server:
 
     ```bash
     npm start
     ```
 
-13. Visit the server in your browser:
+14. Visit the server in your browser:
 
     ```bash
     open http://idm.learnersguild.dev
     ```
 
-14. Create an Account
+15. Create an Account
 
     Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
 
@@ -120,11 +129,11 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     })
     ```
 
-15. Sign In
+16. Sign In
 
     Use the invitation code `hand_crafted_artisanal_invite_code` to create an account.
 
-16. (OPTIONAL) Add some test users:
+17. (OPTIONAL) Add some test users:
 
     ```bash
     npm run data:users -- --verbose --role=member some-dummy-invite-code
