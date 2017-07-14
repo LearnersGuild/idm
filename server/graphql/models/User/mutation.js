@@ -35,7 +35,7 @@ export default {
     },
     async resolve(source, {id}, {rootValue: {currentUser}}) {
       const currentUserIsAuthorized = (currentUser && Array.isArray(currentUser.roles) &&
-        currentUser.roles.include(USER_ROLES.ADMIN))
+        currentUser.roles.includes(USER_ROLES.ADMIN))
 
       if (!currentUser || !currentUserIsAuthorized) {
         throw new GraphQLError('You are not authorized to do that.')
