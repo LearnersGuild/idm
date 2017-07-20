@@ -4,7 +4,7 @@ import {cloneDeep, merge} from 'lodash'
 import {connect} from 'src/db'
 import {resetData, cleanupDB} from 'src/test/db'
 
-import {mergeUserInfo, addUserAvatar} from 'src/server/auth/helpers'
+import {mergeUserInfo, saveUserAvatar} from 'src/server/auth/helpers'
 
 const r = connect()
 
@@ -37,7 +37,7 @@ test.after(async () => {
   await cleanupDB()
 })
 
-test('addUserAvatar: adds user\'s github avatar on sign-up', async t => {
+test('saveUserAvatar: saves user\'s github avatar on sign-up', async t => {
   const jpegDataURL = 'https://www.learnersguild.org/images/LogoPrimary.png'
   const user = {
     id: '06f211e3-bd02-4fbd-b977-dc5e769ad092',
@@ -52,7 +52,7 @@ test('addUserAvatar: adds user\'s github avatar on sign-up', async t => {
     }
   }
 
-  const result = await addUserAvatar(user)
+  const result = await saveUserAvatar(user)
 
   const userAvatar = await r.table('userAvatars')
     .filter({id: user.id})

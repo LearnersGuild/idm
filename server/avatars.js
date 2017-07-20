@@ -14,7 +14,10 @@ app.get('/:filename', (req, res) => {
     .run()
     .then(userAvatar => {
       if (!userAvatar) {
-        res.status(404).send(`No such image: ${filename}`)
+        const notFoundAvatarURL = 'https://brand.learnersguild.org/assets/echo-icon-128x128.png'
+        res
+          .status(307)
+          .redirect(notFoundAvatarURL)
         return
       }
 

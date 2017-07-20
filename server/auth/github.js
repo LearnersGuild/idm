@@ -13,7 +13,7 @@ import {
   getUserByGithubId,
   getInviteCodesByCode,
   defaultSuccessRedirect,
-  addUserAvatar,
+  saveUserAvatar,
 } from './helpers'
 
 const config = require('src/config')
@@ -75,7 +75,7 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
     if (result.inserted) {
-      await addUserAvatar(user)
+      await saveUserAvatar(user)
     }
     cb(null, user)
   } catch (err) {

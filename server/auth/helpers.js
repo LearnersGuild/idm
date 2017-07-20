@@ -12,7 +12,7 @@ export function mergeUserInfo(user, userInfo) {
   return merge(user, userInfo, {inviteCode, email, name, roles, createdAt, active, id})
 }
 
-export function addUserAvatar(user) {
+export function saveUserAvatar(user) {
   const githubProfilePhotos = (user.authProviderProfiles.githubOAuth2 || {}).photos || []
   const githubProfilePhotoURL = (githubProfilePhotos[0] || {}).value
   return r.table('userAvatars')
