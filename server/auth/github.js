@@ -13,6 +13,7 @@ import {
   getUserByGithubId,
   getInviteCodesByCode,
   defaultSuccessRedirect,
+  addUserAvatar,
 } from './helpers'
 
 const config = require('src/config')
@@ -73,6 +74,9 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode)
     const result = await createOrUpdateUser(user, userInfo)
     user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
+    if (result.inserted) {
+      await addUserAvatar(user)
+    }
     cb(null, user)
   } catch (err) {
     sentry.captureException(err)
