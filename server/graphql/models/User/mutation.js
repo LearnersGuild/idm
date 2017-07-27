@@ -50,8 +50,8 @@ export default {
       user: {type: new GraphQLNonNull(InputUser)},
     },
     async resolve(source, {user}, {rootValue: {currentUser}}) {
-      const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-      if (!currentUser || (user.id !== currentUser.id && !currentUserIsBackOffice)) {
+      const currentUserIsAdmin = (currentUser && currentUser.roles && currentUser.roles.indexOf('admin') >= 0)
+      if (!currentUser || (user.id !== currentUser.id && !currentUserIsAdmin)) {
         throw new GraphQLError('You are not authorized to do that.')
       }
 

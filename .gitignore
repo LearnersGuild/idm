@@ -11,3 +11,4 @@ db/database.json
 .flooignore
 *.env
 LearnersGuild-idm.aes
+rethinkdb_data/*

@@ -14,7 +14,7 @@ const inputInviteCode = {
   description: 'whee',
   roles: ['role1', 'role2'],
 }
-const backofficeUser = {id: 'me', handle: 'me', roles: ['backoffice']}
+const admin = {id: 'me', handle: 'me', roles: ['admin']}
 test.before(async () => {
   await resetData()
 })
@@ -30,7 +30,7 @@ test('createInviteCode: creates the invite code correctly', async t => {
     mutation,
     api,
     {inviteCode: inputInviteCode},
-    {currentUser: backofficeUser}
+    {currentUser: admin}
   )
   const savedInviteCode = await r.table('inviteCodes').getAll(inputInviteCode.code, {index: 'code'}).nth(0)
 
@@ -46,7 +46,7 @@ test('createInviteCode: defaults active to true and permanent to false', async t
     mutation,
     api,
     {inviteCode: inputInviteCode},
-    {currentUser: backofficeUser}
+    {currentUser: admin}
   )
   const savedInviteCode = await r.table('inviteCodes').getAll(inputInviteCode.code, {index: 'code'}).nth(0)
 

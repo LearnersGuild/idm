@@ -27,8 +27,8 @@ export default {
     },
     async resolve(source, {inviteCode}, {rootValue: {currentUser}}) {
       try {
-        const currentUserIsBackOffice = (currentUser && currentUser.roles && currentUser.roles.indexOf('backoffice') >= 0)
-        if (!currentUserIsBackOffice) {
+        const currentUserIsAdmin = (currentUser && currentUser.roles && currentUser.roles.indexOf('admin') >= 0)
+        if (!currentUserIsAdmin) {
           throw new GraphQLError('You are not authorized to do that')
         }
 
