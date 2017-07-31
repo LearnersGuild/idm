@@ -72,8 +72,6 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 Make a copy of your access key ID and secret access key. You'll need to include these in your  environment variables in the next step.
 
-<img width="1132" alt="screen shot 2017-07-06 at 2 17 26 pm" src="https://user-images.githubusercontent.com/1890882/27933975-69a1880a-6258-11e7-9e9a-a02256a129e3.png">
-
 11. Create your `.env.development` file for your environment. Example:
 
     ```bash
