@@ -1,8 +1,9 @@
 # idm
 
-[![Code Climate GPA](https://codeclimate.com/repos/579a58e53f93500064001746/badges/e60dd0bcd126c656cd24/gpa.svg)](https://codeclimate.com/repos/579a58e53f93500064001746/feed)
-[![Code Climate Issue Count](https://codeclimate.com/repos/579a58e53f93500064001746/badges/e60dd0bcd126c656cd24/issue_count.svg)](https://codeclimate.com/repos/579a58e53f93500064001746/feed)
-[![Test Coverage](https://codeclimate.com/repos/579a58e53f93500064001746/badges/e60dd0bcd126c656cd24/coverage.svg)](https://codeclimate.com/repos/579a58e53f93500064001746/coverage)
+[ ![Codeship Status for LearnersGuild/idm](https://app.codeship.com/projects/92d0f5c0-180d-0134-1b2a-7a446e54894e/status?branch=master)](https://app.codeship.com/projects/158637)
+[![Code Climate GPA](https://codeclimate.com/github/LearnersGuild/idm/badges/gpa.svg)](https://codeclimate.com/github/LearnersGuild/idm/feed)
+[![Code Climate Issue Count](https://codeclimate.com/github/LearnersGuild/idm/badges/issue_count.svg)](https://codeclimate.com/github/LearnersGuild/idm/feed)
+[![Test Coverage](https://codeclimate.com/github/LearnersGuild/idm/coverage.svg)](https://codeclimate.com/github/LearnersGuild/idm/coverage)
 
 This is the identity management service.
 
