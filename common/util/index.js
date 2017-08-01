@@ -7,6 +7,8 @@ const APP_BASE_URL = __SERVER__ ? process.env.APP_BASE_URL : ''
 
 export * from './phoneNumber'
 
+export {default as userCan} from './userCan'
+
 export function getGraphQLFetcher(dispatch, auth, baseUrl = APP_BASE_URL, throwErrors = true) {
   return graphQLParams => {
     const options = {

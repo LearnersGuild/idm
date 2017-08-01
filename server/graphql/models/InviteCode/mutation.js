@@ -5,6 +5,8 @@ import {GraphQLError} from 'graphql/error'
 import {connect} from 'src/db'
 import {InviteCode} from './schema'
 
+import {userCan} from 'src/common/util'
+
 const r = connect()
 
 const InputInviteCode = new GraphQLInputObjectType({
@@ -27,8 +29,7 @@ export default {
     },
     async resolve(source, {inviteCode}, {rootValue: {currentUser}}) {
       try {
-        const currentUserIsAdmin = (currentUser && currentUser.roles && currentUser.roles.indexOf('admin') >= 0)
-        if (!currentUserIsAdmin) {
+        if (!userCan(currentUser, 'createInviteCode')) {
           throw new GraphQLError('You are not authorized to do that')
         }
 
