@@ -12,6 +12,7 @@ import SignIn from 'src/common/containers/SignIn'
 
 import Home from 'src/common/containers/Home'
 import Profile from 'src/common/components/Profile'
+import UsersContainer from 'src/common/containers/Users'
 import {buildURL} from 'src/common/util'
 
 const userIsAuthenticated = userAuthWrapper({
@@ -71,6 +72,7 @@ const routes = store => {
       <Route component={BlankLayout}>
         <IndexRoute component={userIsAuthenticated(Home)}/>
         <Route path="profile" component={userIsAuthenticated(Profile)}/>
+        <Route path="users" component={userIsAuthenticated(UsersContainer)}/>
       </Route>
     </Route>
   )
