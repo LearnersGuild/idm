@@ -19,7 +19,7 @@ const userIsAuthenticated = userAuthWrapper({
   failureRedirectPath: '/sign-in',
   authSelector: state => state.auth.currentUser,
   redirectAction: routerActions.replace,
-  wrapperDisplayName: 'userIsAuthenticated',
+  wrapperDisplayName: 'userIsAdmin',
 })
 
 function userHasCompletedProfile(currentUser) {

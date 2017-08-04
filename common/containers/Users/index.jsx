@@ -30,7 +30,6 @@ export class UsersContainer extends Component {
   }
 
   render() {
-    console.log('props', this.props)
     const {isBusy, users} = this.props
     const userData = users.map(user => {
       const mailtoURL = `mailto:${user.email}`
@@ -52,7 +51,6 @@ export class UsersContainer extends Component {
         active: user.active ? 'Yes' : 'No',
       })
     })
-    console.log('userData', userData)
 
     return isBusy ? null : (
       <div>
