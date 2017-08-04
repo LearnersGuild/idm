@@ -1,7 +1,8 @@
 import React from 'react'
 import {Route, IndexRoute} from 'react-router'
-import {routerActions} from 'react-router-redux'
 import {UserAuthWrapper as userAuthWrapper} from 'redux-auth-wrapper'
+import {push} from 'react-router-redux'
+import {userCan} from 'src/common/util'
 
 // TODO: use webpack code-splitting and System.import to reduce initial bundle size
 import App from 'src/common/containers/App'
@@ -15,12 +16,21 @@ import Profile from 'src/common/components/Profile'
 import UsersContainer from 'src/common/containers/Users'
 import {buildURL} from 'src/common/util'
 
-const userIsAuthenticated = userAuthWrapper({
-  failureRedirectPath: '/sign-in',
-  authSelector: state => state.auth.currentUser,
-  redirectAction: routerActions.replace,
-  wrapperDisplayName: 'userIsAdmin',
-})
+const userCanVisit = (capability, store) => {
+  return userAuthWrapper({
+    authSelector: state => state.auth.currentUser,
+    predicate: currentUser => userCan(currentUser, capability),
+    failureRedirectPath: '/not-found',
+    allowRedirectBack: false,
+    redirectAction: failureRedirectPath => {
+      const {dispatch} = store
+      dispatch(authorizationError('You are not authorized to do that.'))
+      dispatch(push(failureRedirectPath))
+      return {type: 'ignore'}
+    },
+    wrapperDisplayName: 'userCan',
+  })
+}
 
 function userHasCompletedProfile(currentUser) {
   return (
@@ -70,9 +80,9 @@ const routes = store => {
         <Route path="sign-in" component={SignIn} onEnter={redirectIfSignedIn(store)}/>
       </Route>
       <Route component={BlankLayout}>
-        <IndexRoute component={userIsAuthenticated(Home)}/>
-        <Route path="profile" component={userIsAuthenticated(Profile)}/>
-        <Route path="users" component={userIsAuthenticated(UsersContainer)}/>
+        <IndexRoute component={userCanVisit('viewHome', store)(Home)}/>
+        <Route path="profile" component={userCanVisit('viewOwnProfile', store)(Profile)}/>
+        <Route path="users" component={userCanVisit('viewAllUsers', store)(UsersContainer)}/>
       </Route>
     </Route>
   )
