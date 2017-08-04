@@ -11,6 +11,7 @@ export class Home extends Component {
     super(props)
     this.handleEditProfile = this.handleEditProfile.bind(this)
     this.handleSignOut = this.handleSignOut.bind(this)
+    this.handleNavigateUsers = this.handleNavigateUsers.bind(this)
   }
 
   handleEditProfile() {
@@ -23,14 +24,22 @@ export class Home extends Component {
     }
   }
 
+  handleNavigateUsers() {
+    if (__CLIENT__) {
+      window.location.href = '/users'
+    }
+  }
+
   render() {
+    const isAdmin = this.props.authData.roles.includes('admin')
     return (
-      <HomeComponent onEditProfile={this.handleEditProfile} onSignOut={this.handleSignOut}/>
+      <HomeComponent onEditProfile={this.handleEditProfile} onSignOut={this.handleSignOut} onNavigateUsers={this.handleNavigateUsers} isAdmin={isAdmin}/>
     )
   }
 }
 
 Home.propTypes = {
+  authData: PropTypes.object.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
 }

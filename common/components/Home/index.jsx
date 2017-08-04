@@ -6,6 +6,14 @@ import styles from './index.css'
 
 export default class Home extends Component {
   render() {
+    const usersButton = (
+      <ListItem
+        caption="All Users"
+        leftIcon="people"
+        onClick={this.props.onNavigateUsers}
+        />
+    )
+    const usersLink = this.props.isAdmin ? usersButton : null
     return (
       <Card className={styles.card}>
         <CardTitle
@@ -23,6 +31,7 @@ export default class Home extends Component {
             leftIcon="subdirectory_arrow_left"
             onClick={this.props.onSignOut}
             />
+          {usersLink}
         </List>
       </Card>
     )
@@ -30,6 +39,8 @@ export default class Home extends Component {
 }
 
 Home.propTypes = {
+  isAdmin: PropTypes.bool,
   onEditProfile: PropTypes.func.isRequired,
   onSignOut: PropTypes.func.isRequired,
+  onNavigateUsers: PropTypes.func.isRequired,
 }
