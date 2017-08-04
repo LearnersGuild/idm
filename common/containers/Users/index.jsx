@@ -1,18 +1,20 @@
-/* global __CLIENT__ */
 /* eslint-disable no-undef */
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
-import {push} from 'react-router-redux'
+import {Link} from 'react-router'
 
 import findUsers from 'src/common/actions/findUsers'
-import redirect from 'src/common/actions/redirect'
 import UsersComponent from 'src/common/components/Users'
 
+import styles from './index.css'
+
 const tableModel = {
-    name: {title: 'Name', type: String},
-    handle: {title: 'Handle', type: String},
-    email: {title: 'Email', type: String},
-  }
+  avatarUrl: {title: 'Photo', type: String},
+  name: {title: 'Name', type: String},
+  handle: {title: 'Handle', type: String},
+  email: {title: 'Email', type: String},
+  active: {title: 'Active', type: Boolean}
+}
 
 export class UsersContainer extends Component {
   constructor(props) {
@@ -23,30 +25,51 @@ export class UsersContainer extends Component {
     this.constructor.fetchData(this.props.dispatch, this.props)
   }
 
-
-
-  static fetchData(dispatch, props) {
+  static fetchData(dispatch) {
     dispatch(findUsers())
   }
 
   render() {
-    console.log('props ===========',this.props)
-    const {users} = this.props
+    console.log('props', this.props)
+    const {isBusy, users} = this.props
+    const userData = users.map(user => {
+      const mailtoURL = `mailto:${user.email}`
+      const altTitle = `${user.name} (${user.handle})`
+      return Object.assign({}, user, {
+        avatarUrl: (
+          <Link href={user.profileUrl}>
+            <img
+              className={styles.userImage}
+              src={user.avatarUrl}
+              alt={altTitle}
+              title={altTitle}
+              />
+          </Link>
+        ),
+        handle: <Link href={user.profileUrl} className={styles.userLink}>{user.handle}</Link>,
+        name: <Link href={user.profileUrl} className={styles.userLink}>{user.name}</Link>,
+        email: <Link href={mailtoURL} className={styles.userLink}>{user.email}</Link>,
+        active: user.active ? 'Yes' : 'No',
+      })
+    })
+    console.log('userData', userData)
 
-    return (
+    return isBusy ? null : (
       <div>
-        <h1>{'This is the UsersContainer'}</h1>
-        <UsersComponent users={users} model={tableModel}/>
+        <UsersComponent users={userData} model={tableModel}/>
       </div>
     )
   }
 }
 
 function mapStateToProps(state) {
-  return state.users
+  const {users} = state
+  return users
 }
 
 UsersContainer.propTypes = {
+  users: PropTypes.array.isRequired,
+  isBusy: PropTypes.bool.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
 }

@@ -21,24 +21,26 @@ export default function findUsers() {
     dispatch(findUsersRequest())
 
     const query =
-    {
-      query:
-      ` query {
-          findUsers {
-            id
-            name
-            handle
-            email
+      {
+        query:
+        ` query {
+            findUsers {
+              id
+              name
+              handle
+              email
+              active
+              avatarUrl
+              profileUrl
+            }
           }
-        }
-      `
-    }
+        `
+      }
 
     const {auth} = getState()
 
     return getGraphQLFetcher(dispatch, auth)(query)
       .then(result => {
-        // console.log('graphQL action query result', result)
         dispatch(findUsersSuccess(result.data.findUsers))
       })
       .catch(error => {

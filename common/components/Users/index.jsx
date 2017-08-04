@@ -1,18 +1,22 @@
 import React, {Component, PropTypes} from 'react'
-import {Card, CardTitle} from 'react-toolbox/lib/card'
+import {CardTitle} from 'react-toolbox/lib/card'
 import {Table} from 'react-toolbox'
-
-import styles from './index.css'
 
 export default class UsersComponent extends Component {
   render() {
     const {users, model} = this.props
     return (
-      <Table source={users} model={model}/>
+      <div>
+        <CardTitle title="Users"/>
+        <div>
+          <Table source={users} model={model} selectable={false}/>
+        </div>
+      </div>
     )
   }
 }
 
 UsersComponent.propTypes = {
-
+  model: PropTypes.object.isRequired,
+  users: PropTypes.array.isRequired
 }
