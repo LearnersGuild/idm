@@ -1,4 +1,5 @@
 import {GraphQLError} from 'graphql/error'
+import autoloader from 'auto-loader'
 
 import config from 'src/config'
 
@@ -17,6 +18,16 @@ export class LGInternalServerError extends Error {
     this.type = 'Internal Server Error'
     this.statusCode = 500
   }
+}
+
+export function autoloadFunctions(directoryPath) {
+  const moduleExports = autoloader.load(directoryPath)
+  return Object.keys(moduleExports).reduce((result, key) => {
+    if (typeof moduleExports[key] === 'function') {
+      result[key] = moduleExports[key]
+    }
+    return result
+  }, {})
 }
 
 export function formatServerError(error = new Error()) {
