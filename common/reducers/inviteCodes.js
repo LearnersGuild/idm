@@ -16,7 +16,6 @@ export function inviteCodes(state = initialState, action) {
         isBusy: true,
       })
     case GET_INVITE_CODE_SUCCESS:
-      console.log('invite code reducer',action)
       return Object.assign({}, state, {
         isBusy: false,
         codes: {[action.code]: action.inviteCode},

@@ -13,7 +13,8 @@ export function users(state = initialState, action) {
   switch (action.type) {
     case FIND_USERS_REQUEST:
       return Object.assign({}, state, {
-        isBusy: true
+        isBusy: true,
+        users: []
       })
     case FIND_USERS_SUCCESS:
       return Object.assign({}, state, {
@@ -23,7 +24,7 @@ export function users(state = initialState, action) {
     case FIND_USERS_FAILURE:
       return Object.assign({}, state, {
         isBusy: false,
-        users: action.users
+        users: []
       })
     default:
       return state
