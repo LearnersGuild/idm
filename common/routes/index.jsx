@@ -2,15 +2,14 @@ import React from 'react'
 import {Route, IndexRoute} from 'react-router'
 import {UserAuthWrapper as userAuthWrapper} from 'redux-auth-wrapper'
 import {push} from 'react-router-redux'
-import {userCan} from 'src/common/util'
 
 // TODO: use webpack code-splitting and System.import to reduce initial bundle size
+import {userCan} from 'src/common/util'
+import {authorizationError} from 'src/common/actions/errors'
 import App from 'src/common/containers/App'
-
 import BlankLayout from 'src/common/containers/BlankLayout'
 import SignUp from 'src/common/containers/SignUp'
 import SignIn from 'src/common/containers/SignIn'
-
 import Home from 'src/common/containers/Home'
 import Profile from 'src/common/components/Profile'
 import UsersContainer from 'src/common/containers/Users'
@@ -20,7 +19,7 @@ const userCanVisit = (capability, store) => {
   return userAuthWrapper({
     authSelector: state => state.auth.currentUser,
     predicate: currentUser => userCan(currentUser, capability),
-    failureRedirectPath: '/not-found',
+    failureRedirectPath: '/sign-in',
     allowRedirectBack: false,
     redirectAction: failureRedirectPath => {
       const {dispatch} = store
