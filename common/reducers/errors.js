@@ -1,4 +1,4 @@
-import {DISMISS_ERROR} from 'src/common/actions/errors'
+import {DISMISS_ERROR} from 'src/common/actions/dismissError'
 import {UPDATE_USER_FAILURE} from 'src/common/actions/updateUser'
 import {UPDATE_USER_AVATAR_FAILURE} from 'src/common/actions/updateUserAvatar'
 import {GET_INVITE_CODE_FAILURE} from 'src/common/actions/getInviteCode'

@@ -6,14 +6,35 @@ import styles from './index.css'
 
 export default class Home extends Component {
   render() {
+    const {isAdmin} = this.props
     const usersButton = (
       <ListItem
         caption="All Users"
         leftIcon="people"
+        key="users"
         onClick={this.props.onNavigateUsers}
         />
     )
-    const usersLink = this.props.isAdmin ? usersButton : null
+    const profileButton = (
+      <ListItem
+        caption="Edit Profile"
+        leftIcon="account_box"
+        key="profile"
+        onClick={this.props.onEditProfile}
+        />
+    )
+    const signOutButton = (
+      <ListItem
+        caption="Sign Out"
+        leftIcon="subdirectory_arrow_left"
+        key="signOut"
+        onClick={this.props.onSignOut}
+        />
+    )
+
+    const list = isAdmin ? [usersButton] : []
+    const listItems = list.concat([profileButton, signOutButton])
+
     return (
       <Card className={styles.card}>
         <CardTitle
@@ -21,17 +42,7 @@ export default class Home extends Component {
           title="Identity Management"
           />
         <List selectable ripple className={styles.cardContent}>
-          <ListItem
-            caption="Edit Profile"
-            leftIcon="account_box"
-            onClick={this.props.onEditProfile}
-            />
-          <ListItem
-            caption="Sign Out"
-            leftIcon="subdirectory_arrow_left"
-            onClick={this.props.onSignOut}
-            />
-          {usersLink}
+          {listItems}
         </List>
       </Card>
     )
@@ -39,7 +50,7 @@ export default class Home extends Component {
 }
 
 Home.propTypes = {
-  isAdmin: PropTypes.bool,
+  isAdmin: PropTypes.bool.isRequired,
   onEditProfile: PropTypes.func.isRequired,
   onSignOut: PropTypes.func.isRequired,
   onNavigateUsers: PropTypes.func.isRequired,
