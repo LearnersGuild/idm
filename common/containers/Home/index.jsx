@@ -4,6 +4,7 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 
+import {updateJWT} from 'src/common/actions/updateJWT'
 import HomeComponent from 'src/common/components/Home'
 
 export class Home extends Component {
@@ -30,18 +31,35 @@ export class Home extends Component {
     }
   }
 
+  componentDidMount() {
+    this.constructor.fetchData(this.props.dispatch, this.props)
+  }
+
+  static fetchData(dispatch) {
+    dispatch(updateJWT())
+  }
+
   render() {
-    const isAdmin = this.props.authData.roles.includes('admin')
+    const isAdmin = this.props.isAdmin
     return (
       <HomeComponent onEditProfile={this.handleEditProfile} onSignOut={this.handleSignOut} onNavigateUsers={this.handleNavigateUsers} isAdmin={isAdmin}/>
     )
   }
 }
 
+function mapStateToProps(state) {
+  const {users, auth} = state
+  const {isAdmin} = auth
+  return {users, isAdmin}
+}
+
 Home.propTypes = {
+  isAdmin: PropTypes.bool.isRequired,
   authData: PropTypes.object.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
 }
 
-export default connect()(Home)
+export default connect(
+  mapStateToProps
+)(Home)
