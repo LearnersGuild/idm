@@ -3,16 +3,16 @@ import {GraphQLNonNull, GraphQLID, GraphQLString} from 'graphql'
 import {GraphQLList} from 'graphql/type'
 
 import {downcaseTrimTo21Chars} from 'src/common/util'
-import {connect} from 'src/db'
 import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
 import {errors} from 'src/server/graphql/util'
+import {User as ThinkyUser} from 'src/server/services/dataService'
+import {connect} from 'src/db'
 
 import {User, ActiveStatus} from './schema'
 
-const {notAuthorized, notFound} = errors
-
 const r = connect()
-const table = r.table('users')
+
+const {notAuthorized, notFound} = errors
 
 export default {
   getUserById: {
@@ -25,12 +25,12 @@ export default {
         throw notAuthorized()
       }
 
-      const user = await table.get(args.id)
-      if (!user) {
+      try {
+        const user = await ThinkyUser.get(args.id)
+        return applyUserProfileUrls(user)
+      } catch (error) {
         throw notFound('User')
       }
-
-      return applyUserProfileUrls(user)
     }
   },
   getUsersByIds: {
@@ -43,7 +43,7 @@ export default {
         throw notAuthorized()
       }
 
-      const users = await table.getAll(...ids)
+      const users = await ThinkyUser.getAll(...ids).run()
       return users.map(applyUserProfileUrls)
     }
   },
@@ -58,7 +58,9 @@ export default {
       }
 
       const queryHandles = handles.map(downcaseTrimTo21Chars)
-      const users = await table.getAll(...queryHandles, {index: 'handle'})
+      const users = await ThinkyUser
+        .getAll(...queryHandles, {index: 'handle'})
+        .run()
       return users.map(applyUserProfileUrls)
     }
   },
@@ -72,10 +74,10 @@ export default {
         throw notAuthorized()
       }
 
-      const users = await table.filter(row => r.or(
+      const users = await ThinkyUser.filter(row => r.or(
         row('id').eq(identifier),
         row('handle').downcase().slice(0, 21).eq(downcaseTrimTo21Chars(identifier))
-      ))
+      )).run()
 
       const [user] = users
       if (!user) {
@@ -102,8 +104,8 @@ export default {
 
       const users = await (
         !Array.isArray(identifiers) ?
-          table.run() :
-          table
+          ThinkyUser.run() :
+          ThinkyUser
             .getAll(...identifiers)
             .union(
               r.table('users')
@@ -125,9 +127,10 @@ export default {
       // intentionally a public API not requiring authentication
       // used by marketing reports for our public-facing web site
       if (ids.length > 0) {
-        const idsAndActiveStatuses = await table
+        const idsAndActiveStatuses = await ThinkyUser
           .getAll(...ids)
           .pluck('id', 'active')
+          .run()
 
         return idsAndActiveStatuses
       }

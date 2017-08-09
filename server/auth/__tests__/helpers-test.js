@@ -23,7 +23,7 @@ test('mergeUserInfo doesn\'t overwrite email address', t => {
     },
   }
   const userInfo = merge(cloneDeep(user), {inviteCode: 'DIFFERENT VALUE'})
-  const mergedUser = mergeUserInfo(user, userInfo)
+  const mergedUser = Object.assign(user, mergeUserInfo(userInfo))
 
   t.plan(1)
   t.is(mergedUser.inviteCode, 'oakland123')
@@ -52,14 +52,13 @@ test('saveUserAvatar: saves user\'s github avatar on sign-up', async t => {
     }
   }
 
-  const result = await saveUserAvatar(user)
+  await saveUserAvatar(user)
 
   const userAvatar = await r.table('userAvatars')
     .filter({id: user.id})
     .nth(0)
 
-  t.plan(5)
-  t.is(result.inserted, 1, 'should insert one row')
+  t.plan(4)
   t.is(userAvatar.id, user.id, 'avatar id should match user')
   t.not(userAvatar.jpegData, null, 'should insert jpeg data')
   t.not(userAvatar.createdAt, null, 'should set createdAt date')

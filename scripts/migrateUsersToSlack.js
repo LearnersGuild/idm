@@ -3,6 +3,7 @@ import fetch from 'isomorphic-fetch'
 import minimist from 'minimist'
 
 import {downcaseTrimTo21Chars} from 'src/common/util'
+import {User} from 'src/server/services/dataService'
 import {connect} from 'src/db'
 
 const r = connect()
@@ -84,9 +85,9 @@ export function postUserToSlackSCIM(idmUser, scimAPIToken) {
   return _apiFetch(SLACK_SCIM_USERS_URL, scimAPIToken, options)
 }
 
-export function getUsersToMigrate(existingUserNames) {
+export async function getUsersToMigrate(existingUserNames) {
   console.info('Skipping these users that were already migrated:', existingUserNames)
-  return r.table('users')
+  return User
     .filter(user => r.expr(existingUserNames).contains(user('handle').downcase().slice(0, 21)).not())
 }
 

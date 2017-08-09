@@ -1,6 +1,4 @@
-import {connect} from 'src/db'
-
-const r = connect()
+import {User, InviteCode} from 'src/server/services/dataService'
 
 export async function findInviteCodesToExpire(since = null) {
   let codeExpirationDate = since
@@ -15,25 +13,30 @@ export async function findInviteCodesToExpire(since = null) {
     ))
   }
 
-  const inviteCodesNotRecentlyUsed = await r.table('users')
-    .filter(user => user('createdAt').gt(codeExpirationDate).not())('inviteCode')
-    .distinct()
+  const inviteCodesNotRecentlyUsed = [...new Set(
+    await User
+      .run()
+      .filter(user => user.createdAt <= codeExpirationDate)
+      .map(user => user.inviteCode)
+  )]
 
-  const codesToExpire = await r.table('inviteCodes')
+  const codesToExpire = await InviteCode
     .getAll(...inviteCodesNotRecentlyUsed, {index: 'code'})
-    .filter({active: true, permanent: false})('code')
+    .filter({active: true, permanent: false})
+    .run()
+    .map(inviteCode => inviteCode.code)
 
   return codesToExpire
 }
 
 export async function deactivateInviteCodes(codes) {
   if (codes.length > 0) {
-    const {replaced: numChangedCodes} = await r.table('inviteCodes')
+    const changedInviteCodes = await InviteCode
       .getAll(...codes, {index: 'code'})
       .update({active: false})
 
-    return numChangedCodes
+    return changedInviteCodes
   }
 
-  return 0
+  return []
 }

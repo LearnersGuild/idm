@@ -2,12 +2,10 @@ import {GraphQLNonNull, GraphQLString, GraphQLBoolean} from 'graphql'
 import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
-import {connect} from 'src/db'
+import {InviteCode as InviteCodeModel} from 'src/server/services/dataService'
 import {InviteCode} from './schema'
 
 import {userCan} from 'src/common/util'
-
-const r = connect()
 
 const InputInviteCode = new GraphQLInputObjectType({
   name: 'InputInviteCode',
@@ -28,32 +26,26 @@ export default {
       inviteCode: {type: new GraphQLNonNull(InputInviteCode)},
     },
     async resolve(source, {inviteCode}, {rootValue: {currentUser}}) {
+      if (!userCan(currentUser, 'createInviteCode')) {
+        throw new GraphQLError('You are not authorized to do that')
+      }
+
+      const existingInviteCode = (await InviteCodeModel
+        .getAll(inviteCode.code, {index: 'code'})
+        .limit(1)
+        .run())[0]
+      if (existingInviteCode) {
+        throw new GraphQLError('Invite codes must be unique')
+      }
+
+      const active = inviteCode.active !== false
+      const permanent = inviteCode.permanent === true
+      const inviteCodeWithFlags = {...inviteCode, active, permanent}
+
       try {
-        if (!userCan(currentUser, 'createInviteCode')) {
-          throw new GraphQLError('You are not authorized to do that')
-        }
-
-        const inviteCodes = await r.table('inviteCodes').getAll(inviteCode.code, {index: 'code'}).limit(1).run()
-        const result = inviteCodes[0]
-        if (result) {
-          throw new GraphQLError('Invite codes must be unique')
-        }
-
-        const active = inviteCode.active !== false
-        const permanent = inviteCode.permanent === true
-        const inviteCodeWithFlags = {...inviteCode, active, permanent}
-        const inviteCodeWithTimestamps = {...inviteCodeWithFlags, createdAt: r.now(), updatedAt: r.now()}
-        const insertedInviteCode = await r.table('inviteCodes')
-          .insert(inviteCodeWithTimestamps, {returnChanges: 'always'})
-          .run()
-
-        if (insertedInviteCode.inserted) {
-          return insertedInviteCode.changes[0].new_val
-        }
-
-        throw new GraphQLError('Could not create invite code, please try again')
+        return InviteCodeModel.save(inviteCodeWithFlags)
       } catch (err) {
-        throw err
+        throw new GraphQLError('Could not save invite code, please try again')
       }
     }
   },

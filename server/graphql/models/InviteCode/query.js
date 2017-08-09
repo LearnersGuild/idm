@@ -1,10 +1,8 @@
 import {GraphQLNonNull, GraphQLString} from 'graphql'
 import {GraphQLError} from 'graphql/error'
 
-import {connect} from 'src/db'
+import {InviteCode as ThinkyInviteCode} from 'src/server/services/dataService'
 import {InviteCode} from './schema'
-
-const r = connect()
 
 export default {
   getInviteCodeByCode: {
@@ -14,7 +12,7 @@ export default {
     },
     async resolve(source, {code}) {
       // no authorization needed -- invite code queries are public
-      const inviteCodes = await r.table('inviteCodes')
+      const inviteCodes = await ThinkyInviteCode
         .getAll(code, {index: 'code'})
         .filter({active: true})
         .limit(1)

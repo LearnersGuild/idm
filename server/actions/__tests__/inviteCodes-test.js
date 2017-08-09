@@ -45,9 +45,8 @@ test('findInviteCodesToExpire: does not find permanent invite codes', async t =>
   t.false(expiringCodes.includes(permanentInviteCode.code), 'should not find permanent codes, but did')
 })
 
-test('deactivateInviteCodes: sets the active flags to false and returns count', async t => {
-  const numCodesExpired = await deactivateInviteCodes([willExpireInviteCode.code])
-  t.is(numCodesExpired, 1, 'returned unexpected number codes expired')
+test('deactivateInviteCodes: sets the active flags to false', async t => {
+  await deactivateInviteCodes([willExpireInviteCode.code])
 
   const savedExpiredCode = await r.table('inviteCodes').getAll(willExpireInviteCode.code, {index: 'code'}).nth(0)
   t.is(savedExpiredCode.active, false, 'should set active flag to false, but did not')

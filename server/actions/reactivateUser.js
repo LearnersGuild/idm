@@ -1,9 +1,5 @@
-import {connect} from 'src/db'
-
-const r = connect()
+import {User} from 'src/server/services/dataService'
 
 export default async function reactivateUser(id) {
-  const getUser = r.table('users').get(id)
-  await getUser.update({active: true, updatedAt: r.now()}).run()
-  return await getUser.run()
+  return User.get(id).updateWithTimestamp({active: true})
 }

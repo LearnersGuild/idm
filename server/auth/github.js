@@ -7,9 +7,10 @@ import {Strategy as GitHubStrategy} from 'passport-github'
 import {extendJWTExpiration} from '@learnersguild/idm-jwt-auth/lib/middlewares'
 
 import {encrypt, decrypt} from 'src/server/symmetricCryptoAES'
+import {User} from 'src/server/services/dataService'
 import {slackSAMLPost} from './samlSlack'
 import {
-  createOrUpdateUser,
+  mergeUserInfo,
   getUserByGithubId,
   getInviteCodesByCode,
   defaultSuccessRedirect,
@@ -43,6 +44,7 @@ function getGitHubEmails(accessToken) {
 async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb) {
   try {
     let user = await getUserByGithubId(profile.id)
+
     if (!user || !user.active) {
       return cb(null, false)
     }
@@ -50,8 +52,9 @@ async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb)
     const primaryEmail = ghEmails.filter(email => email.primary)[0].email
     const emails = ghEmails.map(email => email.email)
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails)
-    const result = await createOrUpdateUser(user, userInfo)
-    user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
+    user = await User
+      .get(user.id)
+      .updateWithTimestamp(mergeUserInfo(userInfo))
     cb(null, user)
   } catch (err) {
     sentry.captureException(err)
@@ -72,11 +75,16 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
     const emails = ghEmails.map(email => email.email)
     const inviteCode = (await getInviteCodesByCode(code))[0]
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode)
-    const result = await createOrUpdateUser(user, userInfo)
-    user = (result.inserted || result.replaced) ? result.changes[0].new_val : user
-    if (result.inserted) {
+
+    if (user) {
+      user = await User
+        .get(user.id)
+        .updateWithTimestamp(mergeUserInfo(userInfo))
+    } else {
+      user = await User.save({...userInfo, active: true})
       await saveUserAvatar(user)
     }
+
     cb(null, user)
   } catch (err) {
     sentry.captureException(err)
