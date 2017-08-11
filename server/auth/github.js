@@ -10,7 +10,6 @@ import {encrypt, decrypt} from 'src/server/symmetricCryptoAES'
 import {User} from 'src/server/services/dataService'
 import {slackSAMLPost} from './samlSlack'
 import {
-  mergeUserInfo,
   getUserByGithubId,
   getInviteCodesByCode,
   defaultSuccessRedirect,
@@ -20,6 +19,13 @@ import {
 const config = require('src/config')
 
 const sentry = new raven.Client(config.server.sentryDSN)
+
+function _updateUserGithubInfo(userId, userInfo) {
+  const {handle, emails, authProviders, authProviderProfiles} = userInfo
+  return User
+    .get(userId)
+    .updateWithTimestamp({handle, emails, authProviders, authProviderProfiles})
+}
 
 export function githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode) {
   const inviteCodeData = inviteCode ? {inviteCode: inviteCode.code, roles: inviteCode.roles || []} : {}
@@ -52,9 +58,7 @@ async function verifyUserFromGitHub(req, accessToken, refreshToken, profile, cb)
     const primaryEmail = ghEmails.filter(email => email.primary)[0].email
     const emails = ghEmails.map(email => email.email)
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails)
-    user = await User
-      .get(user.id)
-      .updateWithTimestamp(mergeUserInfo(userInfo))
+    user = await _updateUserGithubInfo(user.id, userInfo)
     cb(null, user)
   } catch (err) {
     sentry.captureException(err)
@@ -77,9 +81,7 @@ async function createOrUpdateUserFromGitHub(req, accessToken, refreshToken, prof
     const userInfo = githubProfileToUserInfo(accessToken, refreshToken, profile, primaryEmail, emails, inviteCode)
 
     if (user) {
-      user = await User
-        .get(user.id)
-        .updateWithTimestamp(mergeUserInfo(userInfo))
+      user = await _updateUserGithubInfo(user.id, userInfo)
     } else {
       user = await User.save({...userInfo, active: true})
       await saveUserAvatar(user)

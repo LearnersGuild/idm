@@ -5,7 +5,7 @@ import {GraphQLList} from 'graphql/type'
 import {downcaseTrimTo21Chars} from 'src/common/util'
 import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
 import {errors} from 'src/server/graphql/util'
-import {User as ThinkyUser} from 'src/server/services/dataService'
+import {User as UserModel} from 'src/server/services/dataService'
 import {connect} from 'src/db'
 
 import {User, ActiveStatus} from './schema'
@@ -26,7 +26,7 @@ export default {
       }
 
       try {
-        const user = await ThinkyUser.get(args.id)
+        const user = await UserModel.get(args.id)
         return applyUserProfileUrls(user)
       } catch (error) {
         throw notFound('User')
@@ -43,7 +43,7 @@ export default {
         throw notAuthorized()
       }
 
-      const users = await ThinkyUser.getAll(...ids).run()
+      const users = await UserModel.getAll(...ids).run()
       return users.map(applyUserProfileUrls)
     }
   },
@@ -58,7 +58,7 @@ export default {
       }
 
       const queryHandles = handles.map(downcaseTrimTo21Chars)
-      const users = await ThinkyUser
+      const users = await UserModel
         .getAll(...queryHandles, {index: 'handle'})
         .run()
       return users.map(applyUserProfileUrls)
@@ -74,7 +74,7 @@ export default {
         throw notAuthorized()
       }
 
-      const users = await ThinkyUser.filter(row => r.or(
+      const users = await UserModel.filter(row => r.or(
         row('id').eq(identifier),
         row('handle').downcase().slice(0, 21).eq(downcaseTrimTo21Chars(identifier))
       )).run()
@@ -104,8 +104,8 @@ export default {
 
       const users = await (
         !Array.isArray(identifiers) ?
-          ThinkyUser.run() :
-          ThinkyUser
+          UserModel.run() :
+          UserModel
             .getAll(...identifiers)
             .union(
               r.table('users')
@@ -127,7 +127,7 @@ export default {
       // intentionally a public API not requiring authentication
       // used by marketing reports for our public-facing web site
       if (ids.length > 0) {
-        const idsAndActiveStatuses = await ThinkyUser
+        const idsAndActiveStatuses = await UserModel
           .getAll(...ids)
           .pluck('id', 'active')
           .run()

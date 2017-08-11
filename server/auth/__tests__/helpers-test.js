@@ -1,33 +1,11 @@
 import test from 'ava'
-import {cloneDeep, merge} from 'lodash'
 
 import {connect} from 'src/db'
 import {resetData, cleanupDB} from 'src/test/db'
 
-import {mergeUserInfo, saveUserAvatar} from 'src/server/auth/helpers'
+import {saveUserAvatar} from 'src/server/auth/helpers'
 
 const r = connect()
-
-test('mergeUserInfo doesn\'t overwrite email address', t => {
-  const user = {
-    name: 'Me',
-    email: 'me@example.com',
-    emails: ['me@example.com'],
-    inviteCode: 'oakland123',
-    authProviders: {
-      googleOAuth2: {
-        accessToken: 'abcd1234',
-        refreshToken: 'wxyz9876',
-        profile: {foo: 'bar'}
-      },
-    },
-  }
-  const userInfo = merge(cloneDeep(user), {inviteCode: 'DIFFERENT VALUE'})
-  const mergedUser = Object.assign(user, mergeUserInfo(userInfo))
-
-  t.plan(1)
-  t.is(mergedUser.inviteCode, 'oakland123')
-})
 
 test.before(async () => {
   await resetData()

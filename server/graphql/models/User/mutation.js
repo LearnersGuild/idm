@@ -4,14 +4,13 @@ import {GraphQLError} from 'graphql/error'
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
 import {GraphQLPhoneNumber} from 'src/server/graphql/models/types'
-import {User as UserModel, UserAvatarModel} from 'src/server/services/dataService'
-
-import {User} from './schema'
 
 import deactivateUser from 'src/server/actions/deactivateUser'
 import reactivateUser from 'src/server/actions/reactivateUser'
-
+import {User as UserModel, UserAvatar as UserAvatarModel} from 'src/server/services/dataService'
 import {userCan} from 'src/common/util'
+
+import {User} from './schema'
 
 const InputUser = new GraphQLInputObjectType({
   name: 'InputUser',

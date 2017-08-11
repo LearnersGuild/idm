@@ -2,10 +2,11 @@ import {GraphQLNonNull, GraphQLString, GraphQLBoolean} from 'graphql'
 import {GraphQLInputObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLError} from 'graphql/error'
 
+import {userCan} from 'src/common/util'
 import {InviteCode as InviteCodeModel} from 'src/server/services/dataService'
+
 import {InviteCode} from './schema'
 
-import {userCan} from 'src/common/util'
 
 const InputInviteCode = new GraphQLInputObjectType({
   name: 'InputInviteCode',
@@ -38,14 +39,14 @@ export default {
         throw new GraphQLError('Invite codes must be unique')
       }
 
-      const active = inviteCode.active !== false
-      const permanent = inviteCode.permanent === true
-      const inviteCodeWithFlags = {...inviteCode, active, permanent}
-
       try {
+        const active = inviteCode.active !== false
+        const permanent = inviteCode.permanent === true
+        const inviteCodeWithFlags = {...inviteCode, active, permanent}
+
         return InviteCodeModel.save(inviteCodeWithFlags)
       } catch (err) {
-        throw new GraphQLError('Could not save invite code, please try again')
+        throw new GraphQLError('Could not create invite code, please try again')
       }
     }
   },
