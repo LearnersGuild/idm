@@ -5,13 +5,10 @@ import {UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, UPDATE_USER_FAILURE} from 'src
 const initialState = {
   currentUser: null,
   lgJWT: null,
-  isAdmin: false,
   isBusy: false,
 }
 
 export function auth(state = initialState, action) {
-  const currentUser = Object.assign({}, state.currentUser, action.currentUser)
-  const isAdmin = currentUser.roles ? currentUser.roles.includes('admin') : false
   switch (action.type) {
     case AUTHENTICATE:
       return Object.assign({}, state, {
@@ -23,8 +20,7 @@ export function auth(state = initialState, action) {
       })
     case UPDATE_USER_SUCCESS:
       return Object.assign({}, state, {
-        currentUser,
-        isAdmin,
+        currentUser: Object.assign({}, state.currentUser, action.currentUser),
         isBusy: false,
       })
     case UPDATE_USER_FAILURE:
@@ -34,7 +30,6 @@ export function auth(state = initialState, action) {
       })
     case UPDATE_JWT:
       return Object.assign({}, state, {
-        isAdmin,
         lgJWT: action.lgJWT,
       })
     default:

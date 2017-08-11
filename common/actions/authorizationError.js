@@ -1,5 +1,5 @@
-const AUTHORIZATION_ERROR = 'AUTHORIZATION_ERROR'
+export const AUTHORIZATION_ERROR = 'AUTHORIZATION_ERROR'
 
-export function authorizationError(message) {
+export default function authorizationError(message) {
   return {type: AUTHORIZATION_ERROR, message}
 }

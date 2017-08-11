@@ -6,26 +6,27 @@ import {push} from 'react-router-redux'
 
 import {updateJWT} from 'src/common/actions/updateJWT'
 import HomeComponent from 'src/common/components/Home'
+import userCan from 'src/common/util/userCan'
 
 export class Home extends Component {
   constructor(props) {
     super(props)
-    this.handleEditProfile = this.handleEditProfile.bind(this)
-    this.handleSignOut = this.handleSignOut.bind(this)
-    this.handleNavigateUsers = this.handleNavigateUsers.bind(this)
+    this.handleClickEditProfileButton = this.handleClickEditProfileButton.bind(this)
+    this.handleClickSignOutButton = this.handleClickSignOutButton.bind(this)
+    this.handleClickUsersButton = this.handleClickUsersButton.bind(this)
   }
 
-  handleEditProfile() {
+  handleClickEditProfileButton() {
     this.props.dispatch(push('/profile'))
   }
 
-  handleSignOut() {
+  handleClickSignOutButton() {
     if (__CLIENT__) {
       window.location.href = '/auth/sign-out'
     }
   }
 
-  handleNavigateUsers() {
+  handleClickUsersButton() {
     if (__CLIENT__) {
       window.location.href = '/users'
     }
@@ -40,21 +41,27 @@ export class Home extends Component {
   }
 
   render() {
-    const isAdmin = this.props.isAdmin
+    const {currentUser} = this.props
+    const canViewUsers = userCan(currentUser, 'viewAllUsers')
     return (
-      <HomeComponent onEditProfile={this.handleEditProfile} onSignOut={this.handleSignOut} onNavigateUsers={this.handleNavigateUsers} isAdmin={isAdmin}/>
+      <HomeComponent
+        onClickEditProfileButton={this.handleClickEditProfileButton}
+        onClickSignOutButton={this.handleClickSignOutButton}
+        onClickUsersButton={this.handleClickUsersButton}
+        showUsers={canViewUsers}
+        />
     )
   }
 }
 
 function mapStateToProps(state) {
   const {users, auth} = state
-  const {isAdmin} = auth
-  return {users, isAdmin}
+  const {currentUser} = auth
+  return {users, currentUser}
 }
 
 Home.propTypes = {
-  isAdmin: PropTypes.bool.isRequired,
+  currentUser: PropTypes.object.isRequired,
   authData: PropTypes.object.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,

@@ -17,9 +17,6 @@ const tableModel = {
 }
 
 export class UsersContainer extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   componentDidMount() {
     this.constructor.fetchData(this.props.dispatch, this.props)

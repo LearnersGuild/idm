@@ -1,5 +1,5 @@
-const DISMISS_ERROR = 'DISMISS_ERROR'
+export const DISMISS_ERROR = 'DISMISS_ERROR'
 
-export function dismissError(index) {
+export default function dismissError(index) {
   return {type: DISMISS_ERROR, index}
 }
