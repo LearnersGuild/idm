@@ -14,17 +14,17 @@ export function users(state = initialState, action) {
     case FIND_USERS_REQUEST:
       return Object.assign({}, state, {
         isBusy: true,
-        users: []
+        allUsers: []
       })
     case FIND_USERS_SUCCESS:
       return Object.assign({}, state, {
         isBusy: false,
-        users: action.users
+        allUsers: action.users
       })
     case FIND_USERS_FAILURE:
       return Object.assign({}, state, {
         isBusy: false,
-        users: []
+        allUsers: []
       })
     default:
       return state

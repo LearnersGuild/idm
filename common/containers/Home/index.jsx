@@ -55,14 +55,13 @@ export class Home extends Component {
 }
 
 function mapStateToProps(state) {
-  const {users, auth} = state
+  const {auth} = state
   const {currentUser} = auth
-  return {users, currentUser}
+  return {currentUser}
 }
 
 Home.propTypes = {
   currentUser: PropTypes.object.isRequired,
-  authData: PropTypes.object.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
 }

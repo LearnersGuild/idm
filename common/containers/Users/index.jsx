@@ -27,8 +27,13 @@ export class UsersContainer extends Component {
   }
 
   render() {
-    const {isBusy, users} = this.props
-    const userData = users.map(user => {
+    const {isBusy, allUsers} = this.props
+
+    if (isBusy) {
+      return null
+    }
+
+    const userData = allUsers.map(user => {
       const mailtoURL = `mailto:${user.email}`
       const altTitle = `${user.name} (${user.handle})`
       return Object.assign({}, user, {
@@ -49,7 +54,7 @@ export class UsersContainer extends Component {
       })
     })
 
-    return isBusy ? null : (
+    return (
       <div>
         <UsersComponent users={userData} model={tableModel}/>
       </div>
@@ -59,11 +64,12 @@ export class UsersContainer extends Component {
 
 function mapStateToProps(state) {
   const {users} = state
-  return users
+  const {allUsers, isBusy} = users
+  return {allUsers, isBusy}
 }
 
 UsersContainer.propTypes = {
-  users: PropTypes.array.isRequired,
+  allUsers: PropTypes.array.isRequired,
   isBusy: PropTypes.bool.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,

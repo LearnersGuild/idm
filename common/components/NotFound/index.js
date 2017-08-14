@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {CardTitle, CardText} from 'react-toolbox/lib/card'
+import {Button} from 'react-toolbox/lib/button'
 
 export default class NotFound extends Component {
   render() {
@@ -10,6 +11,7 @@ export default class NotFound extends Component {
           title="Not Found"
           />
         <CardText>Womp womp. The requested page was not found.</CardText>
+        <Button href="/" label="Back to Home"/>
       </div>
     )
   }

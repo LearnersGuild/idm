@@ -6,7 +6,7 @@ import {push} from 'react-router-redux'
 
 // TODO: use webpack code-splitting and System.import to reduce initial bundle size
 import {userCan} from 'src/common/util'
-import {authorizationError} from 'src/common/actions/authorizationError'
+import authorizationError from 'src/common/actions/authorizationError'
 import App from 'src/common/containers/App'
 import BlankLayout from 'src/common/containers/BlankLayout'
 import SignUp from 'src/common/containers/SignUp'
