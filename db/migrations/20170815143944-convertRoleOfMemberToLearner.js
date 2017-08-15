@@ -3,7 +3,7 @@
 const OLD_ROLE_MEMBER = 'member'
 const NEW_ROLE_LEARNER = 'learner'
 
-exports.up = function (r, conn) {
+export function up(r, conn) {
   return r.table('users')
     .getAll(OLD_ROLE_MEMBER, {index: 'roles'})
     .update(user => ({
@@ -14,7 +14,7 @@ exports.up = function (r, conn) {
     .run(conn)
 }
 
-exports.down = function (r, conn) {
+export function down(r, conn) {
   return r.table('users')
     .getAll(OLD_ROLE_MEMBER, {index: 'roles'})
     .update(user => ({
