@@ -123,7 +123,7 @@ Make a copy of your access key ID and secret access key. You'll need to include 
       id: '58abd2aa-3826-4604-bf7c-f8f2cf7eaad9',
       code: 'hand_crafted_artisanal_invite_code',
       description: 'hand crafted artisanal invite code',
-      roles: ['admin', 'member'],
+      roles: ['admin', 'learner'],
       active: true,
       createdAt: r.now(),
       updatedAt: r.now(),
@@ -137,7 +137,7 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 17. (OPTIONAL) Add some test users:
 
     ```bash
-    npm run data:users -- --verbose --role=member some-dummy-invite-code
+    npm run data:users -- --verbose --role=learner some-dummy-invite-code
     ```
 
 ## Gotchas

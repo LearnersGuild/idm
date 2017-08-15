@@ -16,7 +16,7 @@ export default function define(factory) {
     dateOfBirth: cb => cb(null, faker.date.past(21).toISOString().slice(0, 10)),
     timezone: cb => cb(null, faker.random.arrayElement(VALID_TIMEZONES)),
     active: true,
-    roles: [USER_ROLES.MEMBER],
+    roles: [USER_ROLES.LEARNER],
     inviteCode: 'test',
     authProviders: {},
     authProviderProfiles: {
