@@ -9,6 +9,7 @@ import {connect} from 'src/db'
 import {User} from './schema'
 
 import deactivateUser from 'src/server/actions/deactivateUser'
+import reactivateUser from 'src/server/actions/reactivateUser'
 
 import {userCan} from 'src/common/util'
 
@@ -40,6 +41,19 @@ export default {
       }
 
       return await deactivateUser(id)
+    }
+  },
+  reactivateUser: {
+    type: User,
+    args: {
+      id: {type: new GraphQLNonNull(GraphQLID)},
+    },
+    async resolve(source, {id}, {rootValue: {currentUser}}) {
+      if (!userCan(currentUser, 'reactivateUser')) {
+        throw new GraphQLError('You are not authorized to reactivate a user.')
+      }
+
+      return await reactivateUser(id)
     }
   },
   updateUser: {
