@@ -104,14 +104,8 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 
 13. Seed your development database with test member and project data:
     ```bash
-    npm run db:copy -- <STATE>
+    npm run db:copy
     ```
-
-    Available `STATE` options:
-    - `GOAL_SELECTION` (default)
-    - `GOAL_SELECTION_VOTES`
-    - `PRACTICE`
-    - `REFLECTION`
 
 14. Run the server:
 
@@ -133,7 +127,9 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 
 ## Gotchas
 
-### Create an IDM Account
+### Unable to sign in via GitHub
+
+If you've used the db:copy script to seed the database and still aren't logged in, there isn't an idm user in the test data linked to your github account. You'll need to manually insert an invite code to the database and use it to sign up in your local idm service.
 
 Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
 
