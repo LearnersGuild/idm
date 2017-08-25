@@ -17,6 +17,15 @@ module.exports = {
     jwt: {
       privateKey: process.env.JWT_PRIVATE_KEY,
       publicKey: process.env.JWT_PUBLIC_KEY,
+      algorithm: 'RS512',
+    },
+    echo: {
+      baseURL: process.env.ECHO_BASE_URL,
+    },
+    crm: {
+      enabled: true,
+      baseURL: process.env.CRM_API_BASE_URL,
+      key: process.env.CRM_API_KEY,
     },
     github: {
       clientID: process.env.GITHUB_CLIENT_ID,

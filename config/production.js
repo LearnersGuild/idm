@@ -6,5 +6,8 @@ module.exports = {
     newrelic: {
       enabled: true,
     },
+    crm: {
+      enabled: true,
+    },
   },
 }

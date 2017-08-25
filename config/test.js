@@ -11,6 +11,10 @@ module.exports = {
     github: {
       callbackURL: 'http://idm.learnersguild.test/auth/github/callback',
     },
+    crm: {
+      baseURL: process.env.CRM_API_BASE_URL || 'http://crm.learnersguild.test',
+      key: process.env.CRM_API_KEY || 'this.is.not.a.real.key',
+    },
   },
 
   app: {
