@@ -102,45 +102,50 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     npm run db:migrate -- up
     ```
 
-13. Run the server:
+13. Seed your development database with test member and project data:
+    ```bash
+    npm run db:copy
+    ```
+
+14. Run the server:
 
     ```bash
     npm start
     ```
 
-14. Visit the server in your browser:
+15. Visit the server in your browser:
 
     ```bash
     open http://idm.learnersguild.dev
     ```
 
-15. Create an IDM Account
-
-    Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
-
-    ```ReQl
-    r.db('idm_development').table('inviteCodes').insert({
-      id: '58abd2aa-3826-4604-bf7c-f8f2cf7eaad9',
-      code: 'hand_crafted_artisanal_invite_code',
-      description: 'hand crafted artisanal invite code',
-      roles: ['admin', 'member'],
-      active: true,
-      createdAt: r.now(),
-      updatedAt: r.now(),
-    })
-    ```
-
-16. Sign In
-
-    Use the invitation code `hand_crafted_artisanal_invite_code` to create an account.
-
-17. (OPTIONAL) Add some test users:
+16. (OPTIONAL) Add some test users:
 
     ```bash
     npm run data:users -- --verbose --role=member some-dummy-invite-code
     ```
 
 ## Gotchas
+
+### Unable to sign in via GitHub
+
+If you've used the db:copy script to seed the database and still aren't logged in, there isn't an idm user in the test data linked to your github account. You'll need to manually insert an invite code to the database and use it to sign up in your local idm service.
+
+Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
+
+```ReQl
+r.db('idm_development').table('inviteCodes').insert({
+  id: '58abd2aa-3826-4604-bf7c-f8f2cf7eaad9',
+  code: 'hand_crafted_artisanal_invite_code',
+  description: 'hand crafted artisanal invite code',
+  roles: ['admin', 'member'],
+  active: true,
+  createdAt: r.now(),
+  updatedAt: r.now(),
+})
+```
+
+Use the invitation code `hand_crafted_artisanal_invite_code` to create an account.
 
 ### Node version
 
