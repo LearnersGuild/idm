@@ -8,30 +8,44 @@ export default function userModel(thinky) {
       id: string()
         .uuid(4)
         .allowNull(false),
+
       active: boolean()
         .allowNull(false)
         .default(false),
+
       email: string()
         .allowNull(false),
+
       emails: array()
         .allowNull(false),
+
       handle: string()
         .allowNull(false),
+
       name: string()
         .allowNull(false),
+
       phone: string(),
+
       dateOfBirth: date(),
+
       timezone: string(),
+
       roles: array()
         .default([]),
+
       inviteCode: string(),
+
       authProviders: object()
         .allowExtra(true),
+
       authProviderProfiles: object()
         .allowExtra(true),
+
       createdAt: date()
         .allowNull(false)
         .default(r.now()),
+
       updatedAt: date()
         .allowNull(false)
         .default(r.now()),

@@ -8,10 +8,13 @@ export default function userAvatarModel(thinky) {
       id: string()
         .uuid(4)
         .allowNull(false),
+
       jpegData: buffer(),
+
       createdAt: date()
         .allowNull(false)
         .default(r.now()),
+
       updatedAt: date()
         .allowNull(false)
         .default(r.now()),

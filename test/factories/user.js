@@ -1,12 +1,13 @@
 import faker from 'faker'
 
 import {USER_ROLES} from 'src/common/models/user'
+import {User} from 'src/server/services/dataService'
 
 const VALID_TIMEZONES = ['America/Los_Angeles', 'America/Chicago', 'America/New_York']
 const now = new Date()
 
 export default function define(factory) {
-  factory.define('user', null, {
+  factory.define('user', User, {
     id: cb => cb(null, faker.random.uuid()),
     email: cb => cb(null, faker.internet.exampleEmail()),
     emails: cb => cb(null, [faker.internet.exampleEmail(), faker.internet.exampleEmail()]),

@@ -1,11 +1,13 @@
 import faker from 'faker'
+
 import {connect} from 'src/db'
+import {UserAvatar} from 'src/server/services/dataService'
 
 const r = connect()
 const now = new Date()
 
 export default function define(factory) {
-  factory.define('userAvatar', null, {
+  factory.define('userAvatar', UserAvatar, {
     id: cb => cb(null, faker.random.uuid()),
     jpegData: cb => cb(
       null,

@@ -1,6 +1,6 @@
 import {User, InviteCode} from 'src/server/services/dataService'
 
-export async function findInviteCodesToExpire(since = null) {
+export default async function findInviteCodesToExpire(since = null) {
   let codeExpirationDate = since
   if (!codeExpirationDate) {
     const twoWeeksAgo = new Date()
@@ -13,30 +13,17 @@ export async function findInviteCodesToExpire(since = null) {
     ))
   }
 
-  const inviteCodesNotRecentlyUsed = [...new Set(
-    await User
-      .run()
-      .filter(user => user.createdAt <= codeExpirationDate)
-      .map(user => user.inviteCode)
-  )]
+  const inviteCodesNotRecentlyUsed = await User
+    .filter(row => row('createdAt').gt(codeExpirationDate).not())
+    .map(row => row('inviteCode'))
+    .distinct()
+    .execute()
 
   const codesToExpire = await InviteCode
     .getAll(...inviteCodesNotRecentlyUsed, {index: 'code'})
     .filter({active: true, permanent: false})
-    .run()
-    .map(inviteCode => inviteCode.code)
+    .map(row => row('code'))
+    .execute()
 
   return codesToExpire
-}
-
-export async function deactivateInviteCodes(codes) {
-  if (codes.length > 0) {
-    const changedInviteCodes = await InviteCode
-      .getAll(...codes, {index: 'code'})
-      .update({active: false})
-
-    return changedInviteCodes
-  }
-
-  return []
 }
