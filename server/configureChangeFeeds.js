@@ -26,7 +26,7 @@ function _getQueue(queueName) {
 
 function _getFeed() {
   return r.table('users')
-    .getAll(USER_ROLES.MEMBER, {index: 'roles'})
+    .getAll(USER_ROLES.LEARNER, {index: 'roles'})
     .changes()
     .filter(r.row('old_val').eq(null))
 }

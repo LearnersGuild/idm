@@ -122,7 +122,7 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 16. (OPTIONAL) Add some test users:
 
     ```bash
-    npm run data:users -- --verbose --role=member some-dummy-invite-code
+    npm run data:users -- --verbose --role=learner some-dummy-invite-code
     ```
 
 ## Gotchas

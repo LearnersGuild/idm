@@ -14,7 +14,7 @@ function printUsage(logger = console.error) {
 
 Options:
     --help              print this help message
-    --role=ROLE[,ROLE]  create users with these roles (default: 'member')
+    --role=ROLE[,ROLE]  create users with these roles (default: 'learner')
     --count             how many users to create (default: 15)
     --verbose           print out ids of created users
 `
@@ -48,7 +48,7 @@ async function run() {
       return 1
     }
 
-    const role = parseRole(roleStr) || USER_ROLES.MEMBER
+    const role = parseRole(roleStr) || USER_ROLES.LEARNER
     const count = countStr ? parseInt(countStr, 10) : 15
 
     const users = await createUsers(inviteCode, role, count)
