@@ -5,6 +5,7 @@ const {ADMIN} = USER_ROLES
 const CAPABILITY_ROLES = {
   createInviteCode: [ADMIN],
   deactivateUser: [ADMIN],
+  reactivateUser: [ADMIN],
   updateUser: [ADMIN]
 }
 
