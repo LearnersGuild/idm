@@ -85,7 +85,7 @@ export function postUserToSlackSCIM(idmUser, scimAPIToken) {
   return _apiFetch(SLACK_SCIM_USERS_URL, scimAPIToken, options)
 }
 
-export async function getUsersToMigrate(existingUserNames) {
+export function getUsersToMigrate(existingUserNames) {
   console.info('Skipping these users that were already migrated:', existingUserNames)
   return User
     .filter(user => r.expr(existingUserNames).contains(user('handle').downcase().slice(0, 21)).not())
