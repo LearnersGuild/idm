@@ -105,6 +105,7 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 13. Seed your development database with test member and project data:
     ```bash
     npm run db:copy
+    npm run db:migrate -- up // to ensure migrations are applied to copied data
     ```
 
 14. Run the server:
@@ -135,10 +136,10 @@ Go to `localhost:8080` and use the `Data Explorer` to run the following command 
 
 ```ReQl
 r.db('idm_development').table('inviteCodes').insert({
-  id: '58abd2aa-3826-4604-bf7c-f8f2cf7eaad9',
+  id: '0edb08e1-d8ab-4318-8363-0711a7f9edbb',
   code: 'hand_crafted_artisanal_invite_code',
   description: 'hand crafted artisanal invite code',
-  roles: ['admin', 'member'],
+  roles: ['admin', 'learner'],
   active: true,
   createdAt: r.now(),
   updatedAt: r.now(),
