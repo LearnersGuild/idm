@@ -28,7 +28,7 @@ function _getFeedProcessor(queueService) {
   const userInviteCodeUsedQueue = queueService.getQueue('userInviteCodeUsed')
   return ({new_val: user}) => {
     const jobOpts = {
-      attempts: 3,
+      attempts: 2,
       backoff: {type: 'fixed', delay: 60000},
     }
     userCreatedQueue.add(user, jobOpts)
