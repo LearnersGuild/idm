@@ -18,13 +18,6 @@ class SignUpContainer extends Component {
     this.constructor.fetchData(this.props.dispatch, this.props)
   }
 
-  static fetchData(dispatch, props) {
-    const {params: {code}} = props
-    if (code) {
-      dispatch(getInviteCode(code))
-    }
-  }
-
   handleAuthenticate(authURL) {
     this.props.dispatch(authenticate(authURL))
   }
@@ -65,6 +58,13 @@ SignUpContainer.propTypes = {
   location: PropTypes.shape({
     query: PropTypes.object.isRequired,
   }),
+}
+
+SignUpContainer.fetchData = (dispatch, props) => {
+  const {params: {code}} = props
+  if (code) {
+    dispatch(getInviteCode(code))
+  }
 }
 
 export default connect(state => ({

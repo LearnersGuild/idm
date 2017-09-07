@@ -9,7 +9,7 @@ export default class Home extends Component {
     const {showUsers} = this.props
     const usersButton = (
       <ListItem
-        caption="All Users"
+        caption="Users"
         leftIcon="people"
         key="users"
         onClick={this.props.onClickUsersButton}
@@ -17,7 +17,7 @@ export default class Home extends Component {
     )
     const profileButton = (
       <ListItem
-        caption="Edit Profile"
+        caption="Profile"
         leftIcon="account_box"
         key="profile"
         onClick={this.props.onClickEditProfileButton}

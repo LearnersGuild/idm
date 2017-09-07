@@ -17,23 +17,18 @@ const tableModel = {
 }
 
 export class UsersContainer extends Component {
-
   componentDidMount() {
     this.constructor.fetchData(this.props.dispatch, this.props)
   }
 
-  static fetchData(dispatch) {
-    dispatch(findUsers())
-  }
-
   render() {
-    const {isBusy, allUsers} = this.props
+    const {isBusy, users} = this.props
 
     if (isBusy) {
       return null
     }
 
-    const userData = allUsers.map(user => {
+    const userData = users.map(user => {
       const mailtoURL = `mailto:${user.email}`
       const altTitle = `${user.name} (${user.handle})`
       return Object.assign({}, user, {
@@ -62,17 +57,23 @@ export class UsersContainer extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const {users} = state
-  const {allUsers, isBusy} = users
-  return {allUsers, isBusy}
-}
-
 UsersContainer.propTypes = {
-  allUsers: PropTypes.array.isRequired,
+  users: PropTypes.array.isRequired,
   isBusy: PropTypes.bool.isRequired,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
+}
+
+UsersContainer.fetchData = dispatch => {
+  dispatch(findUsers())
+}
+
+function mapStateToProps(state) {
+  const {users} = state
+  return {
+    users: users.users,
+    isBusy: users.isBusy,
+  }
 }
 
 export default connect(

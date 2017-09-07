@@ -5,7 +5,7 @@ import {
 } from 'src/common/actions/findUsers'
 
 const initialState = {
-  users: {},
+  users: [],
   isBusy: false,
 }
 
@@ -14,17 +14,15 @@ export function users(state = initialState, action) {
     case FIND_USERS_REQUEST:
       return Object.assign({}, state, {
         isBusy: true,
-        allUsers: []
       })
     case FIND_USERS_SUCCESS:
       return Object.assign({}, state, {
         isBusy: false,
-        allUsers: action.users
+        users: action.users,
       })
     case FIND_USERS_FAILURE:
       return Object.assign({}, state, {
         isBusy: false,
-        allUsers: []
       })
     default:
       return state
