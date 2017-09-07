@@ -37,6 +37,7 @@ test('getInviteCodeByCode: returns only active invite codes', async t => {
   await r.table('inviteCodes').insert(inactiveInviteCode)
 
   const query = 'query($code: String!) { getInviteCodeByCode(code: $code) { id code active } }'
+
   const result = runQuery(query, api, {code: inactiveInviteCode.code})
-  t.throws(result)
+  return t.throws(result)
 })

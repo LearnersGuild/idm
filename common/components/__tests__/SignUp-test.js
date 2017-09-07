@@ -65,6 +65,7 @@ function getSignupProps(defaultProps) {
     location = {},
     code,
     onSubmitCode,
+    onAuthenticate,
   } = defaultProps || {}
 
   return {
@@ -81,5 +82,6 @@ function getSignupProps(defaultProps) {
     },
     code: code || 'invitecode',
     onSubmitCode: onSubmitCode ? onSubmitCode : () => null,
+    onAuthenticate: onAuthenticate ? onAuthenticate : () => null,
   }
 }

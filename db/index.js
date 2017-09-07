@@ -37,13 +37,11 @@ export function connect(dbConfig = config()) {
       buffer: 10,
     })
   }
-
   return r
 }
 
 export async function create(dbConfig = config()) {
   if (!r) connect(dbConfig)
-
   try {
     return await r.dbCreate(dbConfig.db).run()
   } catch (err) {
@@ -53,7 +51,6 @@ export async function create(dbConfig = config()) {
 
 export async function drop(dbConfig = config()) {
   if (!r) connect(dbConfig)
-
   try {
     return await r.dbDrop(dbConfig.db).run()
   } catch (err) {
