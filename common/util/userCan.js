@@ -1,12 +1,20 @@
 import {USER_ROLES} from 'src/common/models/user'
 
-const {ADMIN} = USER_ROLES
+const {ADMIN, MEMBER} = USER_ROLES
+
+const GENERAL_USE = [
+  ADMIN,
+  MEMBER
+]
 
 const CAPABILITY_ROLES = {
   createInviteCode: [ADMIN],
   deactivateUser: [ADMIN],
   reactivateUser: [ADMIN],
-  updateUser: [ADMIN]
+  updateUser: [ADMIN],
+  viewAllUsers: [ADMIN],
+  viewOwnProfile: GENERAL_USE,
+  viewHome: GENERAL_USE,
 }
 
 export default function userCan(currentUser, capability) {

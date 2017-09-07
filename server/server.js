@@ -73,10 +73,12 @@ export function start() {
       if (serverError.statusCode >= 400) {
         sentry.captureException(err)
 
-        console.error(`${serverError.name || 'UNHANDLED ERROR'}:
+        const error = serverError.originalError ? serverError.originalError : serverError
+
+        console.error(`${error.name || 'UNHANDLED ERROR'}:
           method: ${req.method.toUpperCase()} ${req.originalUrl}
           params: ${JSON.stringify(req.params)}
-          ${config.server.secure ? serverError.toString() : serverError.stack}`)
+          ${config.server.secure ? error.toString() : error.stack}`)
       }
 
       res.status(serverError.statusCode).send(responseBody)

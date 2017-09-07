@@ -2,7 +2,6 @@
 import processChangeFeedWithAutoReconnect from 'rethinkdb-changefeed-reconnect'
 
 import {connect} from 'src/db'
-import {USER_ROLES} from 'src/common/models/user'
 import handleConnectionError from './util/handleConnectionError'
 
 const r = connect()

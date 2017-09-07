@@ -2,17 +2,36 @@ import React from 'react'
 import {Route, IndexRoute} from 'react-router'
 import {routerActions} from 'react-router-redux'
 import {UserAuthWrapper as userAuthWrapper} from 'redux-auth-wrapper'
+import {push} from 'react-router-redux'
 
 // TODO: use webpack code-splitting and System.import to reduce initial bundle size
+import {userCan} from 'src/common/util'
+import authorizationError from 'src/common/actions/authorizationError'
 import App from 'src/common/containers/App'
-
 import BlankLayout from 'src/common/containers/BlankLayout'
 import SignUp from 'src/common/containers/SignUp'
 import SignIn from 'src/common/containers/SignIn'
-
 import Home from 'src/common/containers/Home'
 import Profile from 'src/common/components/Profile'
+import UsersContainer from 'src/common/containers/Users'
+import NotFound from 'src/common/components/NotFound'
 import {buildURL} from 'src/common/util'
+
+const userCanVisit = (capability, store) => {
+  return userAuthWrapper({
+    authSelector: state => state.auth.currentUser,
+    predicate: currentUser => userCan(currentUser, capability),
+    failureRedirectPath: '/not-found',
+    allowRedirectBack: false,
+    redirectAction: failureRedirectPath => {
+      const {dispatch} = store
+      dispatch(authorizationError('You are not authorized to do that.'))
+      dispatch(push(failureRedirectPath))
+      return {type: 'ignore'}
+    },
+    wrapperDisplayName: 'userCan',
+  })
+}
 
 const userIsAuthenticated = userAuthWrapper({
   failureRedirectPath: '/sign-in',
@@ -68,10 +87,12 @@ const routes = store => {
         <Route path="sign-up/:code" component={SignUp} onEnter={redirectIfSignedIn(store)}/>
         <Route path="sign-in" component={SignIn} onEnter={redirectIfSignedIn(store)}/>
       </Route>
-      <Route component={BlankLayout}>
-        <IndexRoute component={userIsAuthenticated(Home)}/>
-        <Route path="profile" component={userIsAuthenticated(Profile)}/>
+      <Route component={userIsAuthenticated(BlankLayout)}>
+        <IndexRoute component={userCanVisit('viewHome', store)(Home)}/>
+        <Route path="profile" component={userCanVisit('viewOwnProfile', store)(Profile)}/>
+        <Route path="users" component={userCanVisit('viewAllUsers', store)(UsersContainer)}/>
       </Route>
+      <Route path="not-found" component={NotFound}/>
     </Route>
   )
 }
