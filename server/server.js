@@ -12,7 +12,6 @@ import compression from 'compression'
 import config from 'src/config'
 
 import configureApp from './configureApp'
-import configureChangeFeeds from './configureChangeFeeds'
 
 import {formatServerError} from './util'
 
@@ -82,9 +81,6 @@ export function start() {
 
       res.status(serverError.statusCode).send(responseBody)
     })
-
-    // change feeds
-    configureChangeFeeds()
 
     return httpServer.listen(config.server.port, err => {
       if (err) {

@@ -29,10 +29,8 @@ const TEST_USER_COUNT = 5
 const TEST_USER_INVITE_CODE = 'test-invite-code'
 const TEST_USER_ROLES = ['admin']
 
-let testUsers
 test.before(async () => {
   await resetData()
-  testUsers = await createUsers(TEST_USER_INVITE_CODE, TEST_USER_ROLES, TEST_USER_COUNT)
 })
 
 test.after(async () => {
@@ -41,7 +39,7 @@ test.after(async () => {
 
 test('getUserById: returns correct user for valid id', async t => {
   t.plan(3)
-  const [testUser] = testUsers
+  const {users: [testUser]} = await _createTestData()
   const result = await runQuery(queries.getUserById, api, {id: testUser.id})
   t.is(result.data.getUserById.id, testUser.id)
   t.is(result.data.getUserById.inviteCode, TEST_USER_INVITE_CODE)
@@ -79,13 +77,19 @@ test('getUserById: throws an error if user is not signed-in', async t => {
 })
 
 test('getUsersByIds: returns array of correct users for array of valid ids', async t => {
-  t.plan(1 + testUsers.length)
-  const ids = testUsers.map(u => u.id)
+  const {users} = await _createTestData()
+
+  t.plan(1 + users.length)
+
+  const ids = users.map(u => u.id)
   const result = await runQuery(queries.getUsersByIds, api, {ids})
-  t.is(result.data.getUsersByIds.length, testUsers.length)
-  testUsers.forEach(testUser => {
-    t.truthy(result.data.getUsersByIds.find(u => u.id === testUser.id))
-  })
+  const matchedUsers = result.data.getUsersByIds
+
+  t.is(matchedUsers.length, users.length)
+
+  users.forEach(user => (
+    t.truthy(matchedUsers.find(match => match.id === user.id))
+  ))
 })
 
 test('getUsersByIds: returns empty array for empty array of ids', async t => {
@@ -114,12 +118,18 @@ test('getUsersByIds: throws an error if user is not signed-in', async t => {
 })
 
 test('getUsersByHandles: returns array of correct users for array of valid handles', async t => {
-  t.plan(1 + testUsers.length)
-  const handles = testUsers.map(u => u.handle)
+  const {users} = await _createTestData()
+
+  t.plan(1 + users.length)
+
+  const handles = users.map(u => u.handle)
   const result = await runQuery(queries.getUsersByHandles, api, {handles})
-  t.is(result.data.getUsersByHandles.length, testUsers.length)
-  testUsers.forEach(testUser => {
-    t.truthy(result.data.getUsersByHandles.find(u => u.handle === testUser.handle))
+  const matchedUsers = result.data.getUsersByHandles
+
+  t.is(matchedUsers.length, users.length)
+
+  users.forEach(user => {
+    t.truthy(matchedUsers.find(match => match.handle === user.handle))
   })
 })
 
@@ -173,13 +183,13 @@ test('getUser: returns correct user for a Slack-compatible handle', async t => {
 })
 
 test('getUser: returns correct user for valid identifier', async t => {
-  const [testUser] = testUsers
+  const {users: [testUser]} = await _createTestData()
   const result = await runQuery(queries.getUser, api, {identifier: testUser.id})
   t.is(result.data.getUser.id, testUser.id)
 })
 
 test('getUser: returns correct user for valid handle', async t => {
-  const [testUser] = testUsers
+  const {users: [testUser]} = await _createTestData()
   const result = await runQuery(queries.getUser, api, {identifier: testUser.handle})
   t.is(result.data.getUser.id, testUser.id)
 })
@@ -216,7 +226,7 @@ test('getUser: throws an error if user is not signed-in', async t => {
 
 test('findUsers: returns correct user for combination of ids and handles', async t => {
   t.plan(4)
-  const [testUser1, testUser2, testUser3] = testUsers
+  const {users: [testUser1, testUser2, testUser3]} = await _createTestData()
   const identifiers = [testUser1.id, testUser2.handle, testUser3.id]
   const result = await runQuery(queries.findUsers, api, {identifiers})
   t.is(result.data.findUsers.length, 3)
@@ -227,7 +237,7 @@ test('findUsers: returns correct user for combination of ids and handles', async
 
 test('findUsers: returns only unique users for duplicate identifiers', async t => {
   t.plan(2)
-  const [testUser1] = testUsers
+  const {users: [testUser1]} = await _createTestData()
   const identifiers = [testUser1.id, testUser1.handle]
   const result = await runQuery(queries.findUsers, api, {identifiers})
   t.is(result.data.findUsers.length, 1)
@@ -235,8 +245,11 @@ test('findUsers: returns only unique users for duplicate identifiers', async t =
 })
 
 test('findUsers: returns all users if identifiers missing', async t => {
+  const {users} = await _createTestData()
   const result = await runQuery(queries.findUsers, api)
-  t.is(result.data.findUsers.length, testUsers.length)
+  users.forEach(user => (
+    t.truthy(result.data.findUsers.find(u => user.id === u.id))
+  ))
 })
 
 test('findUsers: returns empty array of users for empty array of identifiers', async t => {
@@ -262,17 +275,25 @@ test('getActiveStatuses: returns empty array for empty array', async t => {
 
 test('getActiveStatuses: returns the status for all IDs', async t => {
   t.plan(2)
-  const ids = testUsers.map(_ => _.id)
+  const {users} = await _createTestData()
+  const ids = users.map(_ => _.id)
   const result = await runQuery(queries.getActiveStatuses, api, {ids})
   const statuses = result.data.getActiveStatuses
   const attributes = Object.keys(statuses[0])
-  t.is(statuses.length, testUsers.length)
+  t.is(statuses.length, users.length)
   t.deepEqual(attributes, ['id', 'active'])
 })
 
 test('getActiveStatuses: does not require an authenticated user', async t => {
-  const ids = testUsers.map(_ => _.id)
+  const {users} = await _createTestData()
+  const ids = users.map(_ => _.id)
   const result = await runQuery(queries.getActiveStatuses, api, {ids}, {/* no currentUser */})
   const statuses = result.data.getActiveStatuses
-  t.is(statuses.length, testUsers.length)
+  t.is(statuses.length, users.length)
 })
+
+async function _createTestData() {
+  return {
+    users: await createUsers(TEST_USER_INVITE_CODE, TEST_USER_ROLES, TEST_USER_COUNT)
+  }
+}

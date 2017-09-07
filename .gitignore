@@ -12,3 +12,5 @@ db/database.json
 *.env
 LearnersGuild-idm.aes
 rethinkdb_data/*
+.vscode
+npm-debug.log.*

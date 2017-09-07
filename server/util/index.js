@@ -65,3 +65,13 @@ function _defaultError(originalError) {
   error.statusCode = error.statusCode || error.code
   return error
 }
+
+export async function first(collection, iteratorFn) {
+  let i = 0
+  let result
+  while (!result && i < collection.length) {
+    result = await iteratorFn(collection[i])
+    i++
+  }
+  return result
+}

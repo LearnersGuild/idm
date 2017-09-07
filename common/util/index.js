@@ -76,3 +76,4 @@ export function buildURL(baseURL, queryArgs) {
 export function downcaseTrimTo21Chars(str) {
   return str.toLowerCase(str).slice(0, 21)
 }
+
