@@ -18,7 +18,6 @@ export default function userCreated(queueService) {
 
 function _getFeed() {
   return r.table('users')
-    .getAll(USER_ROLES.LEARNER, {index: 'roles'})
     .changes()
     .filter(r.row('old_val').eq(null))
 }
