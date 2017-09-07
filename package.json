@@ -34,7 +34,7 @@
     "test:cov": "npm run test:cov:run && npm run test:cov:send",
     "test:cov:run": "./node_modules/.bin/nyc --reporter=lcov npm run test:run",
     "test:cov:send": "./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
-    "test:run": "NODE_ENV=test ./node_modules/.bin/ava",
+    "test:run": "NODE_ENV=test ./node_modules/.bin/ava --serial",
     "workers": "npm run symlinks && ./node_modules/.bin/babel-node ./server/workers"
   },
   "keywords": [
@@ -140,6 +140,8 @@
     "babel-plugin-istanbul": "^1.0.3",
     "babel-plugin-react-transform": "^2.0.0-beta1",
     "bluebird": "^3.3.5",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "codeclimate-test-reporter": "^0.3.3",
     "enzyme": "^2.3.0",
     "eslint": "^2.2.0",
@@ -154,6 +156,8 @@
     "react-addons-test-utils": "^15.3.2",
     "react-transform-hmr": "^1.0.1",
     "rimraf": "^2.5.4",
+    "sinon": "^3.2.1",
+    "sinon-chai": "^2.13.0",
     "xo": "^0.12.1"
   },
   "engines": {
