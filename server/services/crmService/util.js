@@ -3,6 +3,9 @@ import fetch from 'isomorphic-fetch'
 import config from 'src/config'
 
 export async function fetchCRM(path, fetchOptions = {}) {
+  if (!config.server.crm.enabled) {
+    throw new Error('CRM integration is disabled')
+  }
   if (!config.server.crm.baseURL) {
     throw new Error('CRM base URL must be configured')
   }
@@ -11,7 +14,6 @@ export async function fetchCRM(path, fetchOptions = {}) {
   }
 
   const url = `${config.server.crm.baseURL}${path}?hapikey=${config.server.crm.key}`
-  console.log('[fetchCRM] url:', url)
 
   const options = {
     headers: {

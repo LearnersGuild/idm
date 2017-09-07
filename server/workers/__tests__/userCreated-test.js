@@ -48,7 +48,7 @@ test.serial('throws an error if the CRM contact is not found', async t => {
 
   const {user} = await _createTestData()
   const result = processUserCreated(user)
-  return expect(result).to.be.rejectedWith(/Did not find contact/)
+  return expect(result).to.be.rejectedWith(/No contact found/)
 })
 
 async function _createTestData() {

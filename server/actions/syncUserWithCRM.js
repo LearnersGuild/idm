@@ -1,12 +1,15 @@
 import {connect} from 'src/db'
-import {findContactByEmails} from 'src/server/actions/findContactByEmails'
+import {first} from 'src/server/util'
 
 const r = connect()
 
 export default async function syncUserWithCRM(user) {
-  const {updateContactProperties} = require('src/server/services/crmService')
+  const {
+    updateContactProperties,
+    getContactByEmail,
+  } = require('src/server/services/crmService')
 
-  const contact = await findContactByEmails(user.emails)
+  const contact = await first(user.emails, getContactByEmail)
   if (!contact) {
     throw new Error(`No contact found with matching email for idm user ${user.id}`)
   }

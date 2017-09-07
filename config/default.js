@@ -20,7 +20,7 @@ module.exports = {
       algorithm: 'RS512',
     },
     crm: {
-      enabled: true,
+      enabled: false,
       baseURL: process.env.CRM_API_BASE_URL,
       key: process.env.CRM_API_KEY,
     },
