@@ -1,10 +1,12 @@
 import {USER_ROLES} from 'src/common/models/user'
 
-const {ADMIN, MEMBER} = USER_ROLES
+const {ADMIN, COACH, LEARNER, STAFF} = USER_ROLES
 
 const GENERAL_USE = [
   ADMIN,
-  MEMBER
+  COACH,
+  LEARNER,
+  STAFF,
 ]
 
 const CAPABILITY_ROLES = {
