@@ -1,4 +1,4 @@
-import syncUserWithCRM from 'src/server/actions/syncUserWithCRM'
+import syncUserIDWithCRMID from 'src/server/actions/syncUserIDWithCRMID'
 
 export function start() {
   const jobService = require('src/server/services/jobService')
@@ -7,7 +7,7 @@ export function start() {
 
 export async function processUserCreated(user) {
   try {
-    await syncUserWithCRM(user)
+    await syncUserIDWithCRMID(user)
   } catch (err) {
     throw new Error(`Error occurred while attempting to update HubSpot contact: \n${err}`)
   }

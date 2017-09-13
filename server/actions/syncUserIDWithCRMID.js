@@ -3,7 +3,7 @@ import {first} from 'src/server/util'
 
 const r = connect()
 
-export default async function syncUserWithCRM(user) {
+export default async function syncUserIDWithCRMID(user) {
   const {updateContactProperties} = require('src/server/services/crmService')
 
   const contact = await first(user.emails, _getContactByEmailSafe)
