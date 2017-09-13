@@ -36,8 +36,10 @@ export class Home extends Component {
     this.constructor.fetchData(this.props.dispatch, this.props)
   }
 
-  static fetchData(dispatch) {
-    dispatch(updateJWT())
+  static fetchData(dispatch, props) {
+    if (props.lgJWT) {
+      dispatch(updateJWT(props.lgJWT))
+    }
   }
 
   render() {
@@ -56,12 +58,13 @@ export class Home extends Component {
 
 function mapStateToProps(state) {
   const {auth} = state
-  const {currentUser} = auth
-  return {currentUser}
+  const {currentUser, lgJWT} = auth
+  return {currentUser, lgJWT}
 }
 
 Home.propTypes = {
   currentUser: PropTypes.object.isRequired,
+  lgJWT: PropTypes.string,
   children: PropTypes.any,
   dispatch: PropTypes.func.isRequired,
 }
