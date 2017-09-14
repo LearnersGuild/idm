@@ -1,4 +1,4 @@
-import {GraphQLNonNull, GraphQLString, GraphQLID} from 'graphql'
+import {GraphQLNonNull, GraphQLString, GraphQLID, GraphQLList} from 'graphql'
 import {GraphQLInputObjectType} from 'graphql/type'
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
@@ -15,5 +15,6 @@ export default new GraphQLInputObjectType({
     phone: {type: GraphQLPhoneNumber, description: 'The user phone number'},
     dateOfBirth: {type: GraphQLDateTime, description: "The user's date of birth"},
     timezone: {type: GraphQLString, description: 'The user timezone'},
+    roles: {type: new GraphQLList(GraphQLString), description: 'The user roles'},
   })
 })
