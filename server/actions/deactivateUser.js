@@ -1,9 +1,5 @@
-import {connect} from 'src/db'
+import {User} from 'src/server/services/dataService'
 
-const r = connect()
-
-export default async function deactivateUser(id) {
-  const getUser = r.table('users').get(id)
-  await getUser.update({active: false, updatedAt: r.now()}).run()
-  return await getUser.run()
+export default function deactivateUser(id) {
+  return User.get(id).updateWithTimestamp({active: false})
 }

@@ -1,4 +1,5 @@
-import {findInviteCodesToExpire, expireInviteCodes} from 'src/server/actions/inviteCodes'
+import findInviteCodesToExpire from 'src/server/actions/findInviteCodesToExpire'
+import expireInviteCodes from 'src/server/actions/expireInviteCodes'
 
 async function expireOldInviteCodes() {
   const inviteCodesToExpire = await findInviteCodesToExpire()

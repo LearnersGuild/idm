@@ -25,7 +25,7 @@
     "build": "npm run symlinks && mkdir -p dist && webpack --config config/webpack.js",
     "build:profile": "npm run symlinks && mkdir -p dist && webpack --profile --json --config config/webpack.js > tmp/webpack.json",
     "data:users": "npm run symlinks && ./node_modules/.bin/babel-node test/generateUsers",
-    "db:copy": "npm run db:drop && ./node_modules/.bin/babel-node scripts/dbCopy",
+    "db:copy": "npm run db:drop && ./node_modules/.bin/babel-node scripts/dbCopy && npm run db:migrate:up",
     "db:create": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbCreate.js",
     "db:drop": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbDrop.js",
     "db:migrate": "npm run db:migrate:configure && ./node_modules/.bin/babel-node ./node_modules/.bin/rethink-migrate -r db",
@@ -39,18 +39,19 @@
     "start": "npm run symlinks && npm run icons:fetch && node server",
     "symlinks": "./node_modules/.bin/babel-node ./scripts/createSymlinks",
     "symlinks:remove": "./node_modules/.bin/rimraf ./node_modules/src",
-    "test": "npm run symlinks && npm run lint && npm run test:run",
-    "test:ci": "npm run db:create && npm run test:cov",
-    "test:cov": "npm run test:cov:run && npm run test:cov:send",
-    "test:cov:run": "./node_modules/.bin/nyc --reporter=lcov npm run test:run",
-    "test:cov:send": "./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
+    "test": "npm run symlinks && npm run lint && npm run test:db && npm run test:run",
+    "test:ci": "NODE_ENV=test npm run db:create && NODE_ENV=test npm run db:migrate:up && npm run lint && npm run test:cov",
+    "test:cov": "NODE_ENV=test npm run test:cov:run && npm run test:cov:send",
+    "test:cov:run": "NODE_ENV=test ./node_modules/.bin/nyc --reporter=lcov npm run test:run",
+    "test:cov:send": "NODE_ENV=test ./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
+    "test:db": "NODE_ENV=test npm run db:drop && NODE_ENV=test npm run db:create && NODE_ENV=test npm run db:migrate:up",
     "test:run": "NODE_ENV=test ./node_modules/.bin/ava --serial",
     "workers": "npm run symlinks && ./node_modules/.bin/babel-node ./server/workers"
   },
   "keywords": [
     "idm"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "bugs": {
     "url": "https://github.com/LearnersGuild/idm/issues"
@@ -58,6 +59,7 @@
   "homepage": "https://github.com/LearnersGuild/idm#readme",
   "dependencies": {
     "@learnersguild/idm-jwt-auth": "^2.0.1",
+    "auto-loader": "^0.2.0",
     "autoprefixer": "^6.5.1",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.0",
@@ -138,6 +140,7 @@
     "sass-resources-loader": "^1.0.2",
     "serve-static": "^1.10.0",
     "style-loader": "^0.13.0",
+    "thinky": "^2.3.8",
     "url-loader": "^0.5.7",
     "webpack": "^1.12.14",
     "webpack-dev-middleware": "^1.6.1",

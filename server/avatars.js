@@ -1,26 +1,16 @@
 import express from 'express'
 
-import {connect} from 'src/db'
+import {UserAvatar} from 'src/server/services/dataService'
+import {errors} from 'src/server/services/dataService'
 
 /* eslint new-cap: [2, {"capIsNewExceptions": ["Router"]}] */
 const app = new express.Router()
-const r = connect()
 
-app.get('/:filename', (req, res) => {
+app.get('/:filename', async (req, res, next) => {
   const {filename} = req.params
   const userId = filename.replace(/\.jpe?g$/, '')
-  r.table('userAvatars')
-    .get(userId)
-    .run()
+  UserAvatar.get(userId)
     .then(userAvatar => {
-      if (!userAvatar) {
-        const notFoundAvatarURL = 'https://brand.learnersguild.org/assets/echo-icon-128x128.png'
-        res
-          .status(307)
-          .redirect(notFoundAvatarURL)
-        return
-      }
-
       res
         .status(200)
         .set({
@@ -30,6 +20,13 @@ app.get('/:filename', (req, res) => {
         })
         .send(userAvatar.jpegData)
     })
+    .catch(errors.DocumentNotFound, () => {
+      const notFoundAvatarURL = 'https://brand.learnersguild.org/assets/echo-icon-128x128.png'
+      res
+        .status(307)
+        .redirect(notFoundAvatarURL)
+    })
+    .catch(next)
 })
 
 export default app
