@@ -25,7 +25,7 @@
     "build": "npm run symlinks && mkdir -p dist && webpack --config config/webpack.js",
     "build:profile": "npm run symlinks && mkdir -p dist && webpack --profile --json --config config/webpack.js > tmp/webpack.json",
     "data:users": "npm run symlinks && ./node_modules/.bin/babel-node test/generateUsers",
-    "db:copy": "npm run db:drop && ./node_modules/.bin/babel-node scripts/dbCopy",
+    "db:copy": "npm run db:drop && ./node_modules/.bin/babel-node scripts/dbCopy && npm run db:migrate:up",
     "db:create": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbCreate.js",
     "db:drop": "npm run symlinks && ./node_modules/.bin/babel-node ./scripts/dbDrop.js",
     "db:migrate": "npm run db:migrate:configure && ./node_modules/.bin/babel-node ./node_modules/.bin/rethink-migrate -r db",
