@@ -29,5 +29,9 @@ export async function fetchCRM(path, fetchOptions = {}) {
     throw new Error(`Couldn't fetch from CRM service: ${resp.statusText}`)
   }
 
+  if (resp.statusText === 'No Content') {
+    return null
+  }
+
   return resp.json()
 }
