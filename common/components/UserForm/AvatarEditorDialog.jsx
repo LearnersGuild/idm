@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 
 import Dialog from 'react-toolbox/lib/dialog'
 import {List, ListItem} from 'react-toolbox/lib/list'

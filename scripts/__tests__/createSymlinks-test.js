@@ -16,6 +16,7 @@ const expectedLinks = [
   {path: `${linkDir}/scripts`, target: `${rootDir}/scripts`},
   {path: `${linkDir}/server`, target: `${rootDir}/server`},
   {path: `${linkDir}/test`, target: `${rootDir}/test`},
+  {path: `${linkDir}/webpack`, target: `${rootDir}/webpack`},
 ]
 
 test('Creates links successfully', t => {

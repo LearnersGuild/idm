@@ -2,7 +2,8 @@
 /* eslint-disable react/jsx-handler-names */
 import moment from 'moment-timezone'
 
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 
 import Autocomplete from 'react-toolbox/lib/autocomplete'
 import Avatar from 'react-toolbox/lib/avatar'

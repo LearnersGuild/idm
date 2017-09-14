@@ -92,7 +92,9 @@ const routes = store => {
         <Route path="profile" component={userCanVisit('viewOwnProfile', store)(Profile)}/>
         <Route path="users" component={userCanVisit('viewAllUsers', store)(UsersContainer)}/>
       </Route>
-      <Route path="not-found" component={NotFound}/>
+      <Route component={BlankLayout}>
+        <Route path="not-found" component={NotFound}/>
+      </Route>
     </Route>
   )
 }

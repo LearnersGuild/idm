@@ -8,7 +8,7 @@ export default function configureApp(app) {
     const webpack = require('webpack')
     const webpackDevMiddleware = require('webpack-dev-middleware')
     const webpackHotMiddleware = require('webpack-hot-middleware')
-    const webpackConfig = require('src/config/webpack')
+    const webpackConfig = require('src/webpack')
 
     const compiler = webpack(webpackConfig)
 
@@ -16,6 +16,7 @@ export default function configureApp(app) {
       noInfo: true,
       publicPath: webpackConfig.output.publicPath
     }))
+
     app.use(webpackHotMiddleware(compiler))
 
     // "hot-reload" (flush require cache) server code when it changes

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {connect, Provider} from 'react-redux'
 
 import 'react-toolbox/lib/commons.scss' // reset

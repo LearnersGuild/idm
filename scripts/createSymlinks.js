@@ -13,6 +13,7 @@ const SYMLINK_NAMES = [
   'scripts',
   'server',
   'test',
+  'webpack',
 ]
 
 export default function createSymlinks() {

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {CardTitle} from 'react-toolbox/lib/card'
 import {Table} from 'react-toolbox'
 
