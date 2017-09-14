@@ -1,12 +1,9 @@
 import {GraphQLObjectType} from 'graphql'
 import {instrumentResolvers} from './util'
 
-import queries from './queries'
-import mutations from './mutations'
-
-const rootFields = Object.assign({}, queries, mutations)
+import queryFields from './queries'
 
 export default new GraphQLObjectType({
   name: 'RootQuery',
-  fields: instrumentResolvers(rootFields, 'query'),
+  fields: instrumentResolvers(queryFields, 'query'),
 })

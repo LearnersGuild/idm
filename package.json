@@ -51,7 +51,7 @@
   "keywords": [
     "idm"
   ],
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": true,
   "bugs": {
     "url": "https://github.com/LearnersGuild/idm/issues"
