@@ -3,12 +3,10 @@ import test from 'ava'
 
 import factory from 'src/test/factories'
 import stubs from 'src/test/stubs'
-import {resetData} from 'src/test/db'
 
 import {processUserCreated} from '../userCreated'
 
 test.before(async () => {
-  await resetData()
   stubs.crmService.enable()
 })
 
@@ -56,7 +54,7 @@ async function _createTestData() {
   const email2 = 'test2@test.com'
   return {
     user: await factory.create('user', {
-      email: [email1],
+      email: email1,
       emails: [email1, email2],
     })
   }

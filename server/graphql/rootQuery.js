@@ -1,10 +1,10 @@
 import {GraphQLObjectType} from 'graphql'
 import {instrumentResolvers} from './util'
 
-import user from './models/User/query'
-import inviteCode from './models/InviteCode/query'
+import queries from './queries'
+import mutations from './mutations'
 
-const rootFields = Object.assign(user, inviteCode)
+const rootFields = Object.assign({}, queries, mutations)
 
 export default new GraphQLObjectType({
   name: 'RootQuery',

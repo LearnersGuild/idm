@@ -3,8 +3,9 @@ import parseArgs from 'minimist'
 
 import 'src/config'
 import {USER_ROLES} from 'src/common/models/user'
-import {createUsers} from './helpers'
+
 import {drainPool} from './db'
+import factory from './factories'
 
 function printUsage(logger = console.error) {
   const command = path.basename(process.argv[1])
@@ -48,10 +49,10 @@ async function run() {
       return 1
     }
 
-    const role = parseRole(roleStr) || USER_ROLES.LEARNER
+    const roles = [parseRole(roleStr) || USER_ROLES.LEARNER]
     const count = countStr ? parseInt(countStr, 10) : 15
 
-    const users = await createUsers(inviteCode, role, count)
+    const users = await factory.createMany('user', {inviteCode, roles}, count)
     if (verbose) {
       users.forEach(user => console.info(user.id))
     }

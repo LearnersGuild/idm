@@ -2,27 +2,11 @@ import {GraphQLString, GraphQLNonNull, GraphQLID, GraphQLBoolean} from 'graphql'
 import {GraphQLObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLEmail, GraphQLDateTime} from 'graphql-custom-types'
 
-import {GraphQLPhoneNumber} from 'src/server/graphql/models/types'
+import {GraphQLPhoneNumber} from 'src/server/graphql/types'
 
-const AuthProvider = new GraphQLObjectType({
-  name: 'AuthProvider',
-  description: 'An auth provider',
-  fields: () => ({
-    accessToken: {type: new GraphQLNonNull(GraphQLString), description: 'The access token'},
-    refreshToken: {type: GraphQLString, description: 'The refresh token'},
-  })
-})
+import AuthProviders from './AuthProviders'
 
-const AuthProviders = new GraphQLObjectType({
-  name: 'AuthProviders',
-  description: 'The auth providers',
-  fields: () => ({
-    githubOAuth2: {type: new GraphQLNonNull(AuthProvider), description: 'The GitHub token(s)'},
-    googleOAuth2: {type: new GraphQLNonNull(AuthProvider), description: 'The Google token(s)'},
-  })
-})
-
-export const User = new GraphQLObjectType({
+export default new GraphQLObjectType({
   name: 'User',
   description: 'The user account',
   fields: () => ({
@@ -43,13 +27,4 @@ export const User = new GraphQLObjectType({
     createdAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was created'},
     updatedAt: {type: new GraphQLNonNull(GraphQLDateTime), description: 'When this record was last updated'},
   })
-})
-
-export const ActiveStatus = new GraphQLObjectType({
-  name: 'ActiveStatus',
-  description: 'A user id and whether or not the user is active',
-  fields: () => ({
-    id: {type: new GraphQLNonNull(GraphQLID), description: 'The user UUID'},
-    active: {type: new GraphQLNonNull(GraphQLBoolean), description: 'True if the user is active'},
-  }),
 })

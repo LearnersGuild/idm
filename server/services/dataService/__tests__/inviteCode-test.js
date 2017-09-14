@@ -1,16 +1,7 @@
 import test from 'ava'
 
 import factory from 'src/test/factories'
-import {resetData, cleanupDB} from 'src/test/db'
 import {InviteCode} from 'src/server/services/dataService'
-
-test.before(async () => {
-  await resetData()
-})
-
-test.after(async () => {
-  await cleanupDB()
-})
 
 test('InviteCode.upsert(id): creates a new invite code', async t => {
   const factoryInviteCode = await factory.build('inviteCode')

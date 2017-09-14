@@ -1,8 +1,6 @@
 import test from 'ava'
 
 import factory from 'src/test/factories'
-import {resetData, cleanupDB} from 'src/test/db'
-import {createUsers} from 'src/test/helpers'
 import {User} from 'src/server/services/dataService'
 
 const inviteCode = 'test-invite-code'
@@ -10,18 +8,12 @@ const roles = ['admin']
 
 let testUsers
 test.before(async () => {
-  await resetData()
-  testUsers = await createUsers(inviteCode, roles, 3)
-})
-
-test.after(async () => {
-  await cleanupDB()
+  testUsers = await factory.createMany('user', {inviteCode, roles}, 3)
 })
 
 test('User.get(id): gets correct user from database', async t => {
   const testUser = testUsers[0]
   const user = await User.get(testUser.id)
-  console.log(user)
   t.plan(3)
   t.is(user.id, testUser.id)
   t.is(user.inviteCode, inviteCode)

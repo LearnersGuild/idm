@@ -1,19 +1,10 @@
 import test from 'ava'
 
 import {connect} from 'src/db'
-import {resetData, cleanupDB} from 'src/test/db'
 
 import {saveUserAvatar} from 'src/server/auth/helpers'
 
 const r = connect()
-
-test.before(async () => {
-  await resetData()
-})
-
-test.after(async () => {
-  await cleanupDB()
-})
 
 test('saveUserAvatar: saves user\'s github avatar on sign-up', async t => {
   const jpegDataURL = 'https://www.learnersguild.org/images/LogoPrimary.png'

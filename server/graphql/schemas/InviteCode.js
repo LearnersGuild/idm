@@ -2,7 +2,7 @@ import {GraphQLString, GraphQLNonNull, GraphQLID, GraphQLBoolean} from 'graphql'
 import {GraphQLObjectType, GraphQLList} from 'graphql/type'
 import {GraphQLDateTime} from 'graphql-custom-types'
 
-export const InviteCode = new GraphQLObjectType({
+export default new GraphQLObjectType({
   name: 'InviteCode',
   description: 'An invitation code to allow a user to sign-up',
   fields: () => ({

@@ -1,5 +1,7 @@
 import {GraphQLError} from 'graphql/error'
+
 import config from 'src/config'
+import {extractUserAvatarUrl, extractUserProfileUrl} from 'src/server/util'
 
 export const errors = {
   notAuthorized: () => (new GraphQLError('You are not authorized to do that.')),
@@ -25,4 +27,13 @@ export function instrumentResolvers(fields, prefix) {
       }
     }
   }).reduce((result, next) => ({...result, ...next}), {})
+}
+
+// FIXME: this is janky.
+export function applyUserProfileUrls(user) {
+  return user ? {
+    ...user,
+    profileUrl: extractUserProfileUrl(user),
+    avatarUrl: extractUserAvatarUrl(user),
+  } : user
 }

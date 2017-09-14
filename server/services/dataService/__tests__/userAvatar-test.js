@@ -1,16 +1,7 @@
 import test from 'ava'
 
 import factory from 'src/test/factories'
-import {resetData, cleanupDB} from 'src/test/db'
 import {UserAvatar} from 'src/server/services/dataService'
-
-test.before(async () => {
-  await resetData()
-})
-
-test.after(async () => {
-  await cleanupDB()
-})
 
 test('userAvatar.upsert(id): creates a new user avatar', async t => {
   const factoryUserAvatar = await factory.build('userAvatar')

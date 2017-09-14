@@ -1,6 +1,5 @@
 import test from 'ava'
 
-import {resetData, cleanupDB} from 'src/test/db'
 import factory from 'src/test/factories'
 
 import findInviteCodesToExpire from '../findInviteCodesToExpire'
@@ -12,8 +11,6 @@ const INVITE_CODES = {
 }
 
 test.before(async () => {
-  await resetData()
-
   await Promise.all([
     factory.create('inviteCode', {code: INVITE_CODES.SHOULD_EXPIRE}),
     factory.create('inviteCode', {code: INVITE_CODES.SHOULD_NOT_EXPIRE}),
@@ -25,10 +22,6 @@ test.before(async () => {
     factory.create('user', {inviteCode: INVITE_CODES.SHOULD_NOT_EXPIRE, createdAt: _getPreviousDate(8)}), // 1+ wk ago
     factory.create('user', {inviteCode: INVITE_CODES.PERMANENT, createdAt: _getPreviousDate(22)}),        // 3+ wks ago
   ])
-})
-
-test.after(async () => {
-  await cleanupDB()
 })
 
 test('finds only active temporary invite codes older than 2 weeks ago', async t => {
