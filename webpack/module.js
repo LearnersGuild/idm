@@ -21,7 +21,7 @@ module.exports = ({config, root}) => {
               }],
             }],
           ],
-        } : null,
+        } : {},
       },
     },
 
@@ -29,19 +29,17 @@ module.exports = ({config, root}) => {
     {
       test: /Root\.css$/,
       use: _extractText([
-        'style-loader',
         {
           loader: 'css-loader',
           options: {sourceMap: true},
         },
-      ]),
+      ], {fallback: 'style-loader'}),
     },
 
     // react-toolbox
     {
       test: /\.scss$/,
       use: _extractText([
-        'style-loader',
         {
           loader: 'css-loader',
           options: {
@@ -69,7 +67,7 @@ module.exports = ({config, root}) => {
           loader: 'sass-resources-loader',
           options: {resources: sassResources},
         },
-      ]),
+      ], {fallback: 'style-loader'}),
       include: [
         path.resolve(root, 'node_modules', 'react-toolbox'),
         path.resolve(root, 'common'),
@@ -80,7 +78,6 @@ module.exports = ({config, root}) => {
     {
       test: /\.css$/,
       use: _extractText([
-        'style-loader',
         {
           loader: 'css-loader',
           options: {
@@ -90,7 +87,7 @@ module.exports = ({config, root}) => {
             importLoaders: 2,
           },
         }
-      ]),
+      ], {fallback: 'style-loader'}),
       include: [
         path.resolve(root, 'common'),
       ],
@@ -117,8 +114,15 @@ module.exports = ({config, root}) => {
     /node_modules\/google-libphonenumber\/dist/,
   ]
 
-  function _extractText(loaders) {
-    return config.app.minify ? ExtractTextPlugin.extract({use: loaders}) : loaders
+  function _extractText(loaders, options = {}) {
+    if (config.app.minify) {
+      return ExtractTextPlugin.extract(Object.assign({use: loaders}, options))
+    }
+    // place fallback loader in line with others when not using ExtractTextPlugin
+    if (options.fallback) {
+      loaders.unshift(options.fallback)
+    }
+    return loaders
   }
 
   return {rules, noParse}
