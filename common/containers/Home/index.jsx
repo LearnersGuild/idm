@@ -4,7 +4,6 @@ import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
 
-import {updateJWT} from 'src/common/actions/updateJWT'
 import HomeComponent from 'src/common/components/Home'
 import userCan from 'src/common/util/userCan'
 
@@ -30,14 +29,6 @@ export class Home extends Component {
     if (__CLIENT__) {
       window.location.href = '/users'
     }
-  }
-
-  componentDidMount() {
-    this.constructor.fetchData(this.props.dispatch, this.props)
-  }
-
-  static fetchData(dispatch) {
-    dispatch(updateJWT())
   }
 
   render() {
