@@ -13,7 +13,7 @@ function validate({name, phone, dateOfBirth, timezone}) {
   if (!phone || phone.length < 10) {
     errors.phone = '3-digit area code and 7-digit phone number'
   }
-  if (!dateOfBirth || !dateOfBirth.match(/\d{4}\-\d{2}\-\d{2}/)) {
+  if (!dateOfBirth || !dateOfBirth.toString().match(/\d{4}\-\d{2}\-\d{2}/)) {
     errors.dateOfBirth = 'Your birth date'
   }
   if (!timezone || moment.tz.names().indexOf(timezone) < 0) {
