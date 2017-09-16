@@ -9,6 +9,7 @@ const now = new Date()
 export default function define(factory) {
   factory.define('user', User, {
     id: cb => cb(null, faker.random.uuid()),
+    hubspotId: null,
     email: cb => cb(null, faker.internet.exampleEmail()),
     emails: cb => cb(null, [faker.internet.exampleEmail(), faker.internet.exampleEmail()]),
     handle: cb => cb(null, `${faker.random.word()}${faker.random.number({max: 100})}`.toLowerCase()),
