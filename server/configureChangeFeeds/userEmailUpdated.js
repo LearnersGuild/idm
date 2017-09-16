@@ -19,7 +19,7 @@ function _getFeed() {
   return r.table('users')
     .changes()
     .filter(
-      r.row('old_val').ne(null)('email')
+      r.row('old_val').default({})('email')
         .ne(
           r.row('new_val')('email')
         )
