@@ -4,7 +4,7 @@ import test from 'ava'
 import factory from 'src/test/factories'
 import stubs from 'src/test/stubs'
 
-import {processUserCreated} from '../userCreated'
+import syncUserCRMId from '../syncUserCRMId'
 
 test.before(async () => {
   stubs.crmService.enable()
@@ -18,10 +18,11 @@ test.beforeEach(() => {
   stubs.crmService.reset()
 })
 
-test.serial('syncs newly created user with CRM and sends user data to echo', async t => {
+test.serial('sets user hubspotId and updates hubspot contact custom property `idm_id`', async t => {
   t.plan(0)
 
   const crmService = require('src/server/services/crmService')
+  const {User} = require('src/server/services/dataService')
 
   const {user} = await _createTestData()
 
@@ -32,7 +33,10 @@ test.serial('syncs newly created user with CRM and sends user data to echo', asy
     vid: testVID
   })
 
-  await processUserCreated(user)
+  await syncUserCRMId(user)
+
+  const updatedUser = await User.get(user.id)
+  expect(updatedUser.hubspotId).to.eq(testVID)
 
   expect(crmService.getContactByEmail).to.have.been.calledWith(user.emails[0])
   expect(crmService.getContactByEmail).to.have.been.calledWith(user.emails[1])
@@ -45,7 +49,7 @@ test.serial('throws an error if the CRM contact is not found', async t => {
   t.plan(0)
 
   const {user} = await _createTestData()
-  const result = processUserCreated(user)
+  const result = syncUserCRMId(user)
   return expect(result).to.be.rejectedWith(/No contact found/)
 })
 

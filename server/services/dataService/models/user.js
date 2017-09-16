@@ -1,7 +1,7 @@
 import {USER_ROLES} from 'src/common/models/user'
 
 export default function userModel(thinky) {
-  const {r, type: {string, boolean, date, array, object}} = thinky
+  const {r, type: {string, boolean, date, array, object, number}} = thinky
 
   return {
     name: 'User',
@@ -10,6 +10,9 @@ export default function userModel(thinky) {
       id: string()
         .uuid(4)
         .allowNull(false),
+
+      hubspotId: number()
+        .integer(),
 
       active: boolean()
         .allowNull(false)

@@ -1,4 +1,4 @@
-import syncUserEmailWithCRMEmail from 'src/server/actions/syncUserEmailWithCRMEmail'
+import syncUserCRMEmail from 'src/server/actions/syncUserCRMEmail'
 
 export function start() {
   const jobService = require('src/server/services/jobService')
@@ -7,7 +7,7 @@ export function start() {
 
 export async function processUserEmailUpdated(user) {
   try {
-    await syncUserEmailWithCRMEmail(user)
+    await syncUserCRMEmail(user)
   } catch (err) {
     throw new Error(`Error occurred while attempting to update HubSpot contact email: \n${err}`)
   }
