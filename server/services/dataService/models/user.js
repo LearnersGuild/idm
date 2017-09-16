@@ -1,3 +1,5 @@
+import {USER_ROLES} from 'src/common/models/user'
+
 export default function userModel(thinky) {
   const {r, type: {string, boolean, date, array, object}} = thinky
 
@@ -32,6 +34,7 @@ export default function userModel(thinky) {
       timezone: string(),
 
       roles: array()
+        .schema(string().enum(Object.values(USER_ROLES)))
         .default([]),
 
       inviteCode: string(),

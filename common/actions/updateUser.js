@@ -33,12 +33,6 @@ mutation ($user: InputUser!) {
     phone
     dateOfBirth
     timezone
-    roles
-    authProviders {
-      githubOAuth2 {
-        accessToken
-      }
-    }
   }
 }
       `,
