@@ -11,7 +11,7 @@ export default function userEmailUpdated(queueService) {
     _getFeed,
     _getFeedProcessor(queueService),
     handleConnectionError,
-    {changefeedName: 'email updated'}
+    {changefeedName: 'user email updated'}
   )
 }
 
