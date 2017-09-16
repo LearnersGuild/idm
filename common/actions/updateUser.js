@@ -17,7 +17,7 @@ function updateUserFailure(error) {
   return {type: UPDATE_USER_FAILURE, error}
 }
 
-export default function updateUser(userData, redirectLocation, responseType) {
+export default function updateUser(userValues, redirectLocation, responseType) {
   return (dispatch, getState) => {
     dispatch(updateUserRequest())
 
@@ -33,17 +33,11 @@ mutation ($user: InputUser!) {
     phone
     dateOfBirth
     timezone
-    roles
-    authProviders {
-      githubOAuth2 {
-        accessToken
-      }
-    }
   }
 }
       `,
       variables: {
-        user: userData,
+        user: _getInputUserFields(userValues),
       },
     }
     const {auth} = getState()
@@ -61,4 +55,9 @@ mutation ($user: InputUser!) {
         dispatch(updateUserFailure(error))
       })
   }
+}
+
+function _getInputUserFields(values) {
+  const {id, email, name, phone, dateOfBirth, timezone} = values || {}
+  return {id, email, name, phone, dateOfBirth, timezone}
 }
