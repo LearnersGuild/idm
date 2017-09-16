@@ -12,16 +12,20 @@ export default {
     user: {type: new GraphQLNonNull(InputUser)},
   },
   async resolve(source, {user}, {rootValue: {currentUser}}) {
-    if (!userCan(currentUser, 'updateUser') && user.id !== currentUser.id) {
+    if (user.id !== currentUser.id && !userCan(currentUser, 'updateUser')) {
       throw new GraphQLError('You are not authorized to do that.')
+    }
+    if (user.roles && !userCan(currentUser, 'updateUserRoles')) {
+      throw new GraphQLError('You are not authorized to edit user roles')
     }
 
     try {
       return UserModel
         .get(user.id)
         .updateWithTimestamp(user)
-    } catch (error) {
-      throw new GraphQLError('Could not update user, please try again')
+    } catch (err) {
+      console.error(err)
+      throw new GraphQLError('Could not update user')
     }
   },
 }

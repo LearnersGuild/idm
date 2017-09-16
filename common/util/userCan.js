@@ -14,6 +14,7 @@ const CAPABILITY_ROLES = {
   deactivateUser: [ADMIN],
   reactivateUser: [ADMIN],
   updateUser: [ADMIN],
+  updateUserRoles: [ADMIN],
   viewAllUsers: [ADMIN],
   viewOwnProfile: GENERAL_USE,
   viewHome: GENERAL_USE,
