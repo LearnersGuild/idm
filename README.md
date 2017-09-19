@@ -128,6 +128,37 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 
 ## Gotchas
 
+### AVN is not working
+
+Perhaps your nvm is not linked, try typing into your terminal  
+`cp $(brew --prefix nvm)/nvm.sh ~/.nvm/`
+
+If you are using bash instead of zsh, you might have a logged-in shell and you'll need to add the following code to your `~/.bash_profile` instead of your `~/.bashrc` or `~/.zshrc` because those don't always load. (To test for sure, add an `echo testing` command at the top of your RC files, if you see nothing when opening new tabs, you're using bash_profile logged-in shell)
+```sh
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ `uname -s` != "Darwin" ] && return
+```
+
+### RethinkDB / Python
+
+If you are receiving an error similar to the following when running `npm run db:copy` you might be missing python drivers.  
+
+Error
+```
+stderr: Error when launching 'rethinkdb-restore': No such file or directory
+The rethinkdb-restore command depends on the RethinkDB Python driver, which must be installed.
+If the Python driver is already installed, make sure that the PATH environment variable
+includes the location of the backup scripts, and that the current user has permission to
+access and run the scripts.
+Instructions for installing the RethinkDB Python driver are available here:
+http://www.rethinkdb.com/docs/install-drivers/python/
+```
+
+Try installing python drivers with this command:  
+`brew install python && sudo pip2 install rethinkdb`
+
 ### Unable to sign in via GitHub
 
 If you've used the db:copy script to seed the database and still aren't logged in, there isn't an idm user in the test data linked to your github account. You'll need to manually insert an invite code to the database and use it to sign up in your local idm service.
