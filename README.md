@@ -133,6 +133,8 @@ VIII. Copy these into your `.env.development` file for AWS Key fields
     open http://idm.learnersguild.dev
     ```
 
+If you are experiencing JavascriptWebToken errors try opening your browser in incognito mode and opening the page again.
+
 16. (OPTIONAL) Add some test users:
 
     ```bash
