@@ -60,19 +60,12 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     - Homepage URL: http://idm.learnersguild.dev
     - Authorization callback URL: http://idm.learnersguild.dev/auth/github/callback
 
-9. Generate a key-pair for JWT token signing / verifying:
-
-    ```bash
-    openssl genrsa -out /tmp/private-key.pem 2048
-    openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
-    ```
-
-10. Create a free AWS account:
+9. Create a free AWS account:
 [https://aws.amazon.com](https://aws.amazon.com/)
 
 Make a copy of your access key ID and secret access key. You'll need to include these in your  environment variables in the next step.
 
-11. Create your `.env.development` file for your environment. Example:
+10. Create your `.env.development` file for your environment. Example:
 
     ```bash
     PORT=9001
@@ -86,12 +79,16 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     # For JWT string data below, replace all linebreaks with \n
     # and include -----BEGIN RSA PRIVATE KEY----- and -----END RSA PRIVATE KEY-----
     # remove these three commented lines
-    JWT_PRIVATE_KEY="<quoted string data from /tmp/private-key.pem >"
-    JWT_PUBLIC_KEY="<quoted string data from /tmp/public-key.pem replace all linebreaks with \n >"
     S3_BUCKET=guild-development
     S3_KEY_PREFIX=db
     AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
     AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
+    ```
+
+11. Generate a key-pair for JWT token signing / verifying:
+
+    ```
+    ./createKeys.sh
     ```
 
 12. Run the setup tasks:
