@@ -11,10 +11,16 @@ This is the identity management service.
 
 Be sure you've read the [instructions for contributing to the LOS repository](https://github.com/LearnersGuild/learning-os-software/blob/master/appendix/how-to-modify.md). These apply here, too, except that you will substitute `idm` for `learning-os-software`.
 
-1. **Globally** install [nvm][nvm], [avn][avn], and [avn-nvm][avn-nvm].
+1. **Globally** install [nvm][nvm], [avn][avn], and [avn-nvm][avn-nvm], insofar as they are not already installed.
+
+If `nvm --version` does not return a version, install [nvm][nvm] with:
 
     ```bash
     curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+    ```
+If `which avn` does not return a path and version, install [avn][avn] with:
+
+    ```bash
     npm install -g avn avn-nvm
     avn setup
     ```
