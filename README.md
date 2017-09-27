@@ -9,7 +9,7 @@ This is the identity management service.
 
 ## Getting Started
 
-Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
+Be sure you've read the [instructions for contributing to the LOS repository](https://github.com/LearnersGuild/learning-os-software/blob/master/appendix/how-to-modify.md). These apply here, too, except that you will substitute `idm` for `learning-os-software`.
 
 1. **Globally** install [nvm][nvm], [avn][avn], and [avn-nvm][avn-nvm].
 
