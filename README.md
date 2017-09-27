@@ -13,12 +13,13 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
 
 1. **Globally** install [nvm][nvm], [avn][avn], and [avn-nvm][avn-nvm], insofar as they are not already installed.
 
-If `nvm --version` does not return a version, install [nvm][nvm] with:
+- If `nvm --version` does not return a version, install [nvm][nvm] with:
 
     ```bash
     curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
     ```
-If `which avn` does not return a path and version, install [avn][avn] with:
+    
+- If `which avn` does not return a path and version, install [avn][avn] with:
 
     ```bash
     npm install -g avn avn-nvm
@@ -109,6 +110,7 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     ```
 
 13. Seed your development database with test member and project data:
+
     ```bash
     npm run db:copy
     npm run db:migrate -- up // to ensure migrations are applied to copied data
@@ -140,6 +142,7 @@ Perhaps your nvm is not linked, try typing into your terminal
 `cp $(brew --prefix nvm)/nvm.sh ~/.nvm/`
 
 If you are using bash instead of zsh, you might have a logged-in shell and you'll need to add the following code to your `~/.bash_profile` instead of your `~/.bashrc` or `~/.zshrc` because those don't always load. (To test for sure, add an `echo testing` command at the top of your RC files, if you see nothing when opening new tabs, you're using bash_profile logged-in shell)
+
 ```sh
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
@@ -212,6 +215,7 @@ TypeError:
     at new Strategy (/Users/jrob/workspace/learners-guild/idm/node_modules/passport-github/lib/strategy.js:62:18)
 ```
 or
+
 ```
 TypeError: OAuth2Strategy requires a clientID option
 ```
