@@ -77,7 +77,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
     ```
 
-10. Create a free AWS account:
+10. If you do not already have one, create a free AWS account:
 [https://aws.amazon.com](https://aws.amazon.com/)
 
 Make a copy of your access key ID and secret access key. You'll need to include these in your  environment variables in the next step.
