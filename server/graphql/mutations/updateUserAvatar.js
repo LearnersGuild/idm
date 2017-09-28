@@ -1,8 +1,6 @@
 import {GraphQLNonNull, GraphQLString} from 'graphql'
-import {GraphQLError} from 'graphql/error'
 
 import {UserAvatar as UserAvatarModel} from 'src/server/services/dataService'
-import {userCan} from 'src/common/util'
 
 export default {
   type: GraphQLString,
@@ -10,10 +8,6 @@ export default {
     base64ImgData: {type: new GraphQLNonNull(GraphQLString)},
   },
   async resolve(source, {base64ImgData}, {rootValue: {currentUser}}) {
-    if (!userCan(currentUser, 'updateUser')) {
-      throw new GraphQLError('You are not authorized to do that.')
-    }
-
     const {id: currentUserId} = currentUser
     await UserAvatarModel.upsert({
       id: currentUserId,
