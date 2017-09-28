@@ -39,6 +39,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
 4. Setup and run [mehserve][mehserve]. This includes entering the 5 `sudo` commands appearing in the output from `mehserve install`. Then figure out which port you intend to use and create the mehserve config file:
 
     ```bash
+    mkdir ~/.mehserve
     echo 9001 > ~/.mehserve/idm.learnersguild
     mehserve run
     ```
