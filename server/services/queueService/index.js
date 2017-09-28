@@ -1,4 +1,3 @@
-import url from 'url'
 import getBullQueue from 'bull'
 
 import config from 'src/config'
@@ -14,7 +13,7 @@ export default {
 }
 
 function getQueue(queueName) {
-  return getBullQueue(queueName, url.parse(config.server.redis.url))
+  return getBullQueue(queueName, config.server.redis.url)
 }
 
 function emptyQueue(queueName) {

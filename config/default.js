@@ -12,7 +12,7 @@ module.exports = {
       replicas: 1,
     },
     redis: {
-      url: process.env.REDIS_URL
+      url: process.env.REDIS_URL,
     },
     jwt: {
       privateKey: process.env.JWT_PRIVATE_KEY,
