@@ -101,7 +101,13 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
     ```
 
-12. Run the setup tasks. The installation command will take about a minute and generate about 200 warnings about the replacement of bundled versions. This is normal.
+12. Run RethinkDB:
+
+    ```bash
+    brew services run rethinkdb
+    ```
+    
+13. Run the setup tasks. The installation command will take about a minute and generate about 200 warnings about the replacement of bundled versions. This is normal.
 
     ```bash
     npm install
@@ -109,26 +115,26 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     npm run db:migrate -- up
     ```
 
-13. Seed your development database with test member and project data:
+14. Seed your development database with test member and project data:
 
     ```bash
     npm run db:copy
     npm run db:migrate -- up // to ensure migrations are applied to copied data
     ```
 
-14. Run the server:
+15. Run the server:
 
     ```bash
     npm start
     ```
 
-15. Visit the server in your browser:
+16. Visit the server in your browser:
 
     ```bash
     open http://idm.learnersguild.dev
     ```
 
-16. (OPTIONAL) Add some test users:
+17. (OPTIONAL) Add some test users:
 
     ```bash
     npm run data:users -- --verbose --role=learner some-dummy-invite-code
