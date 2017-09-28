@@ -190,8 +190,9 @@ Use the invitation code `hand_crafted_artisanal_invite_code` to create an accoun
 
 ### Node version
 
-In the event that you see Javascript and C compilation errors when running `npm start`,
-ensure that your installed node version matches the node version in package.json:
+When you change your working directory to the project directory of your IDM development environment, you may see a message with the format `avn could not activate node 6.11.1`. If so, install the required version (`nvm install 6.11.1`). That will also make that version the one that runs until you issue another `nvm use` command. `nvm ls` will show what versions of node are installed.
+
+In the event that you see Javascript and C compilation errors when running `npm start`, ensure that your installed node version matches the node version in package.json:
 
 ```
 ➜ cat package.json | grep node\"
