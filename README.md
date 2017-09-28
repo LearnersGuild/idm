@@ -44,7 +44,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     mehserve run
     ```
 
-5. Set your `NODE_ENV` environment variable:
+5. Open another terminal window for the subsequent commands. Set your `NODE_ENV` environment variable:
 
     ```bash
     export NODE_ENV=development
