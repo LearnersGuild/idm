@@ -101,7 +101,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
     ```
 
-12. Run the setup tasks:
+12. Run the setup tasks. The installation command will take about a minute and generate about 200 warnings about the replacement of bundled versions. This is normal.
 
     ```bash
     npm install
