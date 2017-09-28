@@ -54,6 +54,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
 
     ```bash
     # With Homebrew on a mac:
+    brew update
     brew install rethinkdb
     ```
 
