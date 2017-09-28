@@ -29,14 +29,15 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 3. Clone the repository.
 
-4. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
+4. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file: (If while setting up mehserve you get an error, mehserve gives you a list of lines to copy and paste, go ahead and run those.)
 
     ```bash
+    mkdir ~/.mehserve
     echo 9001 > ~/.mehserve/idm.learnersguild
     mehserve run
     ```
 
-5. Set your `NODE_ENV` environment variable:
+5. Set your `NODE_ENV` environment variable by typing into the terminal:
 
     ```bash
     export NODE_ENV=development
@@ -55,24 +56,8 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
     brew install redis
     ```
 
-8. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
-    - Application name: Learners Guild IDM (dev)
-    - Homepage URL: http://idm.learnersguild.dev
-    - Authorization callback URL: http://idm.learnersguild.dev/auth/github/callback
 
-9. Generate a key-pair for JWT token signing / verifying:
-
-    ```bash
-    openssl genrsa -out /tmp/private-key.pem 2048
-    openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
-    ```
-
-10. Create a free AWS account:
-[https://aws.amazon.com](https://aws.amazon.com/)
-
-Make a copy of your access key ID and secret access key. You'll need to include these in your  environment variables in the next step.
-
-11. Create your `.env.development` file for your environment. Example:
+8. Create your `.env.development` file for your environment. To do this, from your IDM folder, type `touch ./.env.development`. You will be populating some of the fields from KEYS made in later steps so keep this file open.
 
     ```bash
     PORT=9001
@@ -93,6 +78,34 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     AWS_ACCESS_KEY_ID=<YOUR_AWS_ACCESS_KEY_ID>
     AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
     ```
+
+
+9. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment: (You will be using these keys in a later step)
+    - Application name: Learners Guild IDM (dev)
+    - Homepage URL: http://idm.learnersguild.dev
+    - Authorization callback URL: http://idm.learnersguild.dev/auth/github/callback
+
+10. Generate a key-pair for JWT token signing / verifying:
+
+    ```bash
+    openssl genrsa -out /tmp/private-key.pem 2048
+    openssl rsa -in /tmp/private-key.pem -outform PEM -pubout -out /tmp/public-key.pem
+    ```
+
+After creating they key, open the file to view it by typing `less /tmp/public-key.pem` and move those keys into your `.env.development`
+
+11. Create a free AWS account:
+[https://aws.amazon.com](https://aws.amazon.com/)
+
+Make a copy of your access key ID and secret access key.  
+I. To get your access key ID, at the end of signing up with AWS, click "Launch Management Console"  
+II. Open the dropdown on your profile name on the upper right.  
+III. Click "My Security Credentials"  
+IV. Click "Continue to Security Credentials" if a popup notification appears.  
+V. Click the plus symbol near "Access keys (access key ID and secret access key)"  
+VI. Click "Create New Access Key"  
+VII. Click "Show Access Key"  
+VIII. Copy these into your `.env.development` file for AWS Key fields
 
 12. Run the setup tasks:
 
@@ -120,6 +133,8 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     open http://idm.learnersguild.dev
     ```
 
+If you are experiencing JavascriptWebToken errors try opening your browser in incognito mode and opening the page again.
+
 16. (OPTIONAL) Add some test users:
 
     ```bash
@@ -127,6 +142,10 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     ```
 
 ## Gotchas
+
+### Version
+
+A very large assortment of errors comes from node not being 6.11.1 and npm being below version 5. You'll want to check that your node is "Still" 6.11.1 along the way because as you open tabs your version can switch back to your default. Also your NPM version could change as you switch between versions of node (it's tied with the particular `nvm use` version you have active). If you've run any of the commands such as npm install while at the wrong node version, you'll need to `rm -rf node_modules` and then `nvm install 6.11.1` or `nvm use 6.11.1` if you get the already installed error, finally you need to update your npm version because npm is tied with each nvm version of node. You can update npm with `npm i -g npm`.
 
 ### AVN is not working
 
@@ -217,8 +236,9 @@ Ensure that your `NODE_ENV` is set:
 ### NPM_AUTH_TOKEN Error Message
 
 When attempting to `npm login`, was seeing `Error: Failed to replace env in config: ${NPM_AUTH_TOKEN}`.
-
-`export NPM_AUTH_TOKEN=""`
+If you see this error, try typing into your terminal:  
+`export NPM_AUTH_TOKEN=""`  
+After that, try your `npm login` again.
 
 ## License
 
