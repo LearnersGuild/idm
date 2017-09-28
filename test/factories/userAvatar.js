@@ -11,7 +11,7 @@ export default function define(factory) {
     id: cb => cb(null, faker.random.uuid()),
     jpegData: cb => cb(
       null,
-      r.http(faker.random.image(), {resultFormat: 'binary'})
+      r.http('http://brand.learnersguild.org/apple-touch-icon-120x120.png', {resultFormat: 'binary'})
     ),
     createdAt: cb => cb(null, now),
     updatedAt: cb => cb(null, now),
