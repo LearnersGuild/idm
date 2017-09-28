@@ -34,7 +34,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     export NPM_AUTH_TOKEN=$(cat $HOME/.npmrc | grep _authToken | cut -d '=' -f2)
     ```
 
-3. Clone the repository.
+3. Fork the [IDM repository](https://github.com/LearnersGuild/idm) and clone your fork.
 
 4. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
 
