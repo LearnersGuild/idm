@@ -153,7 +153,7 @@ If your shell is bash, you might have a logged-in shell. If so, you'll need to a
 
 ### RethinkDB / Python
 
-If you are receiving an error similar to the following when running `npm run db:copy` you might be missing python drivers.  
+If you are receiving an error similar to the following when running `npm run db:copy`, you might be missing python drivers.  
 
 Error
 ```
@@ -202,11 +202,11 @@ In the event that you see Javascript and C compilation errors when running `npm 
 v5.6.0
 ```
 
-To run multiple versions of node on your machine, install `nvm` and then use `5.6`
+To run multiple versions of node on your machine, install `nvm` and then enter `use 5.6`.
 
 ### TypeErrors
 
-If you see errors that look like this:
+If you see errors that look like
 
 ```
 TypeError:
@@ -228,7 +228,7 @@ Ensure that your `NODE_ENV` is set:
 
 ### NPM_AUTH_TOKEN Error Message
 
-When attempting to `npm login`, was seeing `Error: Failed to replace env in config: ${NPM_AUTH_TOKEN}`.
+When attempting to `npm login`, if you see `Error: Failed to replace env in config: ${NPM_AUTH_TOKEN}`, enter:
 
 `export NPM_AUTH_TOKEN=""`
 
