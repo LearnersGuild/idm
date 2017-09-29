@@ -119,7 +119,6 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
 
     ```bash
     npm run db:copy
-    npm run db:migrate -- up // to ensure migrations are applied to copied data
     ```
 
 15. Run the server:
