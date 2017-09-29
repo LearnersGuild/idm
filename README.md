@@ -133,14 +133,16 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     http://idm.learnersguild.dev
     ```
 
-## Gotchas
+## Gotchas (i.e. Troubleshooting)
 
 ### AVN is not working
 
-Perhaps your nvm is not linked, try typing into your terminal  
+When you `cd` into your IDM project directory, you should see a line like `avn activated 6.11.1 via .nvmrc (avn-nvm v6.11.1)`, showing that avn has switched your node version to the one specified in your `.nvmrc` file.
+
+If you don't see that line, perhaps your nvm is not linked. Try entering  
 `cp $(brew --prefix nvm)/nvm.sh ~/.nvm/`
 
-If you are using bash instead of zsh, you might have a logged-in shell and you'll need to add the following code to your `~/.bash_profile` instead of your `~/.bashrc` or `~/.zshrc` because those don't always load. (To test for sure, add an `echo testing` command at the top of your RC files, if you see nothing when opening new tabs, you're using bash_profile logged-in shell)
+If your shell is bash, you might have a logged-in shell. If so, you'll need to add the following code to your `~/.bash_profile` instead of your `~/.bashrc` or `~/.zshrc`, because those don't always load. (To test for sure, add an `echo testing` command at the top of your RC files. If you see nothing when opening new terminal tabs, you're using the bash logged-in shell.)
 
 ```sh
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
