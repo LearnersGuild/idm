@@ -127,10 +127,10 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     npm start
     ```
 
-16. Visit the server in your browser:
+16. In your browser, visit the server at:
 
     ```bash
-    open http://idm.learnersguild.dev
+    http://idm.learnersguild.dev
     ```
 
 17. (OPTIONAL) Add some test users:
