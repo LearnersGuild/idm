@@ -133,12 +133,6 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     http://idm.learnersguild.dev
     ```
 
-17. (OPTIONAL) Add some test users:
-
-    ```bash
-    npm run data:users -- --verbose --role=learner some-dummy-invite-code
-    ```
-
 ## Gotchas
 
 ### AVN is not working
