@@ -139,6 +139,8 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     http://idm.learnersguild.dev
     ```
 
+18. You should see a request to sign in with Github. Do so. If you get a 404 status, see below.
+
 ## Gotchas (i.e. Troubleshooting)
 
 ### AVN is not working
