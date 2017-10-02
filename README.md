@@ -179,7 +179,7 @@ Try installing python drivers with this command:
 
 ### Unable to sign in via GitHub
 
-If you've used the db:copy script to seed the database but you get a 404 status when you try to "SIGN IN USING GITHUB" at http://idm.learnersguild.dev, there isn't an idm user in the test data linked to your github account. You'll need to manually insert an invite code to the database and use it to sign up in your local idm service.
+If you've used the db:copy script to seed the database but you get an error when you try to "SIGN IN USING GITHUB" at http://idm.learnersguild.dev, there isn't an idm user in the test data linked to your github account. You'll need to manually insert an invite code to the database and use it to sign up in your local idm service.
 
 Go to `localhost:8080` and use the `Data Explorer` to run the following command to issue yourself an invitation code.
 
