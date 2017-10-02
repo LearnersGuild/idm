@@ -139,7 +139,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     http://idm.learnersguild.dev
     ```
 
-18. You should see a request to sign in with Github. Do so. If you get a 404 status, see below.
+18. You should see a request to sign in with Github. Do so. You should then see a page inviting you to authorize yourself, but it really means to authorize your IDM application to access your account. Do so. You should then see your application's home page, headed "Identity Management", with "Profile" and "Sign Out" controls.
 
 ## Gotchas (i.e. Troubleshooting)
 
