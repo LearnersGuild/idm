@@ -11,6 +11,8 @@ This is the identity management service.
 
 Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
+If you run into errors or problems while getting set up, be sure to check [Gotchas](#gotchas) at the bottom to see if your error is there.
+
 1. **Globally** install [nvm][nvm], [avn][avn], and [avn-nvm][avn-nvm].
 
     ```bash
@@ -219,6 +221,33 @@ Ensure that your `NODE_ENV` is set:
 When attempting to `npm login`, was seeing `Error: Failed to replace env in config: ${NPM_AUTH_TOKEN}`.
 
 `export NPM_AUTH_TOKEN=""`
+
+## React errors
+
+If you're getting React errors or other errors not covered here, maybe you already had IDM installed from a previous time. You need to make sure you're working with a clean copy of idm. You can do the following:  
+1. if you don't have SSH follow these instructions to set it up: [SSH Setup](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
+1. type the following commands into your terminal:  
+```sh
+git remote remove origin`
+git remote add origin git@github.com:$GITHUB_USER/idm.git
+git remote add upstream git@github.com:LearnersGuild/idm.git
+git add --all
+git stash
+git stash drop
+git checkout master
+git fetch --all
+git reset --hard upstream/master
+rm -rf node_modules
+nvm use
+NODE_ENV=development
+```
+
+1. You're now done cleaning your IDM, try starting over now.
+
+## Connection Errors
+
+If you can visit `localhost:9001` but not `idm.learnersguild.dev` or are getting odd connection problems, perhaps your mehserve isn't having unique access to port 9001. You may have Apache server running.  
+Try running this in a terminal `sudo /usr/sbin/apachectl stop`.
 
 ## License
 
