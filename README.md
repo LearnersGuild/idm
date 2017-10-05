@@ -64,10 +64,11 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     brew install rethinkdb
     ```
 
-8. Install [Redis][redis].
+8. Install and run [Redis][redis]. If you want it to be running whenever you are logged in, replace `run` with `start` below.
 
     ```bash
     brew install redis
+    brew services run redis
     ```
 
 9. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
@@ -107,7 +108,7 @@ Be sure you've read the [instructions for contributing to the LOS repository](ht
     AWS_SECRET_ACCESS_KEY=<YOUR_AWS_SECRET_ACCESS_KEY>
     ```
 
-13. Run RethinkDB:
+13. Run RethinkDB. If you want it to be running whenever you are logged in, replace `run` with `start` below.
 
     ```bash
     brew services run rethinkdb
