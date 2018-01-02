@@ -29,8 +29,14 @@ Be sure you've read the [instructions for contributing](./CONTRIBUTING.md).
 
 3. Clone the repository.
 
-4. Setup and run [mehserve][mehserve]. Then figure out which port you intend to use and create the mehserve config file:
+4. Install v1.1.3 of mehserve and complete the setup:
 
+  ```bash
+  npm i -g mehserve@1.1.3
+  mehserve install
+  ```
+
+Then, figure out which port you intend to use and create the mehserve config file:
     ```bash
     echo 9001 > ~/.mehserve/idm.learnersguild
     mehserve run
@@ -216,7 +222,12 @@ Ensure that your `NODE_ENV` is set:
 
 ### NPM_AUTH_TOKEN Error Message
 
-When attempting to `npm login`, was seeing `Error: Failed to replace env in config: ${NPM_AUTH_TOKEN}`.
+If you get an error like:
+```bash
+Error: Failed to replace env in config: ${NPM_AUTH_TOKEN}
+```
+
+You'll need to set an env variable with your NPM auth token (or a blank string):
 
 `export NPM_AUTH_TOKEN=""`
 
@@ -228,7 +239,6 @@ See the [LICENSE](./LICENSE) file.
 [github-register-application]: https://github.com/settings/applications/new
 [install-rethinkdb]: https://www.rethinkdb.com/docs/install/
 [redis]: http://redis.io/
-[mehserve]: https://github.com/timecounts/mehserve
 [npm]: https://www.npmjs.com/
 [nvm]: https://github.com/creationix/nvm
 [avn]: https://github.com/wbyoung/avn
