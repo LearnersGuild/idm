@@ -63,8 +63,8 @@ Then, figure out which port you intend to use and create the mehserve config fil
 
 8. Obtain your GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET (see below) by registering a new [GitHub OAuth application][github-register-application] for _your_ development environment:
     - Application name: Learners Guild IDM (dev)
-    - Homepage URL: http://idm.learnersguild.dev
-    - Authorization callback URL: http://idm.learnersguild.dev/auth/github/callback
+    - Homepage URL: http://idm.learnersguild.test
+    - Authorization callback URL: http://idm.learnersguild.test/auth/github/callback
 
 9. Generate a key-pair for JWT token signing / verifying:
 
@@ -87,8 +87,8 @@ Make a copy of your access key ID and secret access key. You'll need to include 
     GITHUB_CLIENT_ID=<from above>
     GITHUB_CLIENT_SECRET=<from above>
     # Both of the URLs below are needed and remove this commented line
-    APP_BASE_URL=http://idm.learnersguild.dev
-    IDM_BASE_URL=http://idm.learnersguild.dev
+    APP_BASE_URL=http://idm.learnersguild.test
+    IDM_BASE_URL=http://idm.learnersguild.test
     # For JWT string data below, replace all linebreaks with \n
     # and include -----BEGIN RSA PRIVATE KEY----- and -----END RSA PRIVATE KEY-----
     # remove these three commented lines
@@ -123,7 +123,7 @@ Make a copy of your access key ID and secret access key. You'll need to include 
 15. Visit the server in your browser:
 
     ```bash
-    open http://idm.learnersguild.dev
+    open http://idm.learnersguild.test
     ```
 
 16. (OPTIONAL) Add some test users:
