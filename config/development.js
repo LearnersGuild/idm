@@ -8,12 +8,12 @@ module.exports = {
       url: 'redis://localhost:6379',
     },
     github: {
-      callbackURL: 'http://idm.learnersguild.dev/auth/github/callback',
+      callbackURL: 'http://idm.learnersguild.localhost/auth/github/callback',
     },
   },
 
   app: {
-    baseURL: 'http://idm.learnersguild.dev',
+    baseURL: 'http://idm.learnersguild.meh',
     minify: false,
     hotReload: true,
     noErrors: true,
@@ -21,6 +21,6 @@ module.exports = {
   },
 
   graphiql: {
-    baseURL: 'http://graphiql.learnersguild.dev'
+    baseURL: 'http://graphiql.learnersguild.meh'
   },
 }
