@@ -8,7 +8,7 @@ module.exports = {
       url: 'redis://localhost:6379',
     },
     github: {
-      callbackURL: 'http://idm.learnersguild.localhost/auth/github/callback',
+      callbackURL: 'http://idm.learnersguild.meh/auth/github/callback',
     },
   },
 

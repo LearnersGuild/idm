@@ -15,7 +15,7 @@ const app = new express.Router()
 const corsOptions = {
   origin: [
     /\.learnersguild.org/,
-    /\.learnersguild.dev/,
+    /\.learnersguild.meh/,
   ],
   exposedHeaders: ['LearnersGuild-JWT'],
 }
