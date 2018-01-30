@@ -62,7 +62,7 @@
   },
   "homepage": "https://github.com/LearnersGuild/idm#readme",
   "dependencies": {
-    "@learnersguild/idm-jwt-auth": "^2.1.0",
+    "@learnersguild/idm-jwt-auth": "^2.1.1",
     "auto-loader": "^0.2.0",
     "autoprefixer": "^6.5.1",
     "babel-cli": "^6.6.5",
